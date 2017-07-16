@@ -11,4 +11,9 @@
   <string name="login">登录</string>
   <string name="login_success">登录成功</string>
   <string name="usr_name_or_psw_invalid">用户名或密码不合法，请重新输入</string>
+  <string name="register">注册</string>
+  <string name="please_input_psw_again">请再次输入密码</string>
+  <string name="please_input_psw">请输入密码</string>
+  <string name="check_code">验证码</string>
+  <string name="phone_number">手机号</string>
 </resources>

@@ -60,11 +60,47 @@
     android:layout_marginTop="22dp"
     android:background="@color/colorGrayF8"
     android:gravity="center_vertical"
-    android:hint="@string/phone_user_name"
+    android:hint="@string/phone_number"
+    android:inputType="phone"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:textColor="@color/colorBlack66"
     android:textSize="@dimen/fontSizeButton"/>
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginTop="16dp"
+    android:orientation="horizontal">
+
+    <EditText
+      android:id="@+id/check_code_edit_text"
+      android:layout_width="0dp"
+      android:layout_height="48dp"
+      android:layout_weight="3"
+      android:background="@color/colorGrayF8"
+      android:gravity="center_vertical"
+      android:hint="@string/check_code"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
+      android:textColor="@color/colorBlack66"
+      android:textSize="@dimen/fontSizeButton"/>
+
+    <TextView
+      android:id="@+id/get_check_code_text_view"
+      android:layout_width="0dp"
+      android:layout_height="48dp"
+      android:layout_weight="2"
+      android:background="@color/colorAccent"
+      android:gravity="center"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
+      android:text="短信获取"
+      android:textColor="@color/colorWhite"
+      android:textSize="@dimen/fontSizeButton"/>
+  </LinearLayout>
 
   <EditText
     android:id="@+id/psw_edit_text"
@@ -75,7 +111,23 @@
     android:layout_marginTop="16dp"
     android:background="@color/colorGrayF8"
     android:gravity="center_vertical"
-    android:hint="@string/password"
+    android:hint="@string/please_input_psw"
+    android:inputType="textPassword"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:textColor="@color/colorBlack66"
+    android:textSize="@dimen/fontSizeButton"/>
+
+  <EditText
+    android:id="@+id/psw_confirm_edit_text"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginTop="16dp"
+    android:background="@color/colorGrayF8"
+    android:gravity="center_vertical"
+    android:hint="@string/please_input_psw_again"
     android:inputType="textPassword"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
@@ -83,7 +135,7 @@
     android:textSize="@dimen/fontSizeButton"/>
 
   <TextView
-    android:id="@+id/login_text_view"
+    android:id="@+id/register_text_view"
     android:layout_width="match_parent"
     android:layout_height="48dp"
     android:layout_marginLeft="16dp"
@@ -93,37 +145,8 @@
     android:gravity="center"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:text="@string/login"
+    android:text="@string/register"
     android:textColor="@color/colorWhite"
     android:textSize="@dimen/fontSizeButton"/>
-
-  <RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp">
-
-    <TextView
-      android:id="@+id/forget_psw_text_view"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:paddingBottom="14dp"
-      android:paddingTop="14dp"
-      android:text="忘记密码？"
-
-      android:textColor="@color/colorBlack66"
-      android:textSize="@dimen/fontSizeSub"/>
-
-    <TextView
-      android:id="@+id/register_usr_text_view"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignParentRight="true"
-      android:paddingBottom="14dp"
-      android:paddingTop="14dp"
-      android:text="注册账号"
-      android:textColor="@color/colorAccent"
-      android:textSize="@dimen/fontSizeSub"/>
-  </RelativeLayout>
 
 </LinearLayout>

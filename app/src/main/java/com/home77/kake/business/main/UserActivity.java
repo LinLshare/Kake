@@ -8,8 +8,10 @@ import com.home77.kake.App;
 import com.home77.kake.R;
 import com.home77.kake.business.main.presenter.LoginPresenter;
 import com.home77.kake.business.main.presenter.ProfilePresenter;
+import com.home77.kake.business.main.presenter.RegisterPresenter;
 import com.home77.kake.business.main.view.LoginFragment;
 import com.home77.kake.business.main.view.ProfileFragment;
+import com.home77.kake.business.main.view.RegisterFragment;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -23,23 +25,28 @@ public class UserActivity extends AppCompatActivity {
   private LoginFragment loginFragment;
   private ProfilePresenter profilePresenter;
   private LoginPresenter loginPresenter;
+  private RegisterFragment registerFragment;
+  private RegisterPresenter registerPresenter;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
+    setContentView(R.layout.activity_user);
     App.eventBus().register(this);
 
     //1). setUp view
     profileFragment = new ProfileFragment();
     loginFragment = new LoginFragment();
+    registerFragment = new RegisterFragment();
     //2) setUp presenter
     profilePresenter = new ProfilePresenter(profileFragment);
     loginPresenter = new LoginPresenter(loginFragment);
+    registerPresenter = new RegisterPresenter(registerFragment);
     //3) bind presenter
     profileFragment.setPresenter(profilePresenter);
     loginFragment.setPresenter(loginPresenter);
-    //4) commit fragment
+    registerFragment.setPresenter(registerPresenter);
+    //4) commit init fragment
     getSupportFragmentManager().beginTransaction()
                                .add(R.id.content_layout, profileFragment)
                                .commit();
@@ -63,6 +70,10 @@ public class UserActivity extends AppCompatActivity {
                                    .commit();
         break;
       case NavigateEvent.EVENT_TO_REGISTER:
+        getSupportFragmentManager().beginTransaction()
+                                   .replace(R.id.content_layout, registerFragment)
+                                   .addToBackStack(null)
+                                   .commit();
         break;
     }
   }
