@@ -1,6 +1,7 @@
 package com.home77.kake.business.main;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.home77.common.base.event.GenericEvent;
@@ -59,6 +60,9 @@ public class UserActivity extends AppCompatActivity {
   public void onEvent(NavigateEvent navigateEvent) {
     switch (navigateEvent.eventType) {
       case NavigateEvent.EVENT_TO_PROFILE:
+        // clear back stack
+        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
         getSupportFragmentManager().beginTransaction()
                                    .replace(R.id.content_layout, profileFragment)
                                    .commit();
