@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  android:background="@color/colorGrayF0"
   android:orientation="vertical">
 
   <RelativeLayout
@@ -12,17 +12,23 @@
 
     <ImageView
       android:id="@+id/back_image_view"
-      android:layout_width="32dp"
-      android:layout_height="32dp"
+      android:layout_width="48dp"
+      android:layout_height="48dp"
+      android:paddingBottom="8dp"
+      android:paddingTop="8dp"
       android:src="@mipmap/ic_back"/>
 
     <com.home77.common.ui.widget.CircleImageView
       android:id="@+id/avatar_image_view"
       android:layout_width="76dp"
       android:layout_height="76dp"
+      android:layout_alignEnd="@+id/edit_image_view"
+      android:layout_alignRight="@+id/edit_image_view"
+      android:layout_below="@+id/back_image_view"
       android:layout_centerHorizontal="true"
-      android:layout_marginTop="80dp"
-      android:src="@mipmap/ic_launcher"/>
+      android:layout_marginTop="32dp"
+      android:scaleType="centerCrop"
+      android:src="@mipmap/user_avatar_def"/>
 
     <TextView
       android:id="@+id/name_text_view"
@@ -32,20 +38,93 @@
       android:layout_centerHorizontal="true"
       android:layout_marginTop="4dp"
       android:singleLine="true"
+      android:text="@string/no_login"
       android:textColor="@color/colorWhite"
-      android:textSize="@dimen/fontSizeInput"
-      tools:text="我的昵称"/>
+      android:textSize="@dimen/fontSizeInput"/>
 
     <ImageView
       android:id="@+id/edit_image_view"
-      android:layout_width="24dp"
-      android:layout_height="24dp"
+      android:layout_width="14dp"
+      android:layout_height="14dp"
+      android:layout_alignBottom="@id/name_text_view"
       android:layout_below="@id/avatar_image_view"
       android:layout_marginLeft="4dp"
       android:layout_toRightOf="@id/name_text_view"
       android:src="@mipmap/ic_edit_user"/>
+  </RelativeLayout>
 
+  <EditText
+    android:id="@+id/user_name_edit_text"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginTop="22dp"
+    android:background="@color/colorGrayF8"
+    android:gravity="center_vertical"
+    android:hint="@string/phone_user_name"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:textColor="@color/colorBlack66"
+    android:textSize="@dimen/fontSizeButton"/>
 
+  <EditText
+    android:id="@+id/psw_edit_text"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginTop="16dp"
+    android:background="@color/colorGrayF8"
+    android:gravity="center_vertical"
+    android:hint="@string/password"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:textColor="@color/colorBlack66"
+    android:textSize="@dimen/fontSizeButton"/>
+
+  <TextView
+    android:id="@+id/login_text_view"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginTop="32dp"
+    android:background="@color/colorAccent"
+    android:gravity="center"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:text="@string/login"
+    android:textColor="@color/colorWhite"
+    android:textSize="@dimen/fontSizeButton"/>
+
+  <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp">
+
+    <TextView
+      android:id="@+id/forget_psw_text_view"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:paddingBottom="14dp"
+      android:paddingTop="14dp"
+      android:text="忘记密码？"
+
+      android:textColor="@color/colorBlack66"
+      android:textSize="@dimen/fontSizeSub"/>
+
+    <TextView
+      android:id="@+id/register_usr_text_view"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentRight="true"
+      android:paddingBottom="14dp"
+      android:paddingTop="14dp"
+      android:text="注册账号"
+      android:textColor="@color/colorAccent"
+      android:textSize="@dimen/fontSizeSub"/>
   </RelativeLayout>
 
 </LinearLayout>

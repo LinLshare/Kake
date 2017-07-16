@@ -5,5 +5,5 @@
   android:id="@+id/content_layout"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  tools:context="com.home77.kake.business.main.ProfileActivity">
+  tools:context="com.home77.kake.business.main.UserActivity">
 </FrameLayout>

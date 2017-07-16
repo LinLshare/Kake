@@ -8,11 +8,13 @@ package com.home77.kake.base;
  * @author CJ
  */
 public abstract class BasePresenter<T> {
-  protected T contentView;
+  protected T attachedView;
 
-  public BasePresenter(T contentView) {
-    this.contentView = contentView;
+  public BasePresenter(T attachedView) {
+    this.attachedView = attachedView;
   }
 
   public abstract void start();
+
+  public abstract void onCreateView();
 }
