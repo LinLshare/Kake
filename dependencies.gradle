@@ -1,0 +1,42 @@
+ext {
+  versions = [
+    android_support_v7: '25.3.1',
+    eventbus: '3.+',
+    gson: '2.+',
+    okhttp: '3.+',
+    picasso: '2.5.+',
+    base_rvadapter: '3.0.3',
+    butterknife: '8.7.0',
+    android_gradle: '2.3.2',
+  ]
+
+  test_versions = [
+    junit: '4.12'
+  ]
+
+  libraries = [
+    eventbus: "org.greenrobot:eventbus:${versions.eventbus}",
+    gson: "com.google.code.gson:gson:${versions.gson}",
+    okhttp: "com.squareup.okhttp3:okhttp:${versions.okhttp}",
+    android_support_v7: "com.android.support:appcompat-v7:${versions.android_support_v7}",
+    recyclerview: "com.android.support:recyclerview-v7:${versions.android_support_v7}",
+    picasso: "com.squareup.picasso:picasso:${versions.picasso}",
+    design: "com.android.support:design:${versions.android_support_v7}",
+    base_rvadapter: "com.zhy:base-rvadapter:${versions.base_rvadapter}",
+    butterknife: "com.jakewharton:butterknife:${versions.butterknife}"
+  ]
+
+  test_libraries = [
+    junit: "junit:junit:${test_versions.junit}"
+  ]
+
+  // define gradle plugins that needed for build script
+  gradle_plugins = [
+    android_gradle: "com.android.tools.build:gradle:${versions.android_gradle}",
+    butterknife: "com.jakewharton:butterknife-gradle-plugin:${versions.butterknife}"
+  ]
+
+  annotation_processors = [
+    butterknife: "com.jakewharton:butterknife-compiler:${versions.butterknife}"
+  ]
+}

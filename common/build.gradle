@@ -1,0 +1,45 @@
+apply plugin: 'com.android.library'
+
+android {
+  compileSdkVersion 25
+  buildToolsVersion "25.0.2"
+
+  defaultConfig {
+    minSdkVersion 15
+    targetSdkVersion 25
+    versionCode 1
+    versionName "1.0"
+
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    switch (getProperty('VARIANT').toLowerCase()) {
+      case 'debug':
+        buildConfigField "boolean", "DEBUG_BUILD", "true"
+        buildConfigField "boolean", "OFFICIAL_BUILD", "false"
+        break;
+      case 'official':
+        buildConfigField "boolean", "DEBUG_BUILD", "false"
+        buildConfigField "boolean", "OFFICIAL_BUILD", "true"
+        break;
+      default:
+        buildConfigField "boolean", "DEBUG_BUILD", "false"
+        buildConfigField "boolean", "OFFICIAL_BUILD", "false"
+        break;
+    }
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+  }
+}
+
+dependencies {
+  compile fileTree(dir: 'libs', include: ['*.jar'])
+  compile libraries.android_support_v7
+  testCompile test_libraries.junit
+  compile libraries.eventbus
+  compile libraries.gson
+  compile libraries.okhttp
+}
