@@ -1,4 +1,4 @@
-package com.home77.kake.business.main.view;
+package com.home77.kake.business.user.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.home77.common.ui.widget.CircleImageView;
 import com.home77.kake.R;
 import com.home77.kake.base.BaseFragment;
-import com.home77.kake.business.main.presenter.ProfilePresenter;
+import com.home77.kake.business.user.presenter.ProfilePresenter;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;

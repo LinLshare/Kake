@@ -1,10 +1,10 @@
-package com.home77.kake.business.main.presenter;
+package com.home77.kake.business.user.presenter;
 
 import com.home77.kake.App;
 import com.home77.kake.GlobalData;
 import com.home77.kake.base.BasePresenter;
-import com.home77.kake.business.main.UserActivity;
-import com.home77.kake.business.main.view.ProfileView;
+import com.home77.kake.business.user.UserActivity;
+import com.home77.kake.business.user.view.ProfileView;
 
 /**
  * @author CJ

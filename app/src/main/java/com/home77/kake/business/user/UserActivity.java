@@ -1,4 +1,4 @@
-package com.home77.kake.business.main;
+package com.home77.kake.business.user;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -7,12 +7,14 @@ import android.support.v7.app.AppCompatActivity;
 import com.home77.common.base.event.GenericEvent;
 import com.home77.kake.App;
 import com.home77.kake.R;
-import com.home77.kake.business.main.presenter.LoginPresenter;
-import com.home77.kake.business.main.presenter.ProfilePresenter;
-import com.home77.kake.business.main.presenter.RegisterPresenter;
-import com.home77.kake.business.main.view.LoginFragment;
-import com.home77.kake.business.main.view.ProfileFragment;
-import com.home77.kake.business.main.view.RegisterFragment;
+import com.home77.kake.business.user.presenter.ForgetPasswordPresenter;
+import com.home77.kake.business.user.presenter.LoginPresenter;
+import com.home77.kake.business.user.presenter.ProfilePresenter;
+import com.home77.kake.business.user.presenter.RegisterPresenter;
+import com.home77.kake.business.user.view.ForgetPasswordFragment;
+import com.home77.kake.business.user.view.LoginFragment;
+import com.home77.kake.business.user.view.ProfileFragment;
+import com.home77.kake.business.user.view.RegisterFragment;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -28,6 +30,8 @@ public class UserActivity extends AppCompatActivity {
   private LoginPresenter loginPresenter;
   private RegisterFragment registerFragment;
   private RegisterPresenter registerPresenter;
+  private ForgetPasswordFragment forgetPasswordFragment;
+  private ForgetPasswordPresenter forgetPasswordPresenter;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -39,14 +43,17 @@ public class UserActivity extends AppCompatActivity {
     profileFragment = new ProfileFragment();
     loginFragment = new LoginFragment();
     registerFragment = new RegisterFragment();
+    forgetPasswordFragment = new ForgetPasswordFragment();
     //2) setUp presenter
     profilePresenter = new ProfilePresenter(profileFragment);
     loginPresenter = new LoginPresenter(loginFragment);
     registerPresenter = new RegisterPresenter(registerFragment);
+    forgetPasswordPresenter = new ForgetPasswordPresenter(forgetPasswordFragment);
     //3) bind presenter
     profileFragment.setPresenter(profilePresenter);
     loginFragment.setPresenter(loginPresenter);
     registerFragment.setPresenter(registerPresenter);
+    forgetPasswordFragment.setPresenter(forgetPasswordPresenter);
     //4) commit init fragment
     getSupportFragmentManager().beginTransaction()
                                .add(R.id.content_layout, profileFragment)
@@ -76,6 +83,12 @@ public class UserActivity extends AppCompatActivity {
       case NavigateEvent.EVENT_TO_REGISTER:
         getSupportFragmentManager().beginTransaction()
                                    .replace(R.id.content_layout, registerFragment)
+                                   .addToBackStack(null)
+                                   .commit();
+        break;
+      case NavigateEvent.EVENT_TO_FORGET_PSW:
+        getSupportFragmentManager().beginTransaction()
+                                   .replace(R.id.content_layout, forgetPasswordFragment)
                                    .addToBackStack(null)
                                    .commit();
         break;

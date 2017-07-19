@@ -1,7 +1,7 @@
-package com.home77.kake.business.main.view;
+package com.home77.kake.business.user.view;
 
 import com.home77.kake.base.BaseView;
-import com.home77.kake.business.main.presenter.LoginPresenter;
+import com.home77.kake.business.user.presenter.LoginPresenter;
 
 /**
  * @author CJ

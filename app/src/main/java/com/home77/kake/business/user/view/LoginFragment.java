@@ -1,4 +1,4 @@
-package com.home77.kake.business.main.view;
+package com.home77.kake.business.user.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,7 +9,7 @@ import android.widget.EditText;
 
 import com.home77.kake.R;
 import com.home77.kake.base.BaseFragment;
-import com.home77.kake.business.main.presenter.LoginPresenter;
+import com.home77.kake.business.user.presenter.LoginPresenter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

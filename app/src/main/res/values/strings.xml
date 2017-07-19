@@ -10,10 +10,18 @@
   <string name="password">密码</string>
   <string name="login">登录</string>
   <string name="login_success">登录成功</string>
-  <string name="usr_name_or_psw_invalid">用户名或密码不合法，请重新输入</string>
+  <string name="usr_name_or_psw_illegal">用户名或密码不符合长度要求</string>
+  <string name="psw_illegal">密码不符合长度要求</string>
   <string name="register">注册</string>
   <string name="please_input_psw_again">请再次输入密码</string>
   <string name="please_input_psw">请输入密码</string>
   <string name="check_code">验证码</string>
   <string name="phone_number">手机号</string>
+  <string name="please_input_new_psw">请输入新密码</string>
+  <string name="submit">提交</string>
+  <string name="phone_number_illegal">手机号不合法</string>
+  <string name="psw_or_confirm_psw_not_empty">密码或确认密码不能为空</string>
+  <string name="psw_and_confirm_psw_not_equal">密码与确认密码不一致，请重新输入</string>
+  <string name="register_success">注册成功</string>
+  <string name="submit_success">提交成功</string>
 </resources>

@@ -1,11 +1,13 @@
-package com.home77.kake.business.main.presenter;
+package com.home77.kake.business.user.presenter;
 
 import android.text.TextUtils;
 
 import com.home77.kake.App;
+import com.home77.kake.R;
 import com.home77.kake.base.BasePresenter;
-import com.home77.kake.business.main.UserActivity;
-import com.home77.kake.business.main.view.RegisterView;
+import com.home77.kake.business.user.UserActivity;
+import com.home77.kake.business.user.view.RegisterView;
+import com.home77.kake.common.utils.InputChecker;
 
 /**
  * @author CJ
@@ -25,8 +27,8 @@ public class RegisterPresenter extends BasePresenter<RegisterView> {
   }
 
   public void handleGetCheckCodeClick(String phoneNumber) {
-    if (TextUtils.isEmpty(phoneNumber)) {
-      attachedView.toast("手机号不合法");
+    if (!InputChecker.isPhoneNumberLegal(phoneNumber)) {
+      attachedView.toast(R.string.phone_number_illegal);
       return;
     }
   }
@@ -35,25 +37,31 @@ public class RegisterPresenter extends BasePresenter<RegisterView> {
                                   String checkCode,
                                   String password,
                                   String confirmPassword) {
-    if (TextUtils.isEmpty(phoneNumber)) {
-      attachedView.toast("手机号不合法");
+    if (!InputChecker.isPhoneNumberLegal(phoneNumber)) {
+      attachedView.toast(R.string.phone_number_illegal);
       return;
     }
 
-    // check code
+    // TODO: 2017/7/19 check code
+
     if (TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword)) {
-      attachedView.toast("密码或确认密码不能为空");
+      attachedView.toast(R.string.psw_or_confirm_psw_not_empty);
+      return;
+    }
+
+    if (!InputChecker.isPasswordLegal(password)) {
+      attachedView.toast(R.string.psw_illegal);
       return;
     }
 
     if (!TextUtils.equals(password, confirmPassword)) {
-      attachedView.toast("密码与确认密码不一致，请重新输入");
+      attachedView.toast(R.string.psw_and_confirm_psw_not_equal);
       return;
     }
 
     App.eventBus()
        .post(new UserActivity.NavigateEvent(this, UserActivity.NavigateEvent.EVENT_TO_PROFILE));
-    attachedView.toast("注册成功");
+    attachedView.toast(R.string.register_success);
   }
 
   public void handleBackClick() {

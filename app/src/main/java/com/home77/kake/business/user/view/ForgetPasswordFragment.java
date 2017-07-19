@@ -1,4 +1,4 @@
-package com.home77.kake.business.main.view;
+package com.home77.kake.business.user.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,7 +9,7 @@ import android.widget.EditText;
 
 import com.home77.kake.R;
 import com.home77.kake.base.BaseFragment;
-import com.home77.kake.business.main.presenter.RegisterPresenter;
+import com.home77.kake.business.user.presenter.ForgetPasswordPresenter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,7 +19,8 @@ import butterknife.Unbinder;
 /**
  * @author CJ
  */
-public class RegisterFragment extends BaseFragment<RegisterPresenter> implements RegisterView {
+public class ForgetPasswordFragment extends BaseFragment<ForgetPasswordPresenter>
+    implements ForgetPasswordView {
 
   @BindView(R.id.user_name_edit_text)
   EditText userNameEditText;
@@ -27,8 +28,6 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter> implements
   EditText checkCodeEditText;
   @BindView(R.id.psw_edit_text)
   EditText pswEditText;
-  @BindView(R.id.psw_confirm_edit_text)
-  EditText pswConfirmEditText;
   Unbinder unbinder;
 
   @Nullable
@@ -36,7 +35,7 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter> implements
   public View onCreateView(LayoutInflater inflater,
                            @Nullable ViewGroup container,
                            @Nullable Bundle savedInstanceState) {
-    View view = inflater.inflate(R.layout.fragment_register, container, false);
+    View view = inflater.inflate(R.layout.fragment_forget_password, container, false);
     unbinder = ButterKnife.bind(this, view);
     return view;
   }
@@ -56,8 +55,7 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter> implements
       case R.id.register_text_view:
         presenter.handleRegisterClick(userNameEditText.getText().toString(),
                                       checkCodeEditText.getText().toString(),
-                                      pswEditText.getText().toString(),
-                                      pswConfirmEditText.getText().toString());
+                                      pswEditText.getText().toString());
         break;
       case R.id.back_image_view:
         presenter.handleBackClick();
