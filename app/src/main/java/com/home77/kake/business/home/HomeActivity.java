@@ -6,7 +6,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 
+import com.home77.common.base.event.GenericEvent;
 import com.home77.common.ui.widget.Toast;
+import com.home77.kake.App;
 import com.home77.kake.R;
 import com.home77.kake.business.user.UserActivity;
 import com.home77.kake.common.adapter.FragmentPagerAdapter;
@@ -14,6 +16,9 @@ import com.home77.kake.common.widget.ScrollConfigurableViewPager;
 import com.home77.kake.common.widget.bottombar.ImageBottomItem;
 import com.home77.kake.common.widget.bottombar.MainBottomBar;
 import com.home77.kake.common.widget.bottombar.NormalBottomItem;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
@@ -32,12 +37,13 @@ public class HomeActivity extends AppCompatActivity
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    App.eventBus().register(this);
     setContentView(R.layout.activity_home);
     ButterKnife.bind(this);
 
     mainBottomBar.addBottomBarItem(new NormalBottomItem(this,
                                                         R.drawable.tab_local_album_selector,
-                                                        R.string.local_album));
+                                                        R.string.local_photo));
     mainBottomBar.addBottomBarItem(new ImageBottomItem(this, R.drawable.tab_camera));
     mainBottomBar.addBottomBarItem(new NormalBottomItem(this,
                                                         R.drawable.tab_cloud_album_selector,
@@ -52,6 +58,12 @@ public class HomeActivity extends AppCompatActivity
         new FragmentPagerAdapter(getSupportFragmentManager(), fragmentList);
     pagerMainTab.setAdapter(adapter);
     pagerMainTab.setOffscreenPageLimit(3);
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    App.eventBus().unregister(this);
   }
 
   @Override
@@ -78,5 +90,12 @@ public class HomeActivity extends AppCompatActivity
   @OnClick(R.id.user_image_view)
   public void onViewClicked() {
     startActivity(new Intent(this, UserActivity.class));
+  }
+
+  @Subscribe(threadMode = ThreadMode.MAIN)
+  public void onEvent(GenericEvent navigateEvent) {
+    if (!navigateEvent.isSameSender(this)) {
+      return;
+    }
   }
 }

@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.jakewharton.butterknife'
 
 android {
-  compileSdkVersion 25
-  buildToolsVersion "25.0.2"
+  compileSdkVersion android_versions.compileSdkVersion
+  buildToolsVersion android_versions.buildToolsVersion
   defaultConfig {
     applicationId "com.home77.kake"
-    minSdkVersion 15
-    targetSdkVersion 25
-    versionCode 1
-    versionName "1.0"
+    minSdkVersion android_versions.minSdkVersion
+    targetSdkVersion android_versions.targetSdkVersion
+    versionCode propVersionCode as int
+    versionName propVersionName
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
   }
   buildTypes {
@@ -21,8 +21,9 @@ android {
 }
 
 dependencies {
-  compile fileTree(dir: 'libs', include: ['*.jar'])
+  compile fileTree(include: ['*.jar'], dir: 'libs')
   compile project(':common')
+  compile project(':theta360')
   compile libraries.android_support_v7
   compile libraries.recyclerview
   compile libraries.design
@@ -34,5 +35,4 @@ dependencies {
   compile libraries.butterknife
   annotationProcessor annotation_processors.butterknife
   testCompile test_libraries.junit
-  compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha8'
 }

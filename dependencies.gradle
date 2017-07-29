@@ -1,4 +1,12 @@
 ext {
+
+  android_versions = [
+    compileSdkVersion: 25,
+    buildToolsVersion: "25.0.2",
+    minSdkVersion: 15,
+    targetSdkVersion: 25
+  ]
+
   versions = [
     android_support_v7: '25.3.1',
     eventbus: '3.+',
@@ -7,7 +15,7 @@ ext {
     picasso: '2.5.+',
     base_rvadapter: '3.0.3',
     butterknife: '8.7.0',
-    android_gradle: '2.3.2',
+    android_gradle: '2.3.2'
   ]
 
   test_versions = [

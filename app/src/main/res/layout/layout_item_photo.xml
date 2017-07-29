@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="184dp"
+  android:orientation="vertical"
+  tools:background="@color/colorAccent">
+
+  <ImageView
+    android:id="@+id/photo_image_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
+
+  <TextView
+    android:id="@+id/name_text_view"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_marginBottom="16dp"
+    android:layout_marginLeft="16dp"
+    android:textColor="@color/colorC1"
+    android:textSize="@dimen/fontSizeF2"
+    tools:text="Camera 20182839"/>
+
+  <LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentRight="true"
+    android:layout_marginRight="16dp"
+    android:layout_marginTop="16dp"
+    android:orientation="horizontal">
+
+    <ImageView
+      android:layout_width="14dp"
+      android:layout_height="14dp"
+      android:src="@drawable/ic_local_photo_small"/>
+
+    <TextView
+      android:id="@+id/size_image_view"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="4dp"
+      android:textColor="@color/colorC1"
+      android:textSize="@dimen/fontSizeF4"
+      tools:text="29M"/>
+  </LinearLayout>
+</RelativeLayout>

@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/Kake.iml" filepath="$PROJECT_DIR$/Kake.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/theta360/theta360.iml" filepath="$PROJECT_DIR$/theta360/theta360.iml" />
     </modules>
   </component>
 </project>
