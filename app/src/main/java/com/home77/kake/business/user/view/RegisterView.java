@@ -7,4 +7,5 @@ import com.home77.kake.business.user.presenter.RegisterPresenter;
  * @author CJ
  */
 public interface RegisterView extends BaseView<RegisterPresenter> {
+  void onCheckcodeViewCountDown(int seconds);
 }

@@ -2,6 +2,7 @@ package com.home77.kake;
 
 import android.app.Application;
 
+import com.home77.common.base.component.BaseHandler;
 import com.home77.common.base.component.ContextManager;
 
 import org.greenrobot.eventbus.EventBus;
@@ -16,7 +17,9 @@ public class App extends Application {
     super.onCreate();
     // 1). init context
     ContextManager.init(this);
-    // 2). restore global data
+    // 2). open basehandler
+    BaseHandler.open();
+    // 3). restore global data
     GLOBAL_DATA = new GlobalData(this);
     GLOBAL_DATA.restore();
   }

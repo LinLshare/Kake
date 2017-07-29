@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.microedition.khronos.opengles.GL;
+
 /**
  * @author CJ
  */
@@ -14,6 +16,12 @@ public class GlobalData {
 
   public static final String KEY_USER_NAME = "user_name";
   public static final String KEY_USER_AVATER = "user_avatar";
+  public static final String KEY_USER_MOBILE = "user_avatar";
+
+  public static final String KEY_ACCESS_TOKEN = "access_token";
+  public static final String KEY_REFRESH_TOKEN = "refresh_token";
+  public static final String KEY_EXPIRE_IN = "expires_in";
+  public static final String KEY_TOKEN_TYPE = "token_type";
 
   private final SharedPreferences sharedPreferences;
 
@@ -28,29 +36,34 @@ public class GlobalData {
     map.putAll(sharedPreferences.getAll());
   }
 
-  public void putString(String key, @Nullable String value) {
+  public GlobalData putString(String key, @Nullable String value) {
     map.put(key, value);
     sharedPreferences.edit().putString(key, value).apply();
+    return this;
   }
 
-  public void putInt(String key, int value) {
+  public GlobalData putInt(String key, int value) {
     map.put(key, value);
     sharedPreferences.edit().putInt(key, value).apply();
+    return this;
   }
 
-  public void putLong(String key, long value) {
+  public GlobalData putLong(String key, long value) {
     map.put(key, value);
     sharedPreferences.edit().putLong(key, value).apply();
+    return this;
   }
 
-  public void putBoolean(String key, boolean value) {
+  public GlobalData putBoolean(String key, boolean value) {
     map.put(key, value);
     sharedPreferences.edit().putBoolean(key, value).apply();
+    return this;
   }
 
-  public void putFloat(String key, float value) {
+  public GlobalData putFloat(String key, float value) {
     map.put(key, value);
     sharedPreferences.edit().putFloat(key, value).apply();
+    return this;
   }
 
   public Map<String, Object> getAll() {

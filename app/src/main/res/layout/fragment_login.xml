@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@color/colorGrayF0"
+  android:background="@color/colorC3"
   android:orientation="vertical">
 
   <RelativeLayout
@@ -16,7 +16,7 @@
       android:layout_height="48dp"
       android:paddingBottom="8dp"
       android:paddingTop="8dp"
-      android:src="@mipmap/ic_back"/>
+      android:src="@drawable/ic_back"/>
 
     <com.home77.common.ui.widget.CircleImageView
       android:id="@+id/avatar_image_view"
@@ -26,7 +26,7 @@
       android:layout_centerHorizontal="true"
       android:layout_marginTop="32dp"
       android:scaleType="centerCrop"
-      android:src="@mipmap/user_avatar_def"/>
+      android:src="@drawable/user_avatar_def"/>
 
     <TextView
       android:id="@+id/name_text_view"
@@ -37,8 +37,8 @@
       android:layout_marginTop="4dp"
       android:singleLine="true"
       android:text="@string/no_login"
-      android:textColor="@color/colorWhite"
-      android:textSize="@dimen/fontSizeInput"/>
+      android:textColor="@color/colorC1"
+      android:textSize="@dimen/fontSizeF3"/>
 
     <ImageView
       android:id="@+id/edit_image_view"
@@ -48,7 +48,7 @@
       android:layout_below="@id/avatar_image_view"
       android:layout_marginLeft="4dp"
       android:layout_toRightOf="@id/name_text_view"
-      android:src="@mipmap/ic_edit_user"/>
+      android:src="@drawable/ic_edit_user"/>
   </RelativeLayout>
 
   <EditText
@@ -58,13 +58,13 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     android:layout_marginTop="22dp"
-    android:background="@color/colorGrayF8"
+    android:background="@color/colorC2"
     android:gravity="center_vertical"
     android:hint="@string/phone_user_name"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:textColor="@color/colorBlack66"
-    android:textSize="@dimen/fontSizeButton"/>
+    android:textColor="@color/colorC6"
+    android:textSize="@dimen/fontSizeF2"/>
 
   <EditText
     android:id="@+id/psw_edit_text"
@@ -73,14 +73,14 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     android:layout_marginTop="16dp"
-    android:background="@color/colorGrayF8"
+    android:background="@color/colorC2"
     android:gravity="center_vertical"
     android:hint="@string/password"
     android:inputType="textPassword"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:textColor="@color/colorBlack66"
-    android:textSize="@dimen/fontSizeButton"/>
+    android:textColor="@color/colorC6"
+    android:textSize="@dimen/fontSizeF2"/>
 
   <TextView
     android:id="@+id/login_text_view"
@@ -94,8 +94,8 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:text="@string/login"
-    android:textColor="@color/colorWhite"
-    android:textSize="@dimen/fontSizeButton"/>
+    android:textColor="@color/colorC1"
+    android:textSize="@dimen/fontSizeF2"/>
 
   <RelativeLayout
     android:layout_width="match_parent"
@@ -111,8 +111,8 @@
       android:paddingTop="14dp"
       android:text="忘记密码？"
 
-      android:textColor="@color/colorBlack66"
-      android:textSize="@dimen/fontSizeSub"/>
+      android:textColor="@color/colorC6"
+      android:textSize="@dimen/fontSizeF4"/>
 
     <TextView
       android:id="@+id/register_usr_text_view"
@@ -123,7 +123,7 @@
       android:paddingTop="14dp"
       android:text="注册账号"
       android:textColor="@color/colorAccent"
-      android:textSize="@dimen/fontSizeSub"/>
+      android:textSize="@dimen/fontSizeF4"/>
   </RelativeLayout>
 
 </LinearLayout>

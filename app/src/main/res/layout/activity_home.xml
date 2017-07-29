@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:clipChildren="false"
+  >
+
+  <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:background="@color/colorPrimaryDark">
+
+    <ImageView
+      android:id="@+id/user_image_view"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerVertical="true"
+      android:paddingBottom="8dp"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
+      android:paddingTop="8dp"
+      android:src="@drawable/nav_user"/>
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="true"
+      android:text="KAKE 全景相机"
+      android:textColor="@color/colorC1"
+      android:textSize="@dimen/fontSizeF1"/>
+  </RelativeLayout>
+
+  <com.home77.kake.common.widget.ScrollConfigurableViewPager
+    android:id="@+id/main_pager"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="48dp"
+    app:scrollable="false"
+    />
+
+  <!--shadow-->
+  <ImageView
+    android:layout_width="match_parent"
+    android:layout_height="4dp"
+    android:layout_above="@+id/main_bottom_bar"
+    android:src="@drawable/shadow_bottom_bar"
+    />
+
+  <com.home77.kake.common.widget.bottombar.MainBottomBar
+    android:id="@+id/main_bottom_bar"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:layout_alignParentBottom="true"
+    />
+
+</RelativeLayout>

@@ -18,7 +18,7 @@ import com.home77.common.base.util.CompatHelper;
 public class UiData extends Data {
   private final DisplayMetrics mDisplayMetrics = ContextManager.resources().getDisplayMetrics();
 
-  protected UiData() {
+  private UiData() {
     // 1) density
     mDensity = mDisplayMetrics.density;
     mDensityDpi = mDisplayMetrics.densityDpi;

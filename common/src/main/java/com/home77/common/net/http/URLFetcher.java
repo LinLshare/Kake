@@ -104,6 +104,11 @@ public final class URLFetcher {
     return this;
   }
 
+  public URLFetcher addHeader(String name,String value){
+    mRequestBuilder.addHeader(name,value);
+    return this;
+  }
+
   public URLFetcher postJson(String json) {
     DLog.v(TAG, "post json [%s]", json);
     final RequestBody body = RequestBody.create(MediaType.parse(MIME_APPLICATION_JSON), json);

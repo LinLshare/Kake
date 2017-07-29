@@ -4,11 +4,15 @@
   <color name="colorPrimaryDark">#00cdd4</color>
   <color name="colorAccent">#ff8d65</color>
 
-  <color name="colorWhite">#ffffff</color>
-  <color name="colorGrayF8">#f8f8f8</color>
-  <color name="colorGrayF0">#f0f0f0</color>
+  <color name="colorC8">#00cdd4</color>
+  <color name="colorC7">#ff8d65</color>
 
-  <color name="colorBlackCC">#cccccc</color>
-  <color name="colorBlack99">#999999</color>
-  <color name="colorBlack66">#666666</color>
+  <color name="colorC1">#ffffff</color>
+  <color name="colorC2">#f8f8f8</color>
+  <color name="colorC3">#f0f0f0</color>
+
+  <color name="colorC4">#cccccc</color>
+  <color name="colorC5">#999999</color>
+  <color name="colorC6">#666666</color>
+
 </resources>

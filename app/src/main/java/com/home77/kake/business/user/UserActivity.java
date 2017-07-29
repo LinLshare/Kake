@@ -92,6 +92,9 @@ public class UserActivity extends AppCompatActivity {
                                    .addToBackStack(null)
                                    .commit();
         break;
+      case NavigateEvent.EVENT_TO_HOME:
+        this.finish();
+        break;
     }
   }
 

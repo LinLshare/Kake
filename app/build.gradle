@@ -34,4 +34,5 @@ dependencies {
   compile libraries.butterknife
   annotationProcessor annotation_processors.butterknife
   testCompile test_libraries.junit
+  compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha8'
 }

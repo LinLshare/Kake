@@ -1,12 +1,15 @@
 package com.home77.kake.business.user.view;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import com.home77.common.base.component.BaseHandler;
 import com.home77.kake.R;
 import com.home77.kake.base.BaseFragment;
 import com.home77.kake.business.user.presenter.RegisterPresenter;
@@ -30,6 +33,9 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter> implements
   @BindView(R.id.psw_confirm_edit_text)
   EditText pswConfirmEditText;
   Unbinder unbinder;
+  @BindView(R.id.get_check_code_text_view)
+  TextView getCheckCodeTextView;
+  private CountDownTimer countDownTimer;
 
   @Nullable
   @Override
@@ -63,5 +69,28 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter> implements
         presenter.handleBackClick();
         break;
     }
+  }
+
+  @Override
+  public void onCheckcodeViewCountDown(final int seconds) {
+    BaseHandler.post(new Runnable() {
+      @Override
+      public void run() {
+        getCheckCodeTextView.setEnabled(false);
+        countDownTimer = new CountDownTimer(seconds * 1000, 1000) {
+          @Override
+          public void onTick(long millisUntilFinished) {
+            int countDown = (int) (millisUntilFinished / 1000);
+            getCheckCodeTextView.setText(countDown + " s");
+          }
+
+          @Override
+          public void onFinish() {
+            getCheckCodeTextView.setEnabled(true);
+            getCheckCodeTextView.setText("短信获取");
+          }
+        }.start();
+      }
+    });
   }
 }

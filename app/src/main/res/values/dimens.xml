@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <dimen name="fontSizeTitle">20sp</dimen>
-  <dimen name="fontSizeButton">18sp</dimen>
-  <dimen name="fontSizeInput">16sp</dimen>
-  <dimen name="fontSizeSub">14sp</dimen>
-  <dimen name="fontSizeLarge">24sp</dimen>
+  <dimen name="fontSizeF5">24sp</dimen>
+  <dimen name="fontSizeF1">20sp</dimen>
+  <dimen name="fontSizeF2">18sp</dimen>
+  <dimen name="fontSizeF3">16sp</dimen>
+  <dimen name="fontSizeF4">14sp</dimen>
+  <dimen name="fontSizeSmall">10sp</dimen>
 </resources>

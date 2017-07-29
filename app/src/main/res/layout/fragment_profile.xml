@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@color/colorGrayF0"
+  android:background="@color/colorC3"
   android:orientation="vertical">
 
   <RelativeLayout
@@ -16,7 +16,7 @@
       android:layout_height="48dp"
       android:paddingBottom="8dp"
       android:paddingTop="8dp"
-      android:src="@mipmap/ic_back"/>
+      android:src="@drawable/ic_back"/>
 
     <com.home77.common.ui.widget.CircleImageView
       android:id="@+id/avatar_image_view"
@@ -26,7 +26,7 @@
       android:layout_centerHorizontal="true"
       android:layout_marginTop="32dp"
       android:scaleType="centerCrop"
-      android:src="@mipmap/user_avatar_def"/>
+      android:src="@drawable/user_avatar_def"/>
 
     <TextView
       android:id="@+id/name_text_view"
@@ -37,8 +37,8 @@
       android:layout_marginTop="4dp"
       android:singleLine="true"
       android:text="@string/no_login"
-      android:textColor="@color/colorWhite"
-      android:textSize="@dimen/fontSizeInput"/>
+      android:textColor="@color/colorC1"
+      android:textSize="@dimen/fontSizeF3"/>
 
     <ImageView
       android:id="@+id/edit_image_view"
@@ -48,14 +48,14 @@
       android:layout_below="@id/avatar_image_view"
       android:layout_marginLeft="4dp"
       android:layout_toRightOf="@id/name_text_view"
-      android:src="@mipmap/ic_edit_user"/>
+      android:src="@drawable/ic_edit_user"/>
   </RelativeLayout>
 
   <RelativeLayout
     android:id="@+id/list_item_kake"
     android:layout_width="match_parent"
     android:layout_height="56dp"
-    android:background="@color/colorGrayF8">
+    android:background="@color/colorC2">
 
     <ImageView
       android:id="@+id/list_kake_image_view"
@@ -63,7 +63,7 @@
       android:layout_height="32dp"
       android:layout_centerVertical="true"
       android:layout_marginLeft="16dp"
-      android:src="@mipmap/list_menu_kake"/>
+      android:src="@drawable/list_menu_kake"/>
 
     <TextView
       android:layout_width="wrap_content"
@@ -73,8 +73,8 @@
       android:layout_toRightOf="@id/list_kake_image_view"
       android:singleLine="true"
       android:text="@string/kake"
-      android:textColor="@color/colorBlack66"
-      android:textSize="@dimen/fontSizeButton"/>
+      android:textColor="@color/colorC6"
+      android:textSize="@dimen/fontSizeF2"/>
 
     <ImageView
       android:layout_width="24dp"
@@ -82,7 +82,7 @@
       android:layout_alignParentRight="true"
       android:layout_centerVertical="true"
       android:layout_marginRight="16dp"
-      android:src="@mipmap/list_ic_forward"/>
+      android:src="@drawable/list_ic_forward"/>
   </RelativeLayout>
 
   <RelativeLayout
@@ -90,7 +90,7 @@
     android:layout_width="match_parent"
     android:layout_height="56dp"
     android:layout_marginTop="12dp"
-    android:background="@color/colorGrayF8">
+    android:background="@color/colorC2">
 
     <ImageView
       android:id="@+id/list_photo_image_view"
@@ -98,7 +98,7 @@
       android:layout_height="32dp"
       android:layout_centerVertical="true"
       android:layout_marginLeft="16dp"
-      android:src="@mipmap/list_menu_uploadedpho"/>
+      android:src="@drawable/list_menu_uploadedpho"/>
 
     <TextView
       android:layout_width="wrap_content"
@@ -107,9 +107,9 @@
       android:layout_marginLeft="8dp"
       android:layout_toRightOf="@id/list_photo_image_view"
       android:singleLine="true"
-      android:text="@string/cloud_gallery"
-      android:textColor="@color/colorBlack66"
-      android:textSize="@dimen/fontSizeButton"/>
+      android:text="@string/cloud_album"
+      android:textColor="@color/colorC6"
+      android:textSize="@dimen/fontSizeF2"/>
 
     <ImageView
       android:layout_width="24dp"
@@ -117,7 +117,7 @@
       android:layout_alignParentRight="true"
       android:layout_centerVertical="true"
       android:layout_marginRight="16dp"
-      android:src="@mipmap/list_ic_forward"/>
+      android:src="@drawable/list_ic_forward"/>
   </RelativeLayout>
 
   <RelativeLayout
@@ -125,7 +125,7 @@
     android:layout_width="match_parent"
     android:layout_height="56dp"
     android:layout_marginTop="1dp"
-    android:background="@color/colorGrayF8">
+    android:background="@color/colorC2">
 
     <ImageView
       android:id="@+id/list_help_image_view"
@@ -134,7 +134,7 @@
       android:layout_centerVertical="true"
       android:layout_marginLeft="16dp"
       android:layout_marginTop="1dp"
-      android:src="@mipmap/list_menu_help"/>
+      android:src="@drawable/list_menu_help"/>
 
     <TextView
       android:layout_width="wrap_content"
@@ -144,8 +144,8 @@
       android:layout_toRightOf="@id/list_help_image_view"
       android:singleLine="true"
       android:text="@string/help_feedback"
-      android:textColor="@color/colorBlack66"
-      android:textSize="@dimen/fontSizeButton"/>
+      android:textColor="@color/colorC6"
+      android:textSize="@dimen/fontSizeF2"/>
 
     <ImageView
       android:layout_width="24dp"
@@ -153,7 +153,7 @@
       android:layout_alignParentRight="true"
       android:layout_centerVertical="true"
       android:layout_marginRight="16dp"
-      android:src="@mipmap/list_ic_forward"/>
+      android:src="@drawable/list_ic_forward"/>
   </RelativeLayout>
 
   <RelativeLayout
@@ -161,7 +161,7 @@
     android:layout_width="match_parent"
     android:layout_height="56dp"
     android:layout_marginTop="1dp"
-    android:background="@color/colorGrayF8">
+    android:background="@color/colorC2">
 
     <ImageView
       android:id="@+id/list_about_image_view"
@@ -169,7 +169,7 @@
       android:layout_height="32dp"
       android:layout_centerVertical="true"
       android:layout_marginLeft="16dp"
-      android:src="@mipmap/list_menu_about"/>
+      android:src="@drawable/list_menu_about"/>
 
     <TextView
       android:layout_width="wrap_content"
@@ -179,8 +179,8 @@
       android:layout_toRightOf="@id/list_about_image_view"
       android:singleLine="true"
       android:text="@string/about"
-      android:textColor="@color/colorBlack66"
-      android:textSize="@dimen/fontSizeButton"/>
+      android:textColor="@color/colorC6"
+      android:textSize="@dimen/fontSizeF2"/>
 
     <ImageView
       android:layout_width="24dp"
@@ -188,7 +188,7 @@
       android:layout_alignParentRight="true"
       android:layout_centerVertical="true"
       android:layout_marginRight="16dp"
-      android:src="@mipmap/list_ic_forward"/>
+      android:src="@drawable/list_ic_forward"/>
   </RelativeLayout>
 
   <RelativeLayout
@@ -203,10 +203,10 @@
       android:layout_marginBottom="26dp"
       android:layout_marginLeft="24dp"
       android:layout_marginRight="24dp"
-      android:background="@color/colorGrayF8"
+      android:background="@color/colorC2"
       android:gravity="center"
       android:text="@string/exist_login"
-      android:textColor="@color/colorBlack66"
-      android:textSize="@dimen/fontSizeButton"/>
+      android:textColor="@color/colorC6"
+      android:textSize="@dimen/fontSizeF2"/>
   </RelativeLayout>
 </LinearLayout>
