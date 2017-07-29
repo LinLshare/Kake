@@ -1,5 +1,6 @@
 package com.home77.kake.business.user.presenter;
 
+import com.home77.common.base.event.GenericEvent;
 import com.home77.kake.App;
 import com.home77.kake.GlobalData;
 import com.home77.kake.base.BasePresenter;
@@ -26,8 +27,7 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
   }
 
   public void handleBackImageViewClick() {
-    App.eventBus()
-       .post(new UserActivity.NavigateEvent(this, UserActivity.NavigateEvent.EVENT_TO_HOME));
+    App.eventBus().post(new GenericEvent(this, UserActivity.EVENT_TO_HOME));
   }
 
   public void handleAvatarClick() {
@@ -55,12 +55,10 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
   }
 
   public void handleNameTextClick() {
-    App.eventBus()
-       .post(new UserActivity.NavigateEvent(this, UserActivity.NavigateEvent.EVENT_TO_LOGIN));
+    App.eventBus().post(new GenericEvent(this, UserActivity.EVENT_TO_LOGIN));
   }
 
   public void handleExistLogin() {
-    App.eventBus()
-       .post(new UserActivity.NavigateEvent(this, UserActivity.NavigateEvent.EVENT_EXIST_LOGIN));
+    App.eventBus().post(new GenericEvent(this, UserActivity.EVENT_EXIST_LOGIN));
   }
 }

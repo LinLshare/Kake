@@ -1,5 +1,6 @@
 package com.home77.kake.business.user.presenter;
 
+import com.home77.common.base.event.GenericEvent;
 import com.home77.kake.App;
 import com.home77.kake.R;
 import com.home77.kake.base.BasePresenter;
@@ -44,13 +45,11 @@ public class ForgetPasswordPresenter extends BasePresenter<ForgetPasswordView> {
       return;
     }
 
-    App.eventBus()
-       .post(new UserActivity.NavigateEvent(this, UserActivity.NavigateEvent.EVENT_TO_PROFILE));
+    App.eventBus().post(new GenericEvent(this, UserActivity.EVENT_TO_PROFILE));
     attachedView.toast(R.string.submit_success);
   }
 
   public void handleBackClick() {
-    App.eventBus()
-       .post(new UserActivity.NavigateEvent(this, UserActivity.NavigateEvent.EVENT_TO_LOGIN));
+    App.eventBus().post(new GenericEvent(this, UserActivity.EVENT_TO_LOGIN));
   }
 }

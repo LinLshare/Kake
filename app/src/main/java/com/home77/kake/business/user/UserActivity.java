@@ -24,6 +24,13 @@ import org.greenrobot.eventbus.ThreadMode;
  */
 public class UserActivity extends AppCompatActivity {
 
+  public static final int EVENT_TO_PROFILE = 1;
+  public static final int EVENT_TO_LOGIN = 2;
+  public static final int EVENT_TO_REGISTER = 3;
+  public static final int EVENT_TO_HOME = 4;
+  public static final int EVENT_EXIST_LOGIN = 5;
+  public static final int EVENT_TO_FORGET_PSW = 6;
+
   private ProfileFragment profileFragment;
   private LoginFragment loginFragment;
   private ProfilePresenter profilePresenter;
@@ -64,9 +71,12 @@ public class UserActivity extends AppCompatActivity {
 
 
   @Subscribe(threadMode = ThreadMode.MAIN)
-  public void onEvent(NavigateEvent navigateEvent) {
+  public void onEvent(GenericEvent navigateEvent) {
+    if (!navigateEvent.isSameSender(this)) {
+      return;
+    }
     switch (navigateEvent.eventType) {
-      case NavigateEvent.EVENT_TO_PROFILE:
+      case EVENT_TO_PROFILE:
         // clear back stack
         getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
@@ -74,25 +84,25 @@ public class UserActivity extends AppCompatActivity {
                                    .replace(R.id.content_layout, profileFragment)
                                    .commit();
         break;
-      case NavigateEvent.EVENT_TO_LOGIN:
+      case EVENT_TO_LOGIN:
         getSupportFragmentManager().beginTransaction()
                                    .replace(R.id.content_layout, loginFragment)
                                    .addToBackStack(null)
                                    .commit();
         break;
-      case NavigateEvent.EVENT_TO_REGISTER:
+      case EVENT_TO_REGISTER:
         getSupportFragmentManager().beginTransaction()
                                    .replace(R.id.content_layout, registerFragment)
                                    .addToBackStack(null)
                                    .commit();
         break;
-      case NavigateEvent.EVENT_TO_FORGET_PSW:
+      case EVENT_TO_FORGET_PSW:
         getSupportFragmentManager().beginTransaction()
                                    .replace(R.id.content_layout, forgetPasswordFragment)
                                    .addToBackStack(null)
                                    .commit();
         break;
-      case NavigateEvent.EVENT_TO_HOME:
+      case EVENT_TO_HOME:
         this.finish();
         break;
     }
@@ -102,18 +112,5 @@ public class UserActivity extends AppCompatActivity {
   protected void onDestroy() {
     App.eventBus().unregister(this);
     super.onDestroy();
-  }
-
-  public static class NavigateEvent extends GenericEvent {
-    public static final int EVENT_TO_PROFILE = 1;
-    public static final int EVENT_TO_LOGIN = 2;
-    public static final int EVENT_TO_REGISTER = 3;
-    public static final int EVENT_TO_HOME = 4;
-    public static final int EVENT_EXIST_LOGIN = 5;
-    public static final int EVENT_TO_FORGET_PSW = 6;
-
-    public NavigateEvent(Object sender, int eventType) {
-      super(sender, eventType);
-    }
   }
 }

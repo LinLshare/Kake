@@ -1,20 +1,20 @@
 package com.home77.kake.business.user.presenter;
 
+import com.home77.common.base.event.GenericEvent;
 import com.home77.common.base.pattern.Instance;
 import com.home77.common.net.http.URLFetcher;
 import com.home77.kake.App;
 import com.home77.kake.GlobalData;
 import com.home77.kake.R;
 import com.home77.kake.base.BasePresenter;
-import com.home77.kake.business.user.UserActivity;
 import com.home77.kake.business.user.service.UserService;
 import com.home77.kake.business.user.service.response.UserResponse;
 import com.home77.kake.business.user.view.LoginView;
 import com.home77.kake.common.utils.InputChecker;
 
-import static com.home77.kake.business.user.UserActivity.NavigateEvent.EVENT_TO_FORGET_PSW;
-import static com.home77.kake.business.user.UserActivity.NavigateEvent.EVENT_TO_PROFILE;
-import static com.home77.kake.business.user.UserActivity.NavigateEvent.EVENT_TO_REGISTER;
+import static com.home77.kake.business.user.UserActivity.EVENT_TO_FORGET_PSW;
+import static com.home77.kake.business.user.UserActivity.EVENT_TO_PROFILE;
+import static com.home77.kake.business.user.UserActivity.EVENT_TO_REGISTER;
 
 /**
  * @author CJ
@@ -36,7 +36,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
   }
 
   public void handleBackClick() {
-    App.eventBus().post(new UserActivity.NavigateEvent(this, EVENT_TO_PROFILE));
+    App.eventBus().post(new GenericEvent(this, EVENT_TO_PROFILE));
   }
 
   public void handleLoginClick(String userName, String password) {
@@ -54,10 +54,10 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                .putString(GlobalData.KEY_USER_MOBILE, userResponse.getMobile())
                .putString(GlobalData.KEY_USER_AVATER, userResponse.getAvatar())
                .putString(GlobalData.KEY_USER_NAME, userResponse.getName());
-            App.eventBus().post(new UserActivity.NavigateEvent(this, EVENT_TO_PROFILE));
+            App.eventBus().post(new GenericEvent(this, EVENT_TO_PROFILE));
             attachedView.toast(R.string.login_success);
           }
-        }else{
+        } else {
           attachedView.toast("登录失败");
         }
       }
@@ -65,10 +65,10 @@ public class LoginPresenter extends BasePresenter<LoginView> {
   }
 
   public void handleForgetPasswordClick() {
-    App.eventBus().post(new UserActivity.NavigateEvent(this, EVENT_TO_FORGET_PSW));
+    App.eventBus().post(new GenericEvent(this, EVENT_TO_FORGET_PSW));
   }
 
   public void handleRegisterUserClick() {
-    App.eventBus().post(new UserActivity.NavigateEvent(this, EVENT_TO_REGISTER));
+    App.eventBus().post(new GenericEvent(this, EVENT_TO_REGISTER));
   }
 }

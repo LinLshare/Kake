@@ -2,6 +2,7 @@ package com.home77.kake.business.user.presenter;
 
 import android.text.TextUtils;
 
+import com.home77.common.base.event.GenericEvent;
 import com.home77.common.base.pattern.Instance;
 import com.home77.common.net.http.URLFetcher;
 import com.home77.kake.App;
@@ -106,8 +107,7 @@ public class RegisterPresenter extends BasePresenter<RegisterView> {
                                             registerResponse.getExpires_in());
                                  attachedView.toast("注册成功");
                                  App.eventBus()
-                                    .post(new UserActivity.NavigateEvent(this,
-                                                                         UserActivity.NavigateEvent.EVENT_TO_LOGIN));
+                                    .post(new GenericEvent(this, UserActivity.EVENT_TO_LOGIN));
                                }
                              } else {
                                attachedView.toast("注册失败");
@@ -117,7 +117,6 @@ public class RegisterPresenter extends BasePresenter<RegisterView> {
   }
 
   public void handleBackClick() {
-    App.eventBus()
-       .post(new UserActivity.NavigateEvent(this, UserActivity.NavigateEvent.EVENT_TO_LOGIN));
+    App.eventBus().post(new GenericEvent(this, UserActivity.EVENT_TO_LOGIN));
   }
 }
