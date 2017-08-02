@@ -33,12 +33,14 @@
     <ImageView
       android:layout_width="14dp"
       android:layout_height="14dp"
+      android:layout_gravity="center_vertical"
       android:src="@drawable/ic_local_photo_small"/>
 
     <TextView
       android:id="@+id/size_image_view"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_gravity="center_vertical"
       android:layout_marginLeft="4dp"
       android:textColor="@color/colorC1"
       android:textSize="@dimen/fontSizeF4"

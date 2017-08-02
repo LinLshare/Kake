@@ -74,20 +74,20 @@ public class ConfigurationDialog extends DialogFragment {
                 rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
-                        switch (checkedId) {
-                            case R.id.inertia_0:
-                                mRotateInertia = RotateInertia.INERTIA_0;
-                                break;
-                            case R.id.inertia_50:
-                                mRotateInertia = RotateInertia.INERTIA_50;
-                                break;
-                            case R.id.inertia_100:
-                                mRotateInertia = RotateInertia.INERTIA_100;
-                                break;
-                            default:
-                                mRotateInertia = null;
-                                break;
-                        }
+//                        switch (checkedId) {
+//                            case R.id.inertia_0:
+//                                mRotateInertia = RotateInertia.INERTIA_0;
+//                                break;
+//                            case R.id.inertia_50:
+//                                mRotateInertia = RotateInertia.INERTIA_50;
+//                                break;
+//                            case R.id.inertia_100:
+//                                mRotateInertia = RotateInertia.INERTIA_100;
+//                                break;
+//                            default:
+//                                mRotateInertia = null;
+//                                break;
+//                        }
                     }
                 });
             }

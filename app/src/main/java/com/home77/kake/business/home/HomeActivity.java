@@ -5,11 +5,14 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
+import android.widget.TextView;
 
 import com.home77.common.base.event.GenericEvent;
 import com.home77.common.ui.widget.Toast;
 import com.home77.kake.App;
 import com.home77.kake.R;
+import com.home77.kake.business.home.presenter.LocalPhotoPresenter;
+import com.home77.kake.business.home.view.LocalPhotoFragment;
 import com.home77.kake.business.user.UserActivity;
 import com.home77.kake.common.adapter.FragmentPagerAdapter;
 import com.home77.kake.common.widget.ScrollConfigurableViewPager;
@@ -33,6 +36,8 @@ public class HomeActivity extends AppCompatActivity
   ScrollConfigurableViewPager pagerMainTab;
   @BindView(R.id.main_bottom_bar)
   MainBottomBar mainBottomBar;
+  @BindView(R.id.title_text_view)
+  TextView titleTextView;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -50,14 +55,19 @@ public class HomeActivity extends AppCompatActivity
                                                         R.string.cloud_album));
     mainBottomBar.setOnTabItemClickListener(this);
 
+    LocalPhotoFragment localPhotoFragment = new LocalPhotoFragment();
+    // setup presenter
+    LocalPhotoPresenter localPhotoPresenter = new LocalPhotoPresenter(localPhotoFragment);
+    localPhotoFragment.setPresenter(localPhotoPresenter);
+
     ArrayList<Fragment> fragmentList = new ArrayList<>();
-    fragmentList.add(new Fragment()); //占位
+    fragmentList.add(localPhotoFragment);
     fragmentList.add(new Fragment()); //占位
     fragmentList.add(new Fragment()); //占位
     FragmentPagerAdapter adapter =
         new FragmentPagerAdapter(getSupportFragmentManager(), fragmentList);
     pagerMainTab.setAdapter(adapter);
-    pagerMainTab.setOffscreenPageLimit(3);
+    pagerMainTab.setOffscreenPageLimit(fragmentList.size());
   }
 
   @Override
@@ -68,6 +78,16 @@ public class HomeActivity extends AppCompatActivity
 
   @Override
   public void onTabItemClick(int index) {
+    switch (index) {
+      case 0:
+        titleTextView.setText(R.string.local_photo);
+        break;
+      case 1:
+        break;
+      case 2:
+        titleTextView.setText(R.string.cloud_album);
+        break;
+    }
     pagerMainTab.setCurrentItem(index, false);
   }
 

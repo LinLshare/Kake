@@ -10,7 +10,7 @@ ext {
   versions = [
     android_support_v7: '25.3.1',
     eventbus: '3.+',
-    gson: '2.+',
+    gson: '2.4',
     okhttp: '3.+',
     picasso: '2.5.+',
     base_rvadapter: '3.0.3',

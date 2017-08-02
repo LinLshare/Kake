@@ -19,6 +19,8 @@ import com.home77.kake.business.user.view.RegisterFragment;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.Arrays;
+
 /**
  * @author CJ
  */
@@ -72,7 +74,8 @@ public class UserActivity extends AppCompatActivity {
 
   @Subscribe(threadMode = ThreadMode.MAIN)
   public void onEvent(GenericEvent navigateEvent) {
-    if (!navigateEvent.isSameSender(this)) {
+    if (!Arrays.asList(forgetPasswordPresenter, loginPresenter, profilePresenter, registerPresenter)
+               .contains(navigateEvent.sender())) {
       return;
     }
     switch (navigateEvent.eventType) {

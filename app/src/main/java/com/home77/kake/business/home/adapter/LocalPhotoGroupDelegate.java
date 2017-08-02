@@ -21,6 +21,6 @@ public class LocalPhotoGroupDelegate implements ItemViewDelegate<Photo> {
 
   @Override
   public void convert(ViewHolder holder, Photo photo, int position) {
-    holder.setText(R.id.group_name_text_view, photo.getCreated_at());
+    holder.setText(R.id.group_name_text_view, photo.getDateTimeZone());
   }
 }

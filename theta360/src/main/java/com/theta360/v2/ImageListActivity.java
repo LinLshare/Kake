@@ -669,7 +669,7 @@ public class ImageListActivity extends Activity implements ImageSizeDialog.Dialo
       @Override
       public void onCompleted() {
         appendLogView("CaptureComplete");
-        if (ImageAdd) {
+          if (ImageAdd) {
           runOnUiThread(new Runnable() {
             @Override
             public void run() {

@@ -6,69 +6,22 @@ package com.home77.kake.business.home.model;
 public class Photo {
   public static final int TYPE_NORMAL = 0;
   public static final int TYPE_GROUP = 1;
-  private int type;
-  private int id;
-  private int album_id;
-  private String rename;
-  private String imgurl;
-  private String photo_hash;
-  private String created_at;
-  private String updated_at;
+  private int type = TYPE_NORMAL;
+  private String name;
+  private String fileUrl;
+  private int size;
+  private String dateTimeZone;
+  private int width;
+  private int height;
+  private String previewUrl;
+  private String thumbnail;
 
-  public int getId() {
-    return id;
+  public static int getTypeNormal() {
+    return TYPE_NORMAL;
   }
 
-  public void setId(int id) {
-    this.id = id;
-  }
-
-  public int getAlbum_id() {
-    return album_id;
-  }
-
-  public void setAlbum_id(int album_id) {
-    this.album_id = album_id;
-  }
-
-  public String getRename() {
-    return rename;
-  }
-
-  public void setRename(String rename) {
-    this.rename = rename;
-  }
-
-  public String getImgurl() {
-    return imgurl;
-  }
-
-  public void setImgurl(String imgurl) {
-    this.imgurl = imgurl;
-  }
-
-  public String getPhoto_hash() {
-    return photo_hash;
-  }
-
-  public void setPhoto_hash(String photo_hash) {
-    this.photo_hash = photo_hash;
-  }
-
-  public String getCreated_at() {
-    return created_at;
-  }
-
-  public void setCreated_at(String created_at) {
-    this.created_at = created_at;
-  }
-
-  public String getUpdated_at() {
-    return updated_at;
-  }
-
-  public void setUpdated_at(String updated_at) {
-    this.updated_at = updated_at;
+  public static int getTypeGroup() {
+    return TYPE_GROUP;
   }
 
   public int getType() {
@@ -77,5 +30,69 @@ public class Photo {
 
   public void setType(int type) {
     this.type = type;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getFileUrl() {
+    return fileUrl;
+  }
+
+  public void setFileUrl(String fileUrl) {
+    this.fileUrl = fileUrl;
+  }
+
+  public int getSize() {
+    return size;
+  }
+
+  public void setSize(int size) {
+    this.size = size;
+  }
+
+  public String getDateTimeZone() {
+    return dateTimeZone;
+  }
+
+  public void setDateTimeZone(String dateTimeZone) {
+    this.dateTimeZone = dateTimeZone;
+  }
+
+  public int getWidth() {
+    return width;
+  }
+
+  public void setWidth(int width) {
+    this.width = width;
+  }
+
+  public int getHeight() {
+    return height;
+  }
+
+  public void setHeight(int height) {
+    this.height = height;
+  }
+
+  public String getPreviewUrl() {
+    return previewUrl;
+  }
+
+  public void setPreviewUrl(String previewUrl) {
+    this.previewUrl = previewUrl;
+  }
+
+  public String getThumbnail() {
+    return thumbnail;
+  }
+
+  public void setThumbnail(String thumbnail) {
+    this.thumbnail = thumbnail;
   }
 }

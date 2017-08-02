@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * @author CJ
  */
-public class TokenValidateRequest implements Serializable {
+public class TokenValidateRequest {
 
   /**
    * grant_type : password

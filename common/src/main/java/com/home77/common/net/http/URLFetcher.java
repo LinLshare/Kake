@@ -1,5 +1,6 @@
 package com.home77.common.net.http;
 
+import com.google.gson.reflect.TypeToken;
 import com.home77.common.base.debug.DLog;
 import com.home77.common.base.util.TextHelper;
 import com.home77.common.net.util.UserAgentHelper;
@@ -10,6 +11,7 @@ import com.home77.common.protocol.base.Info;
 import com.home77.common.protocol.base.Token;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.List;
 
 import okhttp3.Call;
@@ -38,7 +40,9 @@ public final class URLFetcher {
   // delegate
 
   public interface Delegate {
-    void onComplete(URLFetcher source);
+    void onSuccess(URLFetcher source);
+
+    void onError(String msg);
   }
 
   // class
@@ -81,8 +85,11 @@ public final class URLFetcher {
       mLastError = e;
 
       // ). notify upstream that URLFetcher is complete
-      mDelegate.onComplete(URLFetcher.this);
-
+      if (isSuccess()) {
+        mDelegate.onSuccess(URLFetcher.this);
+      } else {
+        mDelegate.onError("response error: " + (response == null ? "null" : response.code() + ""));
+      }
       // ). release |mResponse|
       if (mResponse != null) {
         mResponse.close();
@@ -104,8 +111,8 @@ public final class URLFetcher {
     return this;
   }
 
-  public URLFetcher addHeader(String name,String value){
-    mRequestBuilder.addHeader(name,value);
+  public URLFetcher addHeader(String name, String value) {
+    mRequestBuilder.addHeader(name, value);
     return this;
   }
 
@@ -149,7 +156,7 @@ public final class URLFetcher {
 
   // response relative
 
-  public boolean isSuccess() {
+  private boolean isSuccess() {
     return mResponse != null && mResponse.isSuccessful();
   }
 
@@ -185,6 +192,11 @@ public final class URLFetcher {
   public <T> T responseClass(Class<T> clazz) {
     final String response = responseUtf8String();
     return TextHelper.isEmptyOrSpaces(response) ? null : Json.fromJson(response, clazz);
+  }
+
+  public <T> T responseClass(TypeToken<T> typeToken) {
+    final String response = responseUtf8String();
+    return TextHelper.isEmptyOrSpaces(response) ? null : Json.fromJson(response, typeToken);
   }
 
   public <T> BasicResponse<T> responseBasicResponseObject(Class<T> clazz) {

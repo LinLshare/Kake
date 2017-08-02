@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -25,7 +26,7 @@ public final class Json {
   }
 
   private final static Gson GSON = new GsonBuilder().enableComplexMapKeySerialization()
-                                                    .setExclusionStrategies(new SerializedNameOnlyStrategy())
+//                                                    .setExclusionStrategies(new SerializedNameOnlyStrategy())
                                                     .create();
 
   public static String toJson(Object object) {
@@ -34,6 +35,10 @@ public final class Json {
 
   public static <T> T fromJson(String json, Class<T> cls) {
     return GSON.fromJson(json, cls);
+  }
+
+  public static <T> T fromJson(String json, TypeToken<T> typeToken) {
+    return GSON.fromJson(json, typeToken.getType());
   }
 
   public static <T> T fromJson(String json, Type type) {

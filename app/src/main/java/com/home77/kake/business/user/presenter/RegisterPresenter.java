@@ -43,18 +43,19 @@ public class RegisterPresenter extends BasePresenter<RegisterView> {
     }
     userService.gainCheckCode(phoneNumber, new URLFetcher.Delegate() {
       @Override
-      public void onComplete(URLFetcher source) {
-        if (source.isSuccess()) {
-          CheckcodeResponse checkcodeResponse = source.responseClass(CheckcodeResponse.class);
-          attachedView.onCheckcodeViewCountDown(60);
-          if (checkcodeResponse != null && checkcodeResponse.getMessage() != null) {
-            attachedView.toast(checkcodeResponse.getMessage());
-          } else {
-            attachedView.toast("服务器异常，正在维护");
-          }
+      public void onSuccess(URLFetcher source) {
+        CheckcodeResponse checkcodeResponse = source.responseClass(CheckcodeResponse.class);
+        attachedView.onCheckcodeViewCountDown(60);
+        if (checkcodeResponse != null && checkcodeResponse.getMessage() != null) {
+          attachedView.toast(checkcodeResponse.getMessage());
         } else {
-          attachedView.toast("网络异常，请稍后重试");
+          attachedView.toast("服务器异常，正在维护");
         }
+      }
+
+      @Override
+      public void onError(String msg) {
+        attachedView.toast("网络异常，请稍后重试");
       }
     });
   }
@@ -89,29 +90,30 @@ public class RegisterPresenter extends BasePresenter<RegisterView> {
                          checkCode,
                          new URLFetcher.Delegate() {
                            @Override
-                           public void onComplete(URLFetcher source) {
-                             if (source.isSuccess()) {
-                               RegisterResponse registerResponse =
-                                   source.responseClass(RegisterResponse.class);
-                               if (registerResponse == null) {
-                                 attachedView.toast("注册失败");
-                               } else {
-                                 App.globalData()
-                                    .putString(GlobalData.KEY_TOKEN_TYPE,
-                                               registerResponse.getToken_type())
-                                    .putString(GlobalData.KEY_ACCESS_TOKEN,
-                                               registerResponse.getAccess_token())
-                                    .putString(GlobalData.KEY_REFRESH_TOKEN,
-                                               registerResponse.getRefresh_token())
-                                    .putInt(GlobalData.KEY_EXPIRE_IN,
-                                            registerResponse.getExpires_in());
-                                 attachedView.toast("注册成功");
-                                 App.eventBus()
-                                    .post(new GenericEvent(this, UserActivity.EVENT_TO_LOGIN));
-                               }
-                             } else {
+                           public void onSuccess(URLFetcher source) {
+                             RegisterResponse registerResponse =
+                                 source.responseClass(RegisterResponse.class);
+                             if (registerResponse == null) {
                                attachedView.toast("注册失败");
+                             } else {
+                               App.globalData()
+                                  .putString(GlobalData.KEY_TOKEN_TYPE,
+                                             registerResponse.getToken_type())
+                                  .putString(GlobalData.KEY_ACCESS_TOKEN,
+                                             registerResponse.getAccess_token())
+                                  .putString(GlobalData.KEY_REFRESH_TOKEN,
+                                             registerResponse.getRefresh_token())
+                                  .putInt(GlobalData.KEY_EXPIRE_IN,
+                                          registerResponse.getExpires_in());
+                               attachedView.toast("注册成功");
+                               App.eventBus()
+                                  .post(new GenericEvent(this, UserActivity.EVENT_TO_LOGIN));
                              }
+                           }
+
+                           @Override
+                           public void onError(String msg) {
+                             attachedView.toast("注册失败");
                            }
                          });
   }

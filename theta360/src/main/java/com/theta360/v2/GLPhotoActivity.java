@@ -109,14 +109,14 @@ public class GLPhotoActivity extends Activity implements ConfigurationDialog.Dia
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
-        switch (item.getItemId()) {
-            case R.id.configuration:
-                FragmentManager mgr = getFragmentManager();
-                ConfigurationDialog.show(mgr, mRotateInertia);
-                break;
-            default:
-                break;
-        }
+//        switch (item.getItemId()) {
+//            case R.id.configuration:
+//                FragmentManager mgr = getFragmentManager();
+//                ConfigurationDialog.show(mgr, mRotateInertia);
+//                break;
+//            default:
+//                break;
+//        }
         return true;
     }
 

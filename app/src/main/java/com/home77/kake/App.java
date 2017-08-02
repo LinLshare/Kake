@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.home77.common.base.component.BaseHandler;
 import com.home77.common.base.component.ContextManager;
+import com.home77.kake.business.theta.ThetaCameraApi;
+import com.home77.kake.business.theta.ThetaCameraApiImpl;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -22,17 +24,25 @@ public class App extends Application {
     // 3). restore global data
     GLOBAL_DATA = new GlobalData(this);
     GLOBAL_DATA.restore();
+    // 4). setup theta api
+
   }
 
   // setup eventbus
   private static EventBus EVENTBUS;
+  private static ThetaCameraApi THETA_CAMERA_API;
 
   static {
     EVENTBUS = EventBus.builder().eventInheritance(false).build();
+    THETA_CAMERA_API = new ThetaCameraApiImpl();
   }
 
   public static EventBus eventBus() {
     return EVENTBUS;
+  }
+
+  public static ThetaCameraApi thetaCameraApi() {
+    return THETA_CAMERA_API;
   }
 
   private static GlobalData GLOBAL_DATA;

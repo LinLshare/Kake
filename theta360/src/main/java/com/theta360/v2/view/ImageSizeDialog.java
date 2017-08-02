@@ -70,15 +70,15 @@ public class ImageSizeDialog extends DialogFragment {
                 rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
-                        switch (checkedId) {
-                            case R.id.image_size_2048x1024:
-                                mImageSize = ImageSize.IMAGE_SIZE_2048x1024;
-                                break;
-                            default:
-                            case R.id.image_size_5376x2688:
-                                mImageSize = ImageSize.IMAGE_SIZE_5376x2688;
-                                break;
-                        }
+//                        switch (checkedId) {
+//                            case R.id.image_size_2048x1024:
+//                                mImageSize = ImageSize.IMAGE_SIZE_2048x1024;
+//                                break;
+//                            default:
+//                            case R.id.image_size_5376x2688:
+//                                mImageSize = ImageSize.IMAGE_SIZE_5376x2688;
+//                                break;
+//                        }
                     }
                 });
             }

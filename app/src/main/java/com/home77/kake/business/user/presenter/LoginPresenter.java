@@ -46,20 +46,21 @@ public class LoginPresenter extends BasePresenter<LoginView> {
     }
     userService.login(userName, password, new URLFetcher.Delegate() {
       @Override
-      public void onComplete(URLFetcher source) {
-        if (source != null && source.isSuccess()) {
-          UserResponse userResponse = source.responseClass(UserResponse.class);
-          if (userResponse != null) {
-            App.globalData()
-               .putString(GlobalData.KEY_USER_MOBILE, userResponse.getMobile())
-               .putString(GlobalData.KEY_USER_AVATER, userResponse.getAvatar())
-               .putString(GlobalData.KEY_USER_NAME, userResponse.getName());
-            App.eventBus().post(new GenericEvent(this, EVENT_TO_PROFILE));
-            attachedView.toast(R.string.login_success);
-          }
-        } else {
-          attachedView.toast("登录失败");
+      public void onSuccess(URLFetcher source) {
+        UserResponse userResponse = source.responseClass(UserResponse.class);
+        if (userResponse != null) {
+          App.globalData()
+             .putString(GlobalData.KEY_USER_MOBILE, userResponse.getMobile())
+             .putString(GlobalData.KEY_USER_AVATER, userResponse.getAvatar())
+             .putString(GlobalData.KEY_USER_NAME, userResponse.getName());
+          App.eventBus().post(new GenericEvent(this, EVENT_TO_PROFILE));
+          attachedView.toast(R.string.login_success);
         }
+      }
+
+      @Override
+      public void onError(String msg) {
+        attachedView.toast("登录失败");
       }
     });
   }
