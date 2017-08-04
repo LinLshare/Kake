@@ -1,5 +1,7 @@
 package com.home77.kake.business.user.view;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -13,6 +15,7 @@ import com.home77.kake.R;
 import com.home77.kake.base.BaseFragment;
 import com.home77.kake.business.user.presenter.ProfilePresenter;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -89,7 +92,22 @@ public class ProfileFragment extends BaseFragment<ProfilePresenter> implements P
       nameTextView.setText(userName);
     }
     if (!TextUtils.isEmpty(imgUrl)) {
-      Picasso.with(getContext()).load(imgUrl).into(avatarImageView);
+      Picasso.with(getContext()).load(imgUrl).into(new Target() {
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+          avatarImageView.setImageBitmap(bitmap);
+        }
+
+        @Override
+        public void onBitmapFailed(Drawable errorDrawable) {
+          avatarImageView.setImageResource(R.drawable.user_avatar_def);
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+          avatarImageView.setImageResource(R.drawable.user_avatar_def);
+        }
+      });
     }
   }
 }
