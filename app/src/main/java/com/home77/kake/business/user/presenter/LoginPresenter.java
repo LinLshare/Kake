@@ -7,8 +7,9 @@ import com.home77.kake.App;
 import com.home77.kake.GlobalData;
 import com.home77.kake.R;
 import com.home77.kake.base.BasePresenter;
-import com.home77.kake.business.user.service.UserService;
-import com.home77.kake.business.user.service.response.UserResponse;
+import com.home77.kake.common.api.ServerConfig;
+import com.home77.kake.common.api.UserService;
+import com.home77.kake.common.api.response.UserResponse;
 import com.home77.kake.business.user.view.LoginView;
 import com.home77.kake.common.utils.InputChecker;
 
@@ -49,11 +50,13 @@ public class LoginPresenter extends BasePresenter<LoginView> {
       public void onSuccess(URLFetcher source) {
         UserResponse userResponse = source.responseClass(UserResponse.class);
         if (userResponse != null) {
+          // 图片需要拼接host
           App.globalData()
              .putString(GlobalData.KEY_USER_MOBILE, userResponse.getMobile())
-             .putString(GlobalData.KEY_USER_AVATER, userResponse.getAvatar())
+             .putString(GlobalData.KEY_USER_AVATER,
+                        ServerConfig.BASE_IMG_URL + userResponse.getAvatar())
              .putString(GlobalData.KEY_USER_NAME, userResponse.getName());
-          App.eventBus().post(new GenericEvent(this, EVENT_TO_PROFILE));
+          App.eventBus().post(new GenericEvent(LoginPresenter.this, EVENT_TO_PROFILE));
           attachedView.toast(R.string.login_success);
         }
       }

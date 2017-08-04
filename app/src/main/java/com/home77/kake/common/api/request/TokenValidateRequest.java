@@ -1,6 +1,4 @@
-package com.home77.kake.business.user.service.request;
-
-import java.io.Serializable;
+package com.home77.kake.common.api.request;
 
 /**
  * @author CJ

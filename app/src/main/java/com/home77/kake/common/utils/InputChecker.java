@@ -25,7 +25,9 @@ public class InputChecker {
     if (TextUtils.isEmpty(password)) {
       return false;
     }
-    return true;
+    Pattern pattern = Pattern.compile("^[a-zA-Z0-9]{6,16}$");
+    Matcher matcher = pattern.matcher(password);
+    return matcher.matches();
   }
 
   public static boolean isUserNameLegal(String userName) {

@@ -1,4 +1,4 @@
-package com.home77.kake.business.user.service.response;
+package com.home77.kake.common.api.response;
 
 /**
  * @author CJ

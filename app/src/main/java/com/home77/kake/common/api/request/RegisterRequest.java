@@ -1,4 +1,4 @@
-package com.home77.kake.business.user.service.request;
+package com.home77.kake.common.api.request;
 
 import java.io.Serializable;
 

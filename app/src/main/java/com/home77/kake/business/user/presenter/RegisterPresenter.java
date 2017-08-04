@@ -10,9 +10,9 @@ import com.home77.kake.GlobalData;
 import com.home77.kake.R;
 import com.home77.kake.base.BasePresenter;
 import com.home77.kake.business.user.UserActivity;
-import com.home77.kake.business.user.service.UserService;
-import com.home77.kake.business.user.service.response.CheckcodeResponse;
-import com.home77.kake.business.user.service.response.RegisterResponse;
+import com.home77.kake.common.api.UserService;
+import com.home77.kake.common.api.response.CheckcodeResponse;
+import com.home77.kake.common.api.response.RegisterResponse;
 import com.home77.kake.business.user.view.RegisterView;
 import com.home77.kake.common.utils.InputChecker;
 
@@ -85,9 +85,9 @@ public class RegisterPresenter extends BasePresenter<RegisterView> {
     }
 
     userService.register(phoneNumber,
+                         checkCode,
                          password,
                          confirmPassword,
-                         checkCode,
                          new URLFetcher.Delegate() {
                            @Override
                            public void onSuccess(URLFetcher source) {

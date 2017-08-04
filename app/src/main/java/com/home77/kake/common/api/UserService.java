@@ -1,13 +1,13 @@
-package com.home77.kake.business.user.service;
+package com.home77.kake.common.api;
 
 import com.home77.common.net.http.HttpContextBuilder;
 import com.home77.common.net.http.URLFetcher;
-import com.home77.kake.business.user.service.request.RegisterRequest;
-import com.home77.kake.business.user.service.request.TokenValidateRequest;
-import com.home77.kake.business.user.service.response.TokenValidateResponse;
+import com.home77.kake.common.api.request.CheckCodeRequest;
+import com.home77.kake.common.api.request.RegisterRequest;
+import com.home77.kake.common.api.request.TokenValidateRequest;
+import com.home77.kake.common.api.response.TokenValidateResponse;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import static com.home77.kake.common.api.ServerConfig.HOST;
 
 /**
  * @author CJ
@@ -23,18 +23,15 @@ public class UserService {
 
   public final static String NICKNAME = "nickname";
   private final static String REGISTER_URL;
-  private final static String QUERY_URL;
   private static final String CHECKCODE_URL;
   private static final String USER_URL;
   private static final String VALIDATE_URL;
 
   static {
-    String host = "control.home77.com";
-    VALIDATE_URL = String.format("http://%s/oauth/token", host);
-    REGISTER_URL = String.format("https://%s/account/v1/register", host);
-    QUERY_URL = String.format("https://%s/account/v1/query", host);
-    CHECKCODE_URL = String.format("http://%s/laravel-sms/verify-code", host);
-    USER_URL = String.format("http://%s/api/v1/user", host);
+    VALIDATE_URL = String.format("http://%s/oauth/token", HOST);
+    REGISTER_URL = String.format("http://%s/api/v1/register", HOST);
+    CHECKCODE_URL = String.format("http://%s/laravel-sms/verify-code", HOST);
+    USER_URL = String.format("http://%s/api/v1/user", HOST);
   }
 
   private URLFetcher urlFetcher;
@@ -97,15 +94,9 @@ public class UserService {
   }
 
   public void gainCheckCode(String phoneNumber, URLFetcher.Delegate callback) {
-    try {
-      JSONObject jsoObject = new JSONObject();
-      jsoObject.put("mobile", phoneNumber);
-      urlFetcher = URLFetcher.create(HttpContextBuilder.httpClient(), callback)
-                             .url(CHECKCODE_URL)
-                             .postJson(jsoObject);
-      urlFetcher.start();
-    } catch (JSONException e) {
-      callback.onError(e.getMessage());
-    }
+    urlFetcher = URLFetcher.create(HttpContextBuilder.httpClient(), callback)
+                           .url(CHECKCODE_URL)
+                           .postJson(new CheckCodeRequest(phoneNumber));
+    urlFetcher.start();
   }
 }

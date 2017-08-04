@@ -1,5 +1,7 @@
 package com.home77.kake.business.user.presenter;
 
+import android.text.TextUtils;
+
 import com.home77.common.base.event.GenericEvent;
 import com.home77.kake.App;
 import com.home77.kake.GlobalData;
@@ -22,8 +24,11 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
 
   @Override
   public void onCreateView() {
-    attachedView.bindData(App.globalData().getString(GlobalData.KEY_USER_NAME, ""),
-                          App.globalData().getString(GlobalData.KEY_USER_AVATER, ""));
+    String userName = App.globalData().getString(GlobalData.KEY_USER_NAME, "");
+    if (TextUtils.isEmpty(userName)) {
+      userName = App.globalData().getString(GlobalData.KEY_USER_MOBILE, "");
+    }
+    attachedView.bindData(userName, App.globalData().getString(GlobalData.KEY_USER_AVATER, ""));
   }
 
   public void handleBackImageViewClick() {
