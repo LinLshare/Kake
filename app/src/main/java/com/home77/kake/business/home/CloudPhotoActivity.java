@@ -29,11 +29,11 @@ public class CloudPhotoActivity extends AppCompatActivity {
     App.eventBus().register(this);
     cloudPhotoListFragment = new CloudPhotoListFragment();
     cloudPhotoListPresenter = new CloudPhotoListPresenter(cloudPhotoListFragment);
+    cloudPhotoListPresenter.setParam(album);
     cloudPhotoListFragment.setPresenter(cloudPhotoListPresenter);
     getSupportFragmentManager().beginTransaction()
                                .add(R.id.content_layout, cloudPhotoListFragment)
                                .commit();
-
   }
 
   @Override

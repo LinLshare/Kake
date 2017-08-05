@@ -5,10 +5,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Size;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.home77.common.ui.util.SizeHelper;
@@ -40,8 +41,11 @@ public class CloudPhotoListFragment extends BaseFragment<CloudPhotoListPresenter
   @BindView(R.id.refresh_layout)
   SwipeRefreshLayout refreshLayout;
   Unbinder unbinder;
+  @BindView(R.id.menu_image_view)
+  ImageView menuImageView;
   private List<Photo> photoList = new ArrayList<>();
   private LocalPhotoListAdapter localPhotoListAdapter;
+  private PopupWindow popupMenu;
 
   @Nullable
   @Override
@@ -64,6 +68,26 @@ public class CloudPhotoListFragment extends BaseFragment<CloudPhotoListPresenter
         presenter.onRefresh();
       }
     });
+    View menulayout =
+        LayoutInflater.from(getContext()).inflate(R.layout.menu_cloud_photo_list, null);
+    popupMenu = new PopupWindow(menulayout,
+                                ViewGroup.LayoutParams.WRAP_CONTENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT);
+    popupMenu.setOutsideTouchable(false);
+    popupMenu.setFocusable(true);
+    menulayout.findViewById(R.id.add_photo_layout).setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+
+        popupMenu.dismiss();
+      }
+    });
+    menulayout.findViewById(R.id.menu_layout).setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        popupMenu.dismiss();
+      }
+    });
     presenter.onCreateView();
     return view;
   }
@@ -84,5 +108,40 @@ public class CloudPhotoListFragment extends BaseFragment<CloudPhotoListPresenter
         presenter.onMenuNavClick();
         break;
     }
+  }
+
+  @Override
+  public void onShowSubMenu() {
+    popupMenu.showAsDropDown(menuImageView);
+  }
+
+  @Override
+  public void onPhotoListUpdated(List<Photo> photoList) {
+    if (refreshLayout.isRefreshing()) {
+      refreshLayout.setRefreshing(false);
+    }
+    if (photoList.isEmpty()) {
+      toast("暂无图片");
+      return;
+    }
+    this.photoList.clear();
+    this.photoList.addAll(photoList);
+    localPhotoListAdapter.notifyDataSetChanged();
+  }
+
+  @Override
+  public void onPhotoListUpdateError(String msg) {
+    if (refreshLayout.isRefreshing()) {
+      refreshLayout.setRefreshing(false);
+    }
+    toast(msg);
+  }
+
+  @Override
+  public void onPause() {
+    if (popupMenu.isShowing()) {
+      popupMenu.dismiss();
+    }
+    super.onPause();
   }
 }
