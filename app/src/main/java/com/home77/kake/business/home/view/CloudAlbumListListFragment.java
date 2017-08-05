@@ -85,6 +85,7 @@ public class CloudAlbumListListFragment extends BaseFragment {
             presenter.onMessage(MsgType.VIEW_REFRESH, null);
           }
         });
+        out.put(ParamsKey.VIEW, view);
         break;
       case CLOUD_ALBUM_CREATING:
         alertDialog.dismiss();
@@ -116,6 +117,9 @@ public class CloudAlbumListListFragment extends BaseFragment {
         this.albumList.add(new Album());
         this.albumList.addAll(albumList);
         cloudAlbumListAdapter.notifyDataSetChanged();
+        if (refreshLayout.isRefreshing()) {
+          refreshLayout.setRefreshing(false);
+        }
         break;
     }
   }

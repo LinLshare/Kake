@@ -51,7 +51,7 @@ public abstract class BaseFragmentPresenter implements BasePresenter {
 
   @Override
   public void onMessage(final MsgType msgType, final Params params) {
-    BaseHandler.post(new Runnable() {
+    BaseHandler.runOnMainThread(new Runnable() {
       @Override
       public void run() {
         handleMessage(msgType, params);

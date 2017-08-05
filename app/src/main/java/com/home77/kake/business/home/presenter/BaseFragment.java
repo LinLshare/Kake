@@ -63,7 +63,7 @@ public abstract class BaseFragment extends Fragment implements BaseView {
 
   @Override
   public void onCommand(final CmdType cmdType, final Params in, final Params out) {
-    BaseHandler.post(new Runnable() {
+    BaseHandler.runOnMainThread(new Runnable() {
       @Override
       public void run() {
         executeCommand(cmdType, in, out);
