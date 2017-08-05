@@ -76,7 +76,7 @@ public class CloudAlbumListListFragment extends BaseFragment<CloudAlbumListPrese
         presenter.onRefresh();
       }
     });
-    presenter.onCreateView();
+    presenter.onViewCreated();
     return view;
   }
 

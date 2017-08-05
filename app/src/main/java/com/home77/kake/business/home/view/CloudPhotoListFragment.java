@@ -90,7 +90,7 @@ public class CloudPhotoListFragment extends BaseFragment<CloudPhotoListPresenter
       }
     });
 
-    presenter.onCreateView();
+    presenter.onViewCreated();
     return view;
   }
 

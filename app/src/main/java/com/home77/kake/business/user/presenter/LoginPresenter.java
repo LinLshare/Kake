@@ -11,6 +11,8 @@ import com.home77.kake.common.api.ServerConfig;
 import com.home77.kake.common.api.service.UserService;
 import com.home77.kake.common.api.response.UserResponse;
 import com.home77.kake.business.user.view.LoginView;
+import com.home77.kake.common.event.BroadCastEvent;
+import com.home77.kake.common.event.BroadCastEventConstant;
 import com.home77.kake.common.utils.InputChecker;
 
 import static com.home77.kake.business.user.UserActivity.EVENT_TO_FORGET_PSW;
@@ -33,7 +35,12 @@ public class LoginPresenter extends BasePresenter<LoginView> {
   }
 
   @Override
-  public void onCreateView() {
+  public void onViewCreated() {
+  }
+
+  @Override
+  public void onViewDestroy() {
+
   }
 
   public void handleBackClick() {
@@ -58,6 +65,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                         ServerConfig.BASE_IMG_URL + userResponse.getAvatar())
              .putString(GlobalData.KEY_USER_NAME, userResponse.getName());
           App.eventBus().post(new GenericEvent(LoginPresenter.this, EVENT_TO_PROFILE));
+          App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.EVENT_LOGIN, null));
           attachedView.toast(R.string.login_success);
         }
       }

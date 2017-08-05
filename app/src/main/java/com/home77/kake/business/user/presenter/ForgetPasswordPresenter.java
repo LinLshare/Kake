@@ -21,7 +21,12 @@ public class ForgetPasswordPresenter extends BasePresenter<ForgetPasswordView> {
   }
 
   @Override
-  public void onCreateView() {
+  public void onViewCreated() {
+
+  }
+
+  @Override
+  public void onViewDestroy() {
 
   }
 

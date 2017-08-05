@@ -9,4 +9,8 @@ import com.home77.kake.business.user.presenter.ProfilePresenter;
 public interface ProfileView extends BaseView<ProfilePresenter> {
 
   void bindData(String userName, String imgUrl);
+
+  void onLogout();
+
+  void onLogin();
 }

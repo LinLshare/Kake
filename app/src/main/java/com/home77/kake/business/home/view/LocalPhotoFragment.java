@@ -47,7 +47,7 @@ public class LocalPhotoFragment extends BaseFragment<LocalPhotoPresenter>
                                                           false));
     localPhotoListAdapter = new LocalPhotoListAdapter(getContext(), photoList);
     recyclerView.setAdapter(localPhotoListAdapter);
-//    presenter.onCreateView();
+//    presenter.onViewCreated();
     return view;
   }
 

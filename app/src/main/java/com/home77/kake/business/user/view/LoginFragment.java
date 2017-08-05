@@ -34,7 +34,7 @@ public class LoginFragment extends BaseFragment<LoginPresenter> implements Login
                            @Nullable Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_login, container, false);
     unbinder = ButterKnife.bind(this, view);
-    presenter.onCreateView();
+    presenter.onViewCreated();
     return view;
   }
 

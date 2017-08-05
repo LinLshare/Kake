@@ -10,10 +10,10 @@ import com.home77.kake.GlobalData;
 import com.home77.kake.R;
 import com.home77.kake.base.BasePresenter;
 import com.home77.kake.business.user.UserActivity;
-import com.home77.kake.common.api.service.UserService;
+import com.home77.kake.business.user.view.RegisterView;
 import com.home77.kake.common.api.response.CheckcodeResponse;
 import com.home77.kake.common.api.response.RegisterResponse;
-import com.home77.kake.business.user.view.RegisterView;
+import com.home77.kake.common.api.service.UserService;
 import com.home77.kake.common.utils.InputChecker;
 
 /**
@@ -32,7 +32,12 @@ public class RegisterPresenter extends BasePresenter<RegisterView> {
   }
 
   @Override
-  public void onCreateView() {
+  public void onViewCreated() {
+
+  }
+
+  @Override
+  public void onViewDestroy() {
 
   }
 

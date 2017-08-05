@@ -35,9 +35,14 @@ public class CloudPhotoListPresenter extends BasePresenter<CloudPhotoListView> {
   }
 
   @Override
-  public void onCreateView() {
+  public void onViewCreated() {
     attachedView.onAlbumNameChanged(album.getName());
     getPhotoList();
+  }
+
+  @Override
+  public void onViewDestroy() {
+
   }
 
   private void getPhotoList() {

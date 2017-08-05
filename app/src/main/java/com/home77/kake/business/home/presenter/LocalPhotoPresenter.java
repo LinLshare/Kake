@@ -31,7 +31,7 @@ public class LocalPhotoPresenter extends BasePresenter<LocalPhotoView> {
   }
 
   @Override
-  public void onCreateView() {
+  public void onViewCreated() {
     thetaService.loadFileList(ThetaRequest.FILE_TYPE_ALL,
                               0,
                               10,
@@ -60,5 +60,10 @@ public class LocalPhotoPresenter extends BasePresenter<LocalPhotoView> {
                                   DLog.d(TAG, "onThetaServiceError: %s", msg);
                                 }
                               });
+  }
+
+  @Override
+  public void onViewDestroy() {
+
   }
 }

@@ -10,4 +10,6 @@ public final class BroadCastEventConstant {
 
   public static final int ACTIVITY_CLOUD_PHOTO_LIST = 102_1;
 
+  public static final int EVENT_LOGOUT = 103_1;
+  public static final int EVENT_LOGIN = 103_2;
 }

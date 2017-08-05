@@ -37,6 +37,11 @@ public class GlobalData {
     map.putAll(sharedPreferences.getAll());
   }
 
+  public void clear() {
+    map.clear();
+    sharedPreferences.edit().clear().apply();
+  }
+
   public GlobalData putString(String key, @Nullable String value) {
     map.put(key, value);
     sharedPreferences.edit().putString(key, value).apply();

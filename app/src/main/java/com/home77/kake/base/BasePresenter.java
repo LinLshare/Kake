@@ -16,5 +16,7 @@ public abstract class BasePresenter<T> {
 
   public abstract void start();
 
-  public abstract void onCreateView();
+  public abstract void onViewCreated();
+
+  public abstract void onViewDestroy();
 }

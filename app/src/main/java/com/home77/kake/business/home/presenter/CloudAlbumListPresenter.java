@@ -90,8 +90,12 @@ public class CloudAlbumListPresenter extends BasePresenter<CloudAlbumListView> {
   }
 
   @Override
-  public void onCreateView() {
+  public void onViewCreated() {
     getAlbumList();
+  }
+
+  @Override
+  public void onViewDestroy() {
   }
 
   private void getAlbumList() {

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import com.home77.common.base.component.BaseHandler;
 import com.home77.common.base.component.ContextManager;
 import com.home77.common.ui.widget.LoadingDialog;
+import com.home77.common.ui.widget.Toast;
 import com.home77.kake.business.theta.ThetaCameraApi;
 import com.home77.kake.business.theta.ThetaCameraApiImpl;
 import com.home77.kake.common.event.BroadCastEvent;
@@ -21,6 +22,9 @@ import org.greenrobot.eventbus.ThreadMode;
  */
 public class App extends Application {
 
+
+  private static boolean IS_LOGIN;
+
   @Override
   public void onCreate() {
     super.onCreate();
@@ -31,6 +35,7 @@ public class App extends Application {
     // 3). restore global data
     GLOBAL_DATA = new GlobalData(this);
     GLOBAL_DATA.restore();
+    IS_LOGIN = GLOBAL_DATA.getInt(GlobalData.KEY_USER_ID, 0) != 0;
     // 4). setup theta api
     // 5). register eventBus
     eventBus().register(this);
@@ -94,6 +99,10 @@ public class App extends Application {
     return GLOBAL_DATA;
   }
 
+  public static boolean isLogin() {
+    return IS_LOGIN;
+  }
+
   @Subscribe(threadMode = ThreadMode.MAIN)
   public void onEvent(BroadCastEvent event) {
     switch (event.getEvent()) {
@@ -106,6 +115,10 @@ public class App extends Application {
         if (loadingDialog != null) {
           loadingDialog.dismiss();
         }
+        break;
+      case BroadCastEventConstant.EVENT_LOGOUT:
+        GLOBAL_DATA.clear();
+        Toast.showShort("已退出登录");
         break;
     }
   }

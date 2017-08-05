@@ -31,6 +31,8 @@ public class ProfileFragment extends BaseFragment<ProfilePresenter> implements P
   @BindView(R.id.name_text_view)
   TextView nameTextView;
   Unbinder unbinder;
+  @BindView(R.id.exist_login_text_view)
+  TextView existLoginTextView;
 
   @Nullable
   @Override
@@ -39,7 +41,7 @@ public class ProfileFragment extends BaseFragment<ProfilePresenter> implements P
                            @Nullable Bundle savedInstanceState) {
     View contentView = inflater.inflate(R.layout.fragment_profile, container, false);
     unbinder = ButterKnife.bind(this, contentView);
-    presenter.onCreateView();
+    presenter.onViewCreated();
     return contentView;
   }
 
@@ -47,6 +49,7 @@ public class ProfileFragment extends BaseFragment<ProfilePresenter> implements P
   public void onDestroyView() {
     super.onDestroyView();
     unbinder.unbind();
+    presenter.onViewDestroy();
   }
 
   @OnClick({
@@ -115,5 +118,17 @@ public class ProfileFragment extends BaseFragment<ProfilePresenter> implements P
         }
       });
     }
+  }
+
+  @Override
+  public void onLogout() {
+    avatarImageView.setImageResource(R.drawable.user_avatar_def);
+    nameTextView.setText("请登录");
+    existLoginTextView.setVisibility(View.GONE);
+  }
+
+  @Override
+  public void onLogin() {
+    existLoginTextView.setVisibility(View.VISIBLE);
   }
 }
