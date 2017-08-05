@@ -8,7 +8,7 @@ import com.home77.common.net.http.URLFetcher;
 import com.home77.kake.App;
 import com.home77.kake.GlobalData;
 import com.home77.kake.base.BasePresenter;
-import com.home77.kake.business.home.view.CloudAlbumView;
+import com.home77.kake.business.home.view.CloudAlbumListView;
 import com.home77.kake.common.api.response.Album;
 import com.home77.kake.common.api.response.AlbumListResponse;
 import com.home77.kake.common.api.response.Response;
@@ -20,12 +20,12 @@ import java.util.Collections;
 /**
  * @author CJ
  */
-public class CloudAlbumPresenter extends BasePresenter<CloudAlbumView> {
+public class CloudAlbumListPresenter extends BasePresenter<CloudAlbumListView> {
 
-  private static final String TAG = CloudAlbumPresenter.class.getSimpleName();
+  private static final String TAG = CloudAlbumListPresenter.class.getSimpleName();
   private CloudAlbumService cloudAlbumService;
 
-  public CloudAlbumPresenter(CloudAlbumView attachedView) {
+  public CloudAlbumListPresenter(CloudAlbumListView attachedView) {
     super(attachedView);
     cloudAlbumService = Instance.of(CloudAlbumService.class);
   }

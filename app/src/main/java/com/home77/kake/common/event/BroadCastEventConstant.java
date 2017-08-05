@@ -8,4 +8,6 @@ public final class BroadCastEventConstant {
   public static final int DIALOG_LOADING_SHOW = 101;
   public static final int DIALOG_LOADING_DISMISS = 101_1;
 
+  public static final int ACTIVITY_CLOUD_PHOTO_LIST = 102_1;
+
 }

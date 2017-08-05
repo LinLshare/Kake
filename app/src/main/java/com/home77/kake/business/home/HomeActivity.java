@@ -8,16 +8,19 @@ import android.view.KeyEvent;
 import android.widget.TextView;
 
 import com.home77.common.base.event.GenericEvent;
-import com.home77.common.ui.widget.LoadingDialog;
 import com.home77.common.ui.widget.Toast;
 import com.home77.kake.App;
 import com.home77.kake.R;
-import com.home77.kake.business.home.presenter.CloudAlbumPresenter;
+import com.home77.kake.business.home.presenter.CloudAlbumListPresenter;
 import com.home77.kake.business.home.presenter.LocalPhotoPresenter;
-import com.home77.kake.business.home.view.CloudAlbumFragment;
+import com.home77.kake.business.home.view.CloudAlbumListListFragment;
 import com.home77.kake.business.home.view.LocalPhotoFragment;
 import com.home77.kake.business.user.UserActivity;
 import com.home77.kake.common.adapter.FragmentPagerAdapter;
+import com.home77.kake.common.api.response.Album;
+import com.home77.kake.common.event.BroadCastEvent;
+import com.home77.kake.common.event.BroadCastEventConstant;
+import com.home77.kake.common.event.ParamKey;
 import com.home77.kake.common.widget.ScrollConfigurableViewPager;
 import com.home77.kake.common.widget.bottombar.ImageBottomItem;
 import com.home77.kake.common.widget.bottombar.MainBottomBar;
@@ -41,7 +44,7 @@ public class HomeActivity extends AppCompatActivity
   MainBottomBar mainBottomBar;
   @BindView(R.id.title_text_view)
   TextView titleTextView;
-  private CloudAlbumFragment cloudAlbumFragment;
+  private CloudAlbumListListFragment cloudAlbumListFragment;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -64,14 +67,15 @@ public class HomeActivity extends AppCompatActivity
     LocalPhotoPresenter localPhotoPresenter = new LocalPhotoPresenter(localPhotoFragment);
     localPhotoFragment.setPresenter(localPhotoPresenter);
 
-    cloudAlbumFragment = new CloudAlbumFragment();
-    CloudAlbumPresenter cloudAlbumPresenter = new CloudAlbumPresenter(cloudAlbumFragment);
-    cloudAlbumFragment.setPresenter(cloudAlbumPresenter);
+    cloudAlbumListFragment = new CloudAlbumListListFragment();
+    CloudAlbumListPresenter cloudAlbumListPresenter =
+        new CloudAlbumListPresenter(cloudAlbumListFragment);
+    cloudAlbumListFragment.setPresenter(cloudAlbumListPresenter);
 
     ArrayList<Fragment> fragmentList = new ArrayList<>();
     fragmentList.add(localPhotoFragment);
     fragmentList.add(new Fragment()); //占位
-    fragmentList.add(cloudAlbumFragment);
+    fragmentList.add(cloudAlbumListFragment);
     FragmentPagerAdapter adapter =
         new FragmentPagerAdapter(getSupportFragmentManager(), fragmentList);
     pagerMainTab.setAdapter(adapter);
@@ -124,6 +128,18 @@ public class HomeActivity extends AppCompatActivity
   public void onEvent(GenericEvent navigateEvent) {
     if (!navigateEvent.isSameSender(this)) {
       return;
+    }
+  }
+
+  @Subscribe(threadMode = ThreadMode.MAIN)
+  public void onEvent(BroadCastEvent event) {
+    switch (event.getEvent()) {
+      case BroadCastEventConstant.ACTIVITY_CLOUD_PHOTO_LIST:
+        Album album = event.getParams().get(ParamKey.ALBUM);
+        Intent intent = new Intent(this, CloudPhotoActivity.class);
+        intent.putExtra(CloudPhotoActivity.EXTRA_ALBUM, album);
+        startActivity(intent);
+        break;
     }
   }
 }

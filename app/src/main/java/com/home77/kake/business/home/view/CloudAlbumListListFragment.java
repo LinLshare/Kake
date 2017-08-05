@@ -11,14 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.home77.common.base.pattern.Instance;
-import com.home77.common.ui.model.UiData;
 import com.home77.common.ui.util.SizeHelper;
 import com.home77.kake.App;
 import com.home77.kake.R;
 import com.home77.kake.base.BaseFragment;
 import com.home77.kake.business.home.adapter.CloudAlbumListAdapter;
-import com.home77.kake.business.home.presenter.CloudAlbumPresenter;
+import com.home77.kake.business.home.presenter.CloudAlbumListPresenter;
 import com.home77.kake.common.api.response.Album;
 import com.home77.kake.common.event.BroadCastEvent;
 import com.home77.kake.common.event.BroadCastEventConstant;
@@ -37,8 +35,8 @@ import butterknife.Unbinder;
 /**
  * @author CJ
  */
-public class CloudAlbumFragment extends BaseFragment<CloudAlbumPresenter>
-    implements CloudAlbumView {
+public class CloudAlbumListListFragment extends BaseFragment<CloudAlbumListPresenter>
+    implements CloudAlbumListView {
 
   @BindView(R.id.recycler_view)
   RecyclerView recyclerView;

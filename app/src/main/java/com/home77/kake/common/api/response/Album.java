@@ -1,9 +1,11 @@
 package com.home77.kake.common.api.response;
 
+import java.io.Serializable;
+
 /**
  * @author CJ
  */
-public class Album {
+public class Album implements Serializable {
 
   /**
    * created_at : 2017-08-05 12:30:02
