@@ -95,17 +95,23 @@ public class ProfileFragment extends BaseFragment<ProfilePresenter> implements P
       Picasso.with(getContext()).load(imgUrl).into(new Target() {
         @Override
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-          avatarImageView.setImageBitmap(bitmap);
+          if (avatarImageView != null) {
+            avatarImageView.setImageBitmap(bitmap);
+          }
         }
 
         @Override
         public void onBitmapFailed(Drawable errorDrawable) {
-          avatarImageView.setImageResource(R.drawable.user_avatar_def);
+          if (avatarImageView != null) {
+            avatarImageView.setImageResource(R.drawable.user_avatar_def);
+          }
         }
 
         @Override
         public void onPrepareLoad(Drawable placeHolderDrawable) {
-          avatarImageView.setImageResource(R.drawable.user_avatar_def);
+          if (avatarImageView != null) {
+            avatarImageView.setImageResource(R.drawable.user_avatar_def);
+          }
         }
       });
     }

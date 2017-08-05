@@ -1,4 +1,4 @@
-package com.home77.kake.common.api;
+package com.home77.kake.common.api.service;
 
 import com.home77.common.net.http.HttpContextBuilder;
 import com.home77.common.net.http.URLFetcher;

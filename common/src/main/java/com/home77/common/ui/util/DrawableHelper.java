@@ -4,7 +4,9 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.StateListDrawable;
+import android.graphics.drawable.shapes.RoundRectShape;
 import android.os.Build;
 import android.view.View;
 
@@ -26,13 +28,6 @@ public class DrawableHelper {
 
   /**
    * 创建一个图片选择器
-   *
-   * @param context
-   * @param idNormal
-   * @param idPressed
-   * @param idFocused
-   *
-   * @return
    */
   public static StateListDrawable addStateDrawable(Context context,
                                                    int idNormal,
@@ -80,5 +75,25 @@ public class DrawableHelper {
     stateListDrawable.addState(new int[] {android.R.attr.state_pressed}, pressedDraw);
     stateListDrawable.addState(new int[] {}, normalDraw);
     return stateListDrawable;
+  }
+
+  public static ShapeDrawable generateRoundRectShapeDrawable(int color, int radius) {
+    float[] outerRadii =
+        new float[] {radius, radius, radius, radius, radius, radius, radius, radius};
+    RoundRectShape shape = new RoundRectShape(outerRadii, null, null);
+    ShapeDrawable shapeDrawable = new ShapeDrawable(shape);
+    shapeDrawable.getPaint().setColor(color);
+    return shapeDrawable;
+  }
+
+  public static Drawable generateRoundRectShapeDrawable(int fillColor,
+                                                        int borderColor,
+                                                        int borderWidth,
+                                                        int radius) {
+    GradientDrawable drawable = new GradientDrawable();
+    drawable.setColor(fillColor);
+    drawable.setStroke(borderWidth, borderColor);
+    drawable.setCornerRadius(radius);
+    return drawable;
   }
 }

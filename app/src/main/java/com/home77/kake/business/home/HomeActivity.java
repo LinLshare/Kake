@@ -8,10 +8,13 @@ import android.view.KeyEvent;
 import android.widget.TextView;
 
 import com.home77.common.base.event.GenericEvent;
+import com.home77.common.ui.widget.LoadingDialog;
 import com.home77.common.ui.widget.Toast;
 import com.home77.kake.App;
 import com.home77.kake.R;
+import com.home77.kake.business.home.presenter.CloudAlbumPresenter;
 import com.home77.kake.business.home.presenter.LocalPhotoPresenter;
+import com.home77.kake.business.home.view.CloudAlbumFragment;
 import com.home77.kake.business.home.view.LocalPhotoFragment;
 import com.home77.kake.business.user.UserActivity;
 import com.home77.kake.common.adapter.FragmentPagerAdapter;
@@ -38,6 +41,7 @@ public class HomeActivity extends AppCompatActivity
   MainBottomBar mainBottomBar;
   @BindView(R.id.title_text_view)
   TextView titleTextView;
+  private CloudAlbumFragment cloudAlbumFragment;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +64,14 @@ public class HomeActivity extends AppCompatActivity
     LocalPhotoPresenter localPhotoPresenter = new LocalPhotoPresenter(localPhotoFragment);
     localPhotoFragment.setPresenter(localPhotoPresenter);
 
+    cloudAlbumFragment = new CloudAlbumFragment();
+    CloudAlbumPresenter cloudAlbumPresenter = new CloudAlbumPresenter(cloudAlbumFragment);
+    cloudAlbumFragment.setPresenter(cloudAlbumPresenter);
+
     ArrayList<Fragment> fragmentList = new ArrayList<>();
     fragmentList.add(localPhotoFragment);
     fragmentList.add(new Fragment()); //占位
-    fragmentList.add(new Fragment()); //占位
+    fragmentList.add(cloudAlbumFragment);
     FragmentPagerAdapter adapter =
         new FragmentPagerAdapter(getSupportFragmentManager(), fragmentList);
     pagerMainTab.setAdapter(adapter);

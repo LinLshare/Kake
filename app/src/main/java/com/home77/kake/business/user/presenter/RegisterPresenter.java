@@ -10,7 +10,7 @@ import com.home77.kake.GlobalData;
 import com.home77.kake.R;
 import com.home77.kake.base.BasePresenter;
 import com.home77.kake.business.user.UserActivity;
-import com.home77.kake.common.api.UserService;
+import com.home77.kake.common.api.service.UserService;
 import com.home77.kake.common.api.response.CheckcodeResponse;
 import com.home77.kake.common.api.response.RegisterResponse;
 import com.home77.kake.business.user.view.RegisterView;

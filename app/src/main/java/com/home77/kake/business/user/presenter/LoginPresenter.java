@@ -8,7 +8,7 @@ import com.home77.kake.GlobalData;
 import com.home77.kake.R;
 import com.home77.kake.base.BasePresenter;
 import com.home77.kake.common.api.ServerConfig;
-import com.home77.kake.common.api.UserService;
+import com.home77.kake.common.api.service.UserService;
 import com.home77.kake.common.api.response.UserResponse;
 import com.home77.kake.business.user.view.LoginView;
 import com.home77.kake.common.utils.InputChecker;
@@ -40,7 +40,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
     App.eventBus().post(new GenericEvent(this, EVENT_TO_PROFILE));
   }
 
-  public void handleLoginClick(String userName, String password) {
+  public void handleLoginClick(final String userName, String password) {
     if (!InputChecker.isUserNameLegal(userName) || !InputChecker.isPasswordLegal(password)) {
       attachedView.toast(R.string.usr_name_or_psw_illegal);
       return;
@@ -52,6 +52,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
         if (userResponse != null) {
           // 图片需要拼接host
           App.globalData()
+             .putInt(GlobalData.KEY_USER_ID, userResponse.getId())
              .putString(GlobalData.KEY_USER_MOBILE, userResponse.getMobile())
              .putString(GlobalData.KEY_USER_AVATER,
                         ServerConfig.BASE_IMG_URL + userResponse.getAvatar())
