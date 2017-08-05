@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 
 public class HomeActivity extends AppCompatActivity
     implements MainBottomBar.OnTabItemClickListener {
@@ -45,13 +46,14 @@ public class HomeActivity extends AppCompatActivity
   @BindView(R.id.title_text_view)
   TextView titleTextView;
   private CloudAlbumListListFragment cloudAlbumListFragment;
+  private Unbinder unbinder;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     App.eventBus().register(this);
     setContentView(R.layout.activity_home);
-    ButterKnife.bind(this);
+    unbinder = ButterKnife.bind(this);
 
     mainBottomBar.addBottomBarItem(new NormalBottomItem(this,
                                                         R.drawable.tab_local_album_selector,
@@ -86,6 +88,7 @@ public class HomeActivity extends AppCompatActivity
   protected void onDestroy() {
     super.onDestroy();
     App.eventBus().unregister(this);
+    unbinder.unbind();
   }
 
   @Override
