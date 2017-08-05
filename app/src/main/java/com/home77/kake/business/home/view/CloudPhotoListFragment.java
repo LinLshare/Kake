@@ -68,6 +68,7 @@ public class CloudPhotoListFragment extends BaseFragment<CloudPhotoListPresenter
         presenter.onRefresh();
       }
     });
+    //popupMenu
     View menulayout =
         LayoutInflater.from(getContext()).inflate(R.layout.menu_cloud_photo_list, null);
     popupMenu = new PopupWindow(menulayout,
@@ -88,6 +89,7 @@ public class CloudPhotoListFragment extends BaseFragment<CloudPhotoListPresenter
         popupMenu.dismiss();
       }
     });
+
     presenter.onCreateView();
     return view;
   }
@@ -135,6 +137,11 @@ public class CloudPhotoListFragment extends BaseFragment<CloudPhotoListPresenter
       refreshLayout.setRefreshing(false);
     }
     toast(msg);
+  }
+
+  @Override
+  public void onAlbumNameChanged(String name) {
+    titleTextView.setText(name);
   }
 
   @Override

@@ -16,4 +16,6 @@ public interface CloudPhotoListView extends BaseView<CloudPhotoListPresenter> {
   void onPhotoListUpdated(List<Photo> photoList);
 
   void onPhotoListUpdateError(String msg);
+
+  void onAlbumNameChanged(String name);
 }

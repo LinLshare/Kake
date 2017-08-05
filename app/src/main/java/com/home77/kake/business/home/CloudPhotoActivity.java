@@ -26,6 +26,7 @@ public class CloudPhotoActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_cloud_photo);
     album = (Album) getIntent().getSerializableExtra(EXTRA_ALBUM);
+
     App.eventBus().register(this);
     cloudPhotoListFragment = new CloudPhotoListFragment();
     cloudPhotoListPresenter = new CloudPhotoListPresenter(cloudPhotoListFragment);
