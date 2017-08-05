@@ -93,14 +93,15 @@ public class HomeActivity extends AppCompatActivity
     switch (index) {
       case 0:
         titleTextView.setText(R.string.local_photo);
+        pagerMainTab.setCurrentItem(index, false);
         break;
       case 1:
         break;
       case 2:
         titleTextView.setText(R.string.cloud_album);
+        pagerMainTab.setCurrentItem(index, false);
         break;
     }
-    pagerMainTab.setCurrentItem(index, false);
   }
 
   private long exitTime = 0;
