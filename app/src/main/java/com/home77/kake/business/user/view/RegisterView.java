@@ -8,4 +8,10 @@ import com.home77.kake.business.user.presenter.RegisterPresenter;
  */
 public interface RegisterView extends BaseView<RegisterPresenter> {
   void onCheckcodeViewCountDown(int seconds);
+
+  void onRegistering();
+
+  void onRegisterError(String msg);
+
+  void onRegisterSuccess();
 }

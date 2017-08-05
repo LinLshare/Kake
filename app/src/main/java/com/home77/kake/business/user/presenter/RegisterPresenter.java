@@ -2,6 +2,7 @@ package com.home77.kake.business.user.presenter;
 
 import android.text.TextUtils;
 
+import com.home77.common.base.component.BaseHandler;
 import com.home77.common.base.event.GenericEvent;
 import com.home77.common.base.pattern.Instance;
 import com.home77.common.net.http.URLFetcher;
@@ -89,6 +90,8 @@ public class RegisterPresenter extends BasePresenter<RegisterView> {
       return;
     }
 
+    attachedView.onRegistering();
+
     userService.register(phoneNumber,
                          checkCode,
                          password,
@@ -96,29 +99,34 @@ public class RegisterPresenter extends BasePresenter<RegisterView> {
                          new URLFetcher.Delegate() {
                            @Override
                            public void onSuccess(URLFetcher source) {
-                             RegisterResponse registerResponse =
+                             final RegisterResponse registerResponse =
                                  source.responseClass(RegisterResponse.class);
-                             if (registerResponse == null) {
-                               attachedView.toast("注册失败");
-                             } else {
-                               App.globalData()
-                                  .putString(GlobalData.KEY_TOKEN_TYPE,
-                                             registerResponse.getToken_type())
-                                  .putString(GlobalData.KEY_ACCESS_TOKEN,
-                                             registerResponse.getAccess_token())
-                                  .putString(GlobalData.KEY_REFRESH_TOKEN,
-                                             registerResponse.getRefresh_token())
-                                  .putInt(GlobalData.KEY_EXPIRE_IN,
-                                          registerResponse.getExpires_in());
-                               attachedView.toast("注册成功");
-                               App.eventBus()
-                                  .post(new GenericEvent(this, UserActivity.EVENT_TO_LOGIN));
-                             }
+                             BaseHandler.post(new Runnable() {
+                               @Override
+                               public void run() {
+                                 if (registerResponse == null) {
+                                   attachedView.onRegisterError("注册失败");
+                                 } else {
+                                   App.globalData()
+                                      .putString(GlobalData.KEY_TOKEN_TYPE,
+                                                 registerResponse.getToken_type())
+                                      .putString(GlobalData.KEY_ACCESS_TOKEN,
+                                                 registerResponse.getAccess_token())
+                                      .putString(GlobalData.KEY_REFRESH_TOKEN,
+                                                 registerResponse.getRefresh_token())
+                                      .putInt(GlobalData.KEY_EXPIRE_IN,
+                                              registerResponse.getExpires_in());
+                                   attachedView.onRegisterSuccess();
+                                   App.eventBus()
+                                      .post(new GenericEvent(this, UserActivity.EVENT_TO_LOGIN));
+                                 }
+                               }
+                             });
                            }
 
                            @Override
                            public void onError(String msg) {
-                             attachedView.toast("注册失败");
+                             attachedView.onRegisterError(msg + "");
                            }
                          });
   }

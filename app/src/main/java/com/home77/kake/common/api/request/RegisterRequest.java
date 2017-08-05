@@ -1,11 +1,9 @@
 package com.home77.kake.common.api.request;
 
-import java.io.Serializable;
-
 /**
  * @author CJ
  */
-public class RegisterRequest implements Serializable {
+public class RegisterRequest {
 
   /**
    * mobile : mobile

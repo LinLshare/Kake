@@ -10,9 +10,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.home77.common.base.component.BaseHandler;
+import com.home77.kake.App;
 import com.home77.kake.R;
 import com.home77.kake.base.BaseFragment;
 import com.home77.kake.business.user.presenter.RegisterPresenter;
+import com.home77.kake.common.event.BroadCastEvent;
+import com.home77.kake.common.event.BroadCastEventConstant;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -92,5 +95,22 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter> implements
         }.start();
       }
     });
+  }
+
+  @Override
+  public void onRegistering() {
+    App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_SHOW, null));
+  }
+
+  @Override
+  public void onRegisterError(String msg) {
+    App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_DISMISS, null));
+    toast(msg);
+  }
+
+  @Override
+  public void onRegisterSuccess() {
+    App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_DISMISS, null));
+    toast(R.string.register_success);
   }
 }

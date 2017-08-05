@@ -22,7 +22,7 @@ public abstract class BaseFragment<T> extends Fragment implements BaseView<T> {
     BaseHandler.post(new Runnable() {
       @Override
       public void run() {
-        Toast.showShort(content);
+        Toast.showShort(content + "");
       }
     });
   }

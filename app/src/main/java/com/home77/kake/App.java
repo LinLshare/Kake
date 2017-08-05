@@ -118,7 +118,11 @@ public class App extends Application {
         break;
       case BroadCastEventConstant.EVENT_LOGOUT:
         GLOBAL_DATA.clear();
+        IS_LOGIN = false;
         Toast.showShort("已退出登录");
+        break;
+      case BroadCastEventConstant.EVENT_LOGIN:
+        IS_LOGIN = true;
         break;
     }
   }

@@ -7,9 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.home77.kake.App;
 import com.home77.kake.R;
 import com.home77.kake.base.BaseFragment;
 import com.home77.kake.business.user.presenter.LoginPresenter;
+import com.home77.kake.common.event.BroadCastEvent;
+import com.home77.kake.common.event.BroadCastEventConstant;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -66,4 +69,20 @@ public class LoginFragment extends BaseFragment<LoginPresenter> implements Login
     }
   }
 
+  @Override
+  public void onLogin() {
+    App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_SHOW, null));
+  }
+
+  @Override
+  public void onLoginSuccess() {
+    App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_DISMISS, null));
+    toast(R.string.login_success);
+  }
+
+  @Override
+  public void onLoginError(String msg) {
+    App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_DISMISS, null));
+    toast(msg);
+  }
 }

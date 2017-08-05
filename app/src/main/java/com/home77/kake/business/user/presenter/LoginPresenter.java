@@ -1,5 +1,6 @@
 package com.home77.kake.business.user.presenter;
 
+import com.home77.common.base.component.BaseHandler;
 import com.home77.common.base.event.GenericEvent;
 import com.home77.common.base.pattern.Instance;
 import com.home77.common.net.http.URLFetcher;
@@ -52,27 +53,40 @@ public class LoginPresenter extends BasePresenter<LoginView> {
       attachedView.toast(R.string.usr_name_or_psw_illegal);
       return;
     }
+    attachedView.onLogin();
     userService.login(userName, password, new URLFetcher.Delegate() {
       @Override
       public void onSuccess(URLFetcher source) {
-        UserResponse userResponse = source.responseClass(UserResponse.class);
-        if (userResponse != null) {
-          // 图片需要拼接host
-          App.globalData()
-             .putInt(GlobalData.KEY_USER_ID, userResponse.getId())
-             .putString(GlobalData.KEY_USER_MOBILE, userResponse.getMobile())
-             .putString(GlobalData.KEY_USER_AVATER,
-                        ServerConfig.BASE_IMG_URL + userResponse.getAvatar())
-             .putString(GlobalData.KEY_USER_NAME, userResponse.getName());
-          App.eventBus().post(new GenericEvent(LoginPresenter.this, EVENT_TO_PROFILE));
-          App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.EVENT_LOGIN, null));
-          attachedView.toast(R.string.login_success);
-        }
+        final UserResponse userResponse = source.responseClass(UserResponse.class);
+        BaseHandler.post(new Runnable() {
+          @Override
+          public void run() {
+            if (userResponse != null) {
+              // 图片需要拼接host
+              App.globalData()
+                 .putInt(GlobalData.KEY_USER_ID, userResponse.getId())
+                 .putString(GlobalData.KEY_USER_MOBILE, userResponse.getMobile())
+                 .putString(GlobalData.KEY_USER_AVATER,
+                            ServerConfig.BASE_IMG_URL + userResponse.getAvatar())
+                 .putString(GlobalData.KEY_USER_NAME, userResponse.getName());
+              attachedView.onLoginSuccess();
+              App.eventBus().post(new GenericEvent(LoginPresenter.this, EVENT_TO_PROFILE));
+              App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.EVENT_LOGIN, null));
+            } else {
+              attachedView.onLoginError("登录失败");
+            }
+          }
+        });
       }
 
       @Override
-      public void onError(String msg) {
-        attachedView.toast("登录失败");
+      public void onError(final String msg) {
+        BaseHandler.post(new Runnable() {
+          @Override
+          public void run() {
+            attachedView.onLoginError(msg);
+          }
+        });
       }
     });
   }
