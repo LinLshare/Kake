@@ -2,13 +2,11 @@ package com.home77.kake.business.home.adapter;
 
 import android.view.View;
 
-import com.home77.common.base.collection.Params;
 import com.home77.kake.App;
 import com.home77.kake.R;
 import com.home77.kake.common.api.response.Album;
 import com.home77.kake.common.event.BroadCastEvent;
 import com.home77.kake.common.event.BroadCastEventConstant;
-import com.home77.kake.common.event.ParamKey;
 import com.zhy.adapter.recyclerview.base.ItemViewDelegate;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
@@ -31,9 +29,7 @@ public class CloudAlbumHeaderDelegate implements ItemViewDelegate<Album> {
     holder.getConvertView().setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        App.eventBus()
-           .post(new BroadCastEvent(BroadCastEventConstant.ACTIVITY_CLOUD_PHOTO_LIST,
-                                    Params.create(ParamKey.ALBUM, album)));
+        App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.DIALOG_UPLOAD_ALBUM, null));
       }
     });
   }
