@@ -1,4 +1,4 @@
-package com.home77.kake.business.home.presenter;
+package com.home77.kake.bs;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,12 +14,12 @@ import com.home77.common.base.component.BaseHandler;
  * @author CJ
  */
 public abstract class BaseFragment extends Fragment implements BaseView {
-  protected BasePresenter presenter;
+  protected BaseFragmentPresenter presenter;
 
   public BaseFragment() {
   }
 
-  public void setPresenter(BasePresenter presenter) {
+  public void setPresenter(BaseFragmentPresenter presenter) {
     this.presenter = presenter;
   }
 

@@ -1,17 +1,20 @@
-package com.home77.kake.business.home.presenter;
+package com.home77.kake.bs;
 
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.home77.common.base.collection.Params;
 import com.home77.common.base.component.BaseHandler;
+import com.home77.kake.business.home.presenter.FragmentLifeCycle;
 
 /**
  * @author CJ
  */
-public abstract class BaseFragmentPresenter implements BasePresenter {
+public abstract class BaseFragmentPresenter
+    implements BasePresenter, FragmentLifeCycle, KeyEventInterface {
 
   protected BaseView baseView;
 
@@ -47,6 +50,15 @@ public abstract class BaseFragmentPresenter implements BasePresenter {
 
   @Override
   public void onDestroyView() {
+  }
+
+  @Override
+  public boolean onKeyDown(int keyCode, KeyEvent event) {
+    return false;
+  }
+
+  @Override
+  public void onBackPressed() {
   }
 
   @Override

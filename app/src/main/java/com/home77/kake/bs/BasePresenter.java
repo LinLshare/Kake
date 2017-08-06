@@ -1,10 +1,10 @@
-package com.home77.kake.business.home.presenter;
+package com.home77.kake.bs;
 
 import com.home77.common.base.collection.Params;
 
 /**
  * @author CJ
  */
-public interface BasePresenter extends FragmentLifeCycle {
+public interface BasePresenter {
   void onMessage(MsgType msgType, Params params);
 }

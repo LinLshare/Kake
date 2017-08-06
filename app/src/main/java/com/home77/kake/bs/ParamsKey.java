@@ -1,4 +1,4 @@
-package com.home77.kake.business.home.presenter;
+package com.home77.kake.bs;
 
 /**
  * @author CJ
