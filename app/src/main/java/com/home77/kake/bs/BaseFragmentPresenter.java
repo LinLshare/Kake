@@ -29,6 +29,7 @@ public abstract class BaseFragmentPresenter
     Params result = Params.create();
     Params in = Params.create(ParamsKey.BUNDLE, savedInstanceState);
     baseView.onCommand(CmdType.VIEW_CREATE, in, result);
+    onMessage(MsgType.VIEW_REFRESH, null);
     return result.get(ParamsKey.VIEW);
   }
 
@@ -50,6 +51,7 @@ public abstract class BaseFragmentPresenter
 
   @Override
   public void onDestroyView() {
+    baseView.onCommand(CmdType.VIEW_DESTORY, null, null);
   }
 
   @Override

@@ -11,6 +11,7 @@ import com.home77.common.base.event.GenericEvent;
 import com.home77.common.ui.widget.Toast;
 import com.home77.kake.App;
 import com.home77.kake.R;
+import com.home77.kake.bs.ParamsKey;
 import com.home77.kake.business.home.presenter.CloudAlbumListPresenter;
 import com.home77.kake.business.home.presenter.LocalPhotoPresenter;
 import com.home77.kake.business.home.view.CloudAlbumListListFragment;
@@ -20,7 +21,6 @@ import com.home77.kake.common.adapter.FragmentPagerAdapter;
 import com.home77.kake.common.api.response.Album;
 import com.home77.kake.common.event.BroadCastEvent;
 import com.home77.kake.common.event.BroadCastEventConstant;
-import com.home77.kake.common.event.ParamKey;
 import com.home77.kake.common.widget.ScrollConfigurableViewPager;
 import com.home77.kake.common.widget.bottombar.ImageBottomItem;
 import com.home77.kake.common.widget.bottombar.MainBottomBar;
@@ -139,7 +139,7 @@ public class HomeActivity extends AppCompatActivity
   public void onEvent(BroadCastEvent event) {
     switch (event.getEvent()) {
       case BroadCastEventConstant.ACTIVITY_CLOUD_PHOTO_LIST:
-        Album album = event.getParams().get(ParamKey.ALBUM);
+        Album album = event.getParams().get(ParamsKey.ALBUM);
         Intent intent = new Intent(this, CloudPhotoActivity.class);
         intent.putExtra(CloudPhotoActivity.EXTRA_ALBUM, album);
         startActivity(intent);

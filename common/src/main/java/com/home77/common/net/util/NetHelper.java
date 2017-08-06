@@ -33,6 +33,14 @@ public final class NetHelper {
     return info != null && info.isConnected();
   }
 
+  public static boolean isWifiAvailable() {
+    final NetworkInfo info = activeConnectivityNetworkInfo();
+    if (info != null && !info.getTypeName().toLowerCase(Locale.US).equals("mobile")) {
+      return true;
+    }
+    return false;
+  }
+
   public static final String NETWORK_UNAVAILABLE = "unavailable";
 
   public static String getNetworkType() {

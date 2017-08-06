@@ -1,15 +1,26 @@
 package com.home77.kake;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Application;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkRequest;
+import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import com.home77.common.base.component.BaseHandler;
 import com.home77.common.base.component.ContextManager;
+import com.home77.common.net.util.NetHelper;
 import com.home77.common.ui.widget.LoadingDialog;
 import com.home77.common.ui.widget.Toast;
-import com.home77.kake.business.theta.ThetaCameraApi;
-import com.home77.kake.business.theta.ThetaCameraApiImpl;
 import com.home77.kake.common.event.BroadCastEvent;
 import com.home77.kake.common.event.BroadCastEventConstant;
 
@@ -73,24 +84,43 @@ public class App extends Application {
       public void onActivityDestroyed(Activity activity) {
       }
     });
+    // 7) check and connect to wifi
+    checkAndConnectToWifi();
+    registerReceiver(wifiChangedReceiver, new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
   }
+
+  private BroadcastReceiver wifiChangedReceiver = new BroadcastReceiver() {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+      String action = intent.getAction();
+      if (!TextUtils.isEmpty(action) && action.equals(WifiManager.WIFI_STATE_CHANGED_ACTION)) {
+        int wifiState =
+            intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_DISABLED);
+        switch (wifiState) {
+          case WifiManager.WIFI_STATE_ENABLED:
+            hasConnectedToWifi = true;
+            eventBus().post(new BroadCastEvent(BroadCastEventConstant.WIFI_CONNECTED, null));
+            break;
+          case WifiManager.WIFI_STATE_DISABLED:
+            hasConnectedToWifi = false;
+            eventBus().post(new BroadCastEvent(BroadCastEventConstant.WIFI_LOST, null));
+            break;
+        }
+      }
+    }
+  };
 
   // setup eventbus
   private static EventBus EVENTBUS;
-  private static ThetaCameraApi THETA_CAMERA_API;
   private LoadingDialog loadingDialog;
+  private static boolean hasConnectedToWifi = false;
 
   static {
     EVENTBUS = EventBus.builder().eventInheritance(false).build();
-    THETA_CAMERA_API = new ThetaCameraApiImpl();
   }
 
   public static EventBus eventBus() {
     return EVENTBUS;
-  }
-
-  public static ThetaCameraApi thetaCameraApi() {
-    return THETA_CAMERA_API;
   }
 
   private static GlobalData GLOBAL_DATA;
@@ -124,6 +154,39 @@ public class App extends Application {
       case BroadCastEventConstant.EVENT_LOGIN:
         IS_LOGIN = true;
         break;
+    }
+  }
+
+  public static boolean hasConnectedToWifi() {
+    return hasConnectedToWifi;
+  }
+
+  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+  private void checkAndConnectToWifi() {
+    boolean wifiAvailable = NetHelper.isWifiAvailable();
+    if (wifiAvailable) {
+      // AP connected
+      hasConnectedToWifi = true;
+    } else {
+      ConnectivityManager cm = (ConnectivityManager) ContextManager.appContext()
+                                                                   .getSystemService(Context.CONNECTIVITY_SERVICE);
+      cm.registerNetworkCallback(new NetworkRequest.Builder().addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+                                                             .build(),
+                                 new ConnectivityManager.NetworkCallback() {
+                                   @Override
+                                   public void onAvailable(Network network) {
+                                     super.onAvailable(network);
+                                     //AP connected
+                                     hasConnectedToWifi = true;
+                                   }
+
+                                   @Override
+                                   public void onLost(Network network) {
+                                     super.onLost(network);
+                                     //Ap lost
+                                     hasConnectedToWifi = false;
+                                   }
+                                 });
     }
   }
 }

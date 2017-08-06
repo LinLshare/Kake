@@ -5,10 +5,10 @@ import android.view.View;
 import com.home77.common.base.collection.Params;
 import com.home77.kake.App;
 import com.home77.kake.R;
+import com.home77.kake.bs.ParamsKey;
 import com.home77.kake.common.api.response.Album;
 import com.home77.kake.common.event.BroadCastEvent;
 import com.home77.kake.common.event.BroadCastEventConstant;
-import com.home77.kake.common.event.ParamKey;
 import com.zhy.adapter.recyclerview.base.ItemViewDelegate;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
@@ -35,7 +35,7 @@ public class CloudAlbumNormalDelegate implements ItemViewDelegate<Album> {
       public void onClick(View v) {
         App.eventBus()
            .post(new BroadCastEvent(BroadCastEventConstant.ACTIVITY_CLOUD_PHOTO_LIST,
-                                    Params.create(ParamKey.ALBUM, album)));
+                                    Params.create(ParamsKey.ALBUM, album)));
       }
     });
   }

@@ -10,6 +10,11 @@ public enum CmdType {
   VIEW_DESTORY,
   TOAST,
 
+  // local photo presenter
+  LOCAL_PHOTO_LIST_LOADING,
+  LOCAL_PHOTO_LIST_LOAD_SUCCESS,
+  LOCAL_PHOTO_LIST_LOAD_ERROR,
+
   // cloud album list presenter
   CLOUD_ALBUM_LOADING,
   CLOUD_ALBUM_LOAD_SUCCESS,

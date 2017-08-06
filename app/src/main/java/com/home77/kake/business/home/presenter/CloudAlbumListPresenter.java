@@ -1,11 +1,6 @@
 package com.home77.kake.business.home.presenter;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.home77.common.base.collection.Params;
 import com.home77.common.base.pattern.Instance;
@@ -35,16 +30,6 @@ public class CloudAlbumListPresenter extends BaseFragmentPresenter {
   public CloudAlbumListPresenter(BaseView baseView) {
     super(baseView);
     cloudAlbumService = Instance.of(CloudAlbumService.class);
-  }
-
-  @Nullable
-  @Override
-  public View onCreateView(LayoutInflater inflater,
-                           @Nullable ViewGroup container,
-                           @Nullable Bundle savedInstanceState) {
-    View view = super.onCreateView(inflater, container, savedInstanceState);
-    getAlbumList();
-    return view;
   }
 
   @Override
