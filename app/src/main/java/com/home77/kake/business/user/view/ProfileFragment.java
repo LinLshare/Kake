@@ -93,6 +93,9 @@ public class ProfileFragment extends BaseFragment<ProfilePresenter> implements P
   public void bindData(String userName, String imgUrl) {
     if (!TextUtils.isEmpty(userName)) {
       nameTextView.setText(userName);
+      existLoginTextView.setVisibility(View.VISIBLE);
+    } else {
+      existLoginTextView.setVisibility(View.GONE);
     }
     if (!TextUtils.isEmpty(imgUrl)) {
       Picasso.with(getContext()).load(imgUrl).into(new Target() {

@@ -74,10 +74,6 @@ public class UserActivity extends AppCompatActivity {
 
   @Subscribe(threadMode = ThreadMode.MAIN)
   public void onEvent(GenericEvent navigateEvent) {
-    if (!Arrays.asList(forgetPasswordPresenter, loginPresenter, profilePresenter, registerPresenter)
-               .contains(navigateEvent.sender())) {
-      return;
-    }
     switch (navigateEvent.eventType) {
       case EVENT_TO_PROFILE:
         // clear back stack

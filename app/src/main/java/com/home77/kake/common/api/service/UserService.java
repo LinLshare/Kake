@@ -13,25 +13,19 @@ import static com.home77.kake.common.api.ServerConfig.HOST;
  * @author CJ
  */
 public class UserService {
-  public final static String ACTION_LOGIN = "login";
-  public final static String ACTION_REGISTER = "register";
-  public final static String ACTION_ERROR = "error";
 
-  public final static String USERNAME = "username";
-  public final static String PHONE = "phone";
-  private static final String TAG = UserService.class.getSimpleName();
-
-  public final static String NICKNAME = "nickname";
   private final static String REGISTER_URL;
   private static final String CHECKCODE_URL;
   private static final String USER_URL;
   private static final String VALIDATE_URL;
+  private static final String RESET_PASSWORD_URL;
 
   static {
     VALIDATE_URL = String.format("http://%s/oauth/token", HOST);
     REGISTER_URL = String.format("http://%s/api/v1/register", HOST);
     CHECKCODE_URL = String.format("http://%s/laravel-sms/verify-code", HOST);
     USER_URL = String.format("http://%s/api/v1/user", HOST);
+    RESET_PASSWORD_URL = String.format("http://%s/api/v1/resetpassword", HOST);
   }
 
   private URLFetcher urlFetcher;
@@ -93,10 +87,26 @@ public class UserService {
     urlFetcher.start();
   }
 
+  public void resetPassword(String phoneNumber,
+                            String checkCode,
+                            String password,
+                            URLFetcher.Delegate callback) {
+    RegisterRequest registerRequest = new RegisterRequest();
+    registerRequest.setMobile(phoneNumber);
+    registerRequest.setCode(checkCode);
+    registerRequest.setRepassword(password);
+    registerRequest.setPassword(password);
+    urlFetcher = URLFetcher.create(HttpContextBuilder.httpClient(), callback)
+                           .url(RESET_PASSWORD_URL)
+                           .postJson(registerRequest);
+    urlFetcher.start();
+  }
+
   public void gainCheckCode(String phoneNumber, URLFetcher.Delegate callback) {
     urlFetcher = URLFetcher.create(HttpContextBuilder.httpClient(), callback)
                            .url(CHECKCODE_URL)
                            .postJson(new CheckCodeRequest(phoneNumber));
     urlFetcher.start();
   }
+
 }
