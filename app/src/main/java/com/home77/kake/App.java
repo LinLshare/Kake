@@ -137,7 +137,7 @@ public class App extends Application {
   public void onEvent(BroadCastEvent event) {
     switch (event.getEvent()) {
       case BroadCastEventConstant.DIALOG_LOADING_SHOW:
-        if (loadingDialog != null) {
+        if (loadingDialog != null && !loadingDialog.isShowing()) {
           loadingDialog.show();
         }
         break;

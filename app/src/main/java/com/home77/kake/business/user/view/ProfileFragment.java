@@ -5,9 +5,12 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.home77.common.ui.widget.CircleImageView;
@@ -29,7 +32,7 @@ public class ProfileFragment extends BaseFragment<ProfilePresenter> implements P
   @BindView(R.id.avatar_image_view)
   CircleImageView avatarImageView;
   @BindView(R.id.name_text_view)
-  TextView nameTextView;
+  EditText nameTextView;
   Unbinder unbinder;
   @BindView(R.id.exist_login_text_view)
   TextView existLoginTextView;
@@ -41,6 +44,17 @@ public class ProfileFragment extends BaseFragment<ProfilePresenter> implements P
                            @Nullable Bundle savedInstanceState) {
     View contentView = inflater.inflate(R.layout.fragment_profile, container, false);
     unbinder = ButterKnife.bind(this, contentView);
+    nameTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+      @Override
+      public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+          nameTextView.setEnabled(false);
+          presenter.handleEditUserClick(v.getText().toString());
+          return true;
+        }
+        return false;
+      }
+    });
     presenter.onViewCreated();
     return contentView;
   }
@@ -66,7 +80,7 @@ public class ProfileFragment extends BaseFragment<ProfilePresenter> implements P
         presenter.handleAvatarClick();
         break;
       case R.id.edit_image_view:
-        presenter.handleEditUserClick();
+        nameTextView.setEnabled(true);
         break;
       case R.id.list_item_kake:
         presenter.handleKakeClick();

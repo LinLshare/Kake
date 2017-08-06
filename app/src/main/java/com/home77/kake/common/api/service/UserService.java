@@ -5,6 +5,7 @@ import com.home77.common.net.http.URLFetcher;
 import com.home77.kake.common.api.request.CheckCodeRequest;
 import com.home77.kake.common.api.request.RegisterRequest;
 import com.home77.kake.common.api.request.TokenValidateRequest;
+import com.home77.kake.common.api.request.UpdateUserNameRequest;
 import com.home77.kake.common.api.response.TokenValidateResponse;
 
 import static com.home77.kake.common.api.ServerConfig.HOST;
@@ -19,6 +20,7 @@ public class UserService {
   private static final String USER_URL;
   private static final String VALIDATE_URL;
   private static final String RESET_PASSWORD_URL;
+  private static final String UPDATE_USER_NAME_URL;
 
   static {
     VALIDATE_URL = String.format("http://%s/oauth/token", HOST);
@@ -26,6 +28,7 @@ public class UserService {
     CHECKCODE_URL = String.format("http://%s/laravel-sms/verify-code", HOST);
     USER_URL = String.format("http://%s/api/v1/user", HOST);
     RESET_PASSWORD_URL = String.format("http://%s/api/v1/resetpassword", HOST);
+    UPDATE_USER_NAME_URL = String.format("http://%s/api/v1/user/changename", HOST);
   }
 
   private URLFetcher urlFetcher;
@@ -83,6 +86,14 @@ public class UserService {
     registerRequest.setRepassword(confirmPassword);
     urlFetcher = URLFetcher.create(HttpContextBuilder.httpClient(), callback)
                            .url(REGISTER_URL)
+                           .postJson(registerRequest);
+    urlFetcher.start();
+  }
+
+  public void updateUserName(int userId, String newName, URLFetcher.Delegate callback) {
+    UpdateUserNameRequest registerRequest = new UpdateUserNameRequest(userId, newName);
+    urlFetcher = URLFetcher.create(HttpContextBuilder.httpClient(), callback)
+                           .url(UPDATE_USER_NAME_URL)
                            .postJson(registerRequest);
     urlFetcher.start();
   }
