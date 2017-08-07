@@ -67,8 +67,6 @@ public class UserActivity extends AppCompatActivity {
     getSupportFragmentManager().beginTransaction()
                                .add(R.id.content_layout, profileFragment)
                                .commit();
-    // 4) start
-    profilePresenter.start();
   }
 
 

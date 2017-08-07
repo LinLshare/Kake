@@ -1,7 +1,6 @@
 package com.home77.kake.business.user.view;
 
 import android.os.CountDownTimer;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -52,7 +51,7 @@ public class RegisterFragment extends BaseFragment {
         unbinder = ButterKnife.bind(this, view);
         out.put(ParamsKey.VIEW, view);
         break;
-      case VIEW_DESTORY:
+      case VIEW_DESTROY:
         if (countDownTimer != null) {
           countDownTimer.cancel();
         }
@@ -96,14 +95,6 @@ public class RegisterFragment extends BaseFragment {
             getCheckCodeTextView.setText("短信获取");
           }
         }.start();
-        break;
-      case TOAST:
-        String msg = in.get(ParamsKey.MSG, "");
-        if (TextUtils.isEmpty(msg)) {
-          Toast.showShort(in.get(ParamsKey.MSG_INT, 0));
-        } else {
-          Toast.showShort(msg);
-        }
         break;
     }
   }

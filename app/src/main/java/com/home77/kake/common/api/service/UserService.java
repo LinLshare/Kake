@@ -59,6 +59,12 @@ public class UserService {
         TokenValidateResponse tokenValidateResponse =
             source.responseClass(TokenValidateResponse.class);
         if (tokenValidateResponse != null) {
+          App.globalData()
+             .putString(GlobalData.KEY_ACCESS_TOKEN, tokenValidateResponse.getAccess_token())
+             .putString(GlobalData.KEY_REFRESH_TOKEN, tokenValidateResponse.getRefresh_token())
+             .putInt(GlobalData.KEY_EXPIRE_IN, tokenValidateResponse.getExpires_in())
+             .putString(GlobalData.KEY_TOKEN_TYPE, tokenValidateResponse.getAccess_token());
+
           urlFetcher = URLFetcher.create(HttpContextBuilder.httpClient(), callback)
                                  .url(USER_URL)
                                  .addHeader("Authorization",

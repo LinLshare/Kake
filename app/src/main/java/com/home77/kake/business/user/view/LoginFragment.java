@@ -1,16 +1,17 @@
 package com.home77.kake.business.user.view;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.home77.common.base.collection.Params;
+import com.home77.common.base.event.GenericEvent;
 import com.home77.kake.App;
 import com.home77.kake.R;
-import com.home77.kake.base.BaseFragment;
-import com.home77.kake.business.user.presenter.LoginPresenter;
+import com.home77.kake.bs.BaseFragment;
+import com.home77.kake.bs.CmdType;
+import com.home77.kake.bs.MsgType;
+import com.home77.kake.bs.ParamsKey;
 import com.home77.kake.common.event.BroadCastEvent;
 import com.home77.kake.common.event.BroadCastEventConstant;
 
@@ -19,10 +20,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+import static com.home77.kake.business.user.UserActivity.EVENT_TO_PROFILE;
+
 /**
  * @author CJ
  */
-public class LoginFragment extends BaseFragment<LoginPresenter> implements LoginView {
+public class LoginFragment extends BaseFragment {
 
   @BindView(R.id.user_name_edit_text)
   EditText userNameEditText;
@@ -30,21 +33,31 @@ public class LoginFragment extends BaseFragment<LoginPresenter> implements Login
   EditText pswEditText;
   Unbinder unbinder;
 
-  @Nullable
   @Override
-  public View onCreateView(LayoutInflater inflater,
-                           @Nullable ViewGroup container,
-                           @Nullable Bundle savedInstanceState) {
-    View view = inflater.inflate(R.layout.fragment_login, container, false);
-    unbinder = ButterKnife.bind(this, view);
-    presenter.onViewCreated();
-    return view;
-  }
-
-  @Override
-  public void onDestroyView() {
-    super.onDestroyView();
-    unbinder.unbind();
+  public void executeCommand(CmdType cmdType, Params in, Params out) {
+    switch (cmdType) {
+      case VIEW_CREATE:
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_login, null, false);
+        unbinder = ButterKnife.bind(this, view);
+        out.put(ParamsKey.VIEW, view);
+        break;
+      case VIEW_DESTROY:
+        unbinder.unbind();
+        break;
+      case LOGINING:
+        App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_SHOW, null));
+        break;
+      case LOGIN_SUCCESS:
+        App.eventBus()
+           .post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_DISMISS, null));
+        App.eventBus().post(new GenericEvent(LoginFragment.this, EVENT_TO_PROFILE));
+        App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.EVENT_LOGIN, null));
+        break;
+      case LOGIN_ERROR:
+        App.eventBus()
+           .post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_DISMISS, null));
+        break;
+    }
   }
 
   @OnClick({
@@ -54,35 +67,20 @@ public class LoginFragment extends BaseFragment<LoginPresenter> implements Login
   public void onViewClicked(View view) {
     switch (view.getId()) {
       case R.id.back_image_view:
-        presenter.handleBackClick();
+        presenter.onMessage(MsgType.CLICK_BACK, null);
         break;
       case R.id.login_text_view:
-        presenter.handleLoginClick(userNameEditText.getText().toString(),
-                                   pswEditText.getText().toString());
+        presenter.onMessage(MsgType.CLICK_LOGIN,
+                            Params.create(ParamsKey.PHONE_NUMBER,
+                                          userNameEditText.getText().toString())
+                                  .put(ParamsKey.PASSWORD, pswEditText.getText().toString()));
         break;
       case R.id.forget_psw_text_view:
-        presenter.handleForgetPasswordClick();
+        presenter.onMessage(MsgType.CLICK_FORGET_PASSWORD, null);
         break;
       case R.id.register_usr_text_view:
-        presenter.handleRegisterUserClick();
+        presenter.onMessage(MsgType.CLICK_REGISTER_NOW, null);
         break;
     }
-  }
-
-  @Override
-  public void onLogin() {
-    App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_SHOW, null));
-  }
-
-  @Override
-  public void onLoginSuccess() {
-    App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_DISMISS, null));
-    toast(R.string.login_success);
-  }
-
-  @Override
-  public void onLoginError(String msg) {
-    App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_DISMISS, null));
-    toast(msg);
   }
 }

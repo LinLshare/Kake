@@ -25,4 +25,6 @@ public final class ParamsKey {
   public static final int PASSWORD = 401_3;
   public static final int PASSWORD_CONFIRM = 401_4;
   public static final int CHECK_CODE_COUNT_DOWN = 401_5;
+  public static final int AVATAR_URL = 401_6;
+  public static final int USER_NAME = 401_7;
 }

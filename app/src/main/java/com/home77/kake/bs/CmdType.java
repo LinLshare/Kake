@@ -7,7 +7,8 @@ public enum CmdType {
 
   //common
   VIEW_CREATE,
-  VIEW_DESTORY,
+  VIEW_DESTROY,
+  VIEW_REFRESH,
   TOAST,
 
   // local photo presenter
@@ -31,4 +32,7 @@ public enum CmdType {
   REGISTERING,
   REGISTER_SUCCESS,
   REGISTER_ERROR,
+  LOGINING,
+  LOGIN_SUCCESS,
+  LOGIN_ERROR,
 }

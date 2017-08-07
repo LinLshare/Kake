@@ -1,7 +1,6 @@
 package com.home77.kake.business.user.view;
 
 import android.os.CountDownTimer;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -17,7 +16,6 @@ import com.home77.kake.bs.CmdType;
 import com.home77.kake.bs.MsgType;
 import com.home77.kake.bs.ParamsKey;
 import com.home77.kake.business.user.UserActivity;
-import com.home77.kake.business.user.presenter.ForgetPasswordPresenter;
 import com.home77.kake.common.event.BroadCastEvent;
 import com.home77.kake.common.event.BroadCastEventConstant;
 
@@ -51,19 +49,11 @@ public class ForgetPasswordFragment extends BaseFragment {
         unbinder = ButterKnife.bind(this, view);
         out.put(ParamsKey.VIEW, view);
         break;
-      case VIEW_DESTORY:
+      case VIEW_DESTROY:
         if (countDownTimer != null) {
           countDownTimer.cancel();
         }
         unbinder.unbind();
-        break;
-      case TOAST:
-        String msg = in.get(ParamsKey.MSG, "");
-        if (TextUtils.isEmpty(msg)) {
-          Toast.showShort(in.get(ParamsKey.MSG_INT, 0));
-        } else {
-          Toast.showShort(msg);
-        }
         break;
       case CHECK_CODE_COUNT_DOWN:
         int seconds = in.get(ParamsKey.CHECK_CODE_COUNT_DOWN, 1);

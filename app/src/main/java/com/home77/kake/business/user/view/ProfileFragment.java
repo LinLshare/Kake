@@ -2,25 +2,22 @@ package com.home77.kake.business.user.view;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.text.method.KeyListener;
-import android.text.method.TextKeyListener;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.home77.common.base.collection.Params;
 import com.home77.common.ui.widget.CircleImageView;
-import com.home77.kake.App;
-import com.home77.kake.GlobalData;
 import com.home77.kake.R;
-import com.home77.kake.base.BaseFragment;
-import com.home77.kake.business.user.presenter.ProfilePresenter;
+import com.home77.kake.bs.BaseFragment;
+import com.home77.kake.bs.CmdType;
+import com.home77.kake.bs.MsgType;
+import com.home77.kake.bs.ParamsKey;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -32,7 +29,7 @@ import butterknife.Unbinder;
 /**
  * @author CJ
  */
-public class ProfileFragment extends BaseFragment<ProfilePresenter> implements ProfileView {
+public class ProfileFragment extends BaseFragment {
   @BindView(R.id.avatar_image_view)
   CircleImageView avatarImageView;
   @BindView(R.id.name_text_view)
@@ -43,36 +40,37 @@ public class ProfileFragment extends BaseFragment<ProfilePresenter> implements P
 
   private KeyListener keyListener;
 
-  @Nullable
   @Override
-  public View onCreateView(LayoutInflater inflater,
-                           @Nullable ViewGroup container,
-                           @Nullable Bundle savedInstanceState) {
-    View contentView = inflater.inflate(R.layout.fragment_profile, container, false);
-    unbinder = ButterKnife.bind(this, contentView);
-    keyListener = nameTextView.getKeyListener();
-    nameTextView.setKeyListener(null);
-    nameTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-      @Override
-      public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        if (actionId == EditorInfo.IME_ACTION_DONE) {
-          keyListener = nameTextView.getKeyListener();
-          nameTextView.setKeyListener(null);
-          presenter.handleEditUserClick(v.getText().toString());
-          return true;
-        }
-        return false;
-      }
-    });
-    presenter.onViewCreated();
-    return contentView;
-  }
-
-  @Override
-  public void onDestroyView() {
-    super.onDestroyView();
-    unbinder.unbind();
-    presenter.onViewDestroy();
+  public void executeCommand(CmdType cmdType, Params in, Params out) {
+    switch (cmdType) {
+      case VIEW_CREATE:
+        View contentView =
+            LayoutInflater.from(getContext()).inflate(R.layout.fragment_profile, null, false);
+        unbinder = ButterKnife.bind(this, contentView);
+        keyListener = nameTextView.getKeyListener();
+        nameTextView.setKeyListener(null);
+        nameTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+          @Override
+          public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+              keyListener = nameTextView.getKeyListener();
+              nameTextView.setKeyListener(null);
+              presenter.onMessage(MsgType.EDIT_USER_NAME_DONE,
+                                  Params.create(ParamsKey.USER_NAME, v.getText().toString()));
+              return true;
+            }
+            return false;
+          }
+        });
+        out.put(ParamsKey.VIEW, contentView);
+        break;
+      case VIEW_DESTROY:
+        unbinder.unbind();
+        break;
+      case VIEW_REFRESH:
+        handleViewRefresh(in);
+        break;
+    }
   }
 
   @OnClick({
@@ -83,41 +81,43 @@ public class ProfileFragment extends BaseFragment<ProfilePresenter> implements P
   public void onViewClicked(View view) {
     switch (view.getId()) {
       case R.id.back_image_view:
-        presenter.handleBackImageViewClick();
+        presenter.onMessage(MsgType.CLICK_BACK, null);
         break;
       case R.id.avatar_image_view:
-        presenter.handleAvatarClick();
+        presenter.onMessage(MsgType.CLICK_AVATAR, null);
         break;
       case R.id.edit_image_view:
         nameTextView.setKeyListener(keyListener);
         break;
       case R.id.list_item_kake:
-        presenter.handleKakeClick();
+        presenter.onMessage(MsgType.CLICK_KAKE, null);
         break;
       case R.id.list_item_photo:
-        presenter.handleCloudGalleyClick();
+        presenter.onMessage(MsgType.CLICK_CLOUD_ALBUM, null);
         break;
       case R.id.list_item_help:
-        presenter.handleHelpFeedbackClick();
+        presenter.onMessage(MsgType.CLICK_HELP, null);
         break;
       case R.id.list_item_about:
-        presenter.handleAboutClick();
+        presenter.onMessage(MsgType.CLICK_ABOUT, null);
         break;
       case R.id.name_text_view:
-        presenter.handleNameTextClick();
+        presenter.onMessage(MsgType.CLICK_USER_NAME, null);
         break;
       case R.id.exist_login_text_view:
-        presenter.handleExistLogin();
+        presenter.onMessage(MsgType.CLICK_LOGOUT, null);
         break;
     }
   }
 
-  @Override
-  public void bindData(String userName, String imgUrl) {
+  private void handleViewRefresh(Params params) {
+    String userName = params.get(ParamsKey.USER_NAME, "");
+    String imgUrl = params.get(ParamsKey.AVATAR_URL, "");
     if (!TextUtils.isEmpty(userName)) {
       nameTextView.setText(userName);
       existLoginTextView.setVisibility(View.VISIBLE);
     } else {
+      nameTextView.setText("请登录");
       existLoginTextView.setVisibility(View.GONE);
     }
     if (!TextUtils.isEmpty(imgUrl)) {
@@ -143,23 +143,8 @@ public class ProfileFragment extends BaseFragment<ProfilePresenter> implements P
           }
         }
       });
+    } else {
+      avatarImageView.setImageResource(R.drawable.user_avatar_def);
     }
-  }
-
-  @Override
-  public void onLogout() {
-    avatarImageView.setImageResource(R.drawable.user_avatar_def);
-    nameTextView.setText("请登录");
-    existLoginTextView.setVisibility(View.GONE);
-  }
-
-  @Override
-  public void onLogin() {
-    String userName = App.globalData().getString(GlobalData.KEY_USER_NAME, "");
-    if (TextUtils.isEmpty(userName)) {
-      userName = App.globalData().getString(GlobalData.KEY_USER_MOBILE, "");
-    }
-    nameTextView.setText(userName);
-    existLoginTextView.setVisibility(View.VISIBLE);
   }
 }

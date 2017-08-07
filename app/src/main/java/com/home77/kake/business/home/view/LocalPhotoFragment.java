@@ -60,7 +60,7 @@ public class LocalPhotoFragment extends BaseFragment {
         recyclerView.setAdapter(localPhotoListAdapter);
         out.put(ParamsKey.VIEW, view);
         break;
-      case VIEW_DESTORY:
+      case VIEW_DESTROY:
         unbinder.unbind();
         break;
       case LOCAL_PHOTO_LIST_LOADING:
