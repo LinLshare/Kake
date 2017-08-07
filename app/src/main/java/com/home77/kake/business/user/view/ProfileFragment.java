@@ -16,6 +16,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.home77.common.ui.widget.CircleImageView;
+import com.home77.kake.App;
+import com.home77.kake.GlobalData;
 import com.home77.kake.R;
 import com.home77.kake.base.BaseFragment;
 import com.home77.kake.business.user.presenter.ProfilePresenter;
@@ -153,6 +155,11 @@ public class ProfileFragment extends BaseFragment<ProfilePresenter> implements P
 
   @Override
   public void onLogin() {
+    String userName = App.globalData().getString(GlobalData.KEY_USER_NAME, "");
+    if (TextUtils.isEmpty(userName)) {
+      userName = App.globalData().getString(GlobalData.KEY_USER_MOBILE, "");
+    }
+    nameTextView.setText(userName);
     existLoginTextView.setVisibility(View.VISIBLE);
   }
 }

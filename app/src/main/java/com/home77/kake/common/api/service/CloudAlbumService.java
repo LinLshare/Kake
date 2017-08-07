@@ -2,6 +2,8 @@ package com.home77.kake.common.api.service;
 
 import com.home77.common.net.http.HttpContextBuilder;
 import com.home77.common.net.http.URLFetcher;
+import com.home77.kake.App;
+import com.home77.kake.GlobalData;
 import com.home77.kake.common.api.request.AlbumListRequest;
 import com.home77.kake.common.api.request.CreateAlbumRequest;
 import com.home77.kake.common.api.request.PhotoListRequest;
@@ -34,6 +36,9 @@ public class CloudAlbumService {
     AlbumListRequest request = new AlbumListRequest(userId);
     urlFetcher = URLFetcher.create(HttpContextBuilder.httpClient(), callback)
                            .url(ALBUM_LIST_URL)
+                           .addHeader("Authorization",
+                                      "Bearer " +
+                                      App.globalData().getString(GlobalData.KEY_ACCESS_TOKEN, ""))
                            .postJson(request);
     urlFetcher.start();
   }
@@ -42,6 +47,9 @@ public class CloudAlbumService {
     CreateAlbumRequest request = new CreateAlbumRequest(userId, albumName);
     urlFetcher = URLFetcher.create(HttpContextBuilder.httpClient(), callback)
                            .url(ADD_ALBUM_URL)
+                           .addHeader("Authorization",
+                                      "Bearer " +
+                                      App.globalData().getString(GlobalData.KEY_ACCESS_TOKEN, ""))
                            .postJson(request);
     urlFetcher.start();
   }
@@ -50,6 +58,9 @@ public class CloudAlbumService {
     PhotoListRequest request = new PhotoListRequest(albumId);
     urlFetcher = URLFetcher.create(HttpContextBuilder.httpClient(), callbck)
                            .url(PHOTO_LIST_URL)
+                           .addHeader("Authorization",
+                                      "Bearer " +
+                                      App.globalData().getString(GlobalData.KEY_ACCESS_TOKEN, ""))
                            .postJson(request);
     urlFetcher.start();
   }

@@ -2,6 +2,8 @@ package com.home77.kake.common.api.service;
 
 import com.home77.common.net.http.HttpContextBuilder;
 import com.home77.common.net.http.URLFetcher;
+import com.home77.kake.App;
+import com.home77.kake.GlobalData;
 import com.home77.kake.common.api.request.CheckCodeRequest;
 import com.home77.kake.common.api.request.RegisterRequest;
 import com.home77.kake.common.api.request.TokenValidateRequest;
@@ -94,6 +96,9 @@ public class UserService {
     UpdateUserNameRequest registerRequest = new UpdateUserNameRequest(userId, newName);
     urlFetcher = URLFetcher.create(HttpContextBuilder.httpClient(), callback)
                            .url(UPDATE_USER_NAME_URL)
+                           .addHeader("Authorization",
+                                      "Bearer " +
+                                      App.globalData().getString(GlobalData.KEY_ACCESS_TOKEN, ""))
                            .postJson(registerRequest);
     urlFetcher.start();
   }
@@ -109,6 +114,9 @@ public class UserService {
     registerRequest.setPassword(password);
     urlFetcher = URLFetcher.create(HttpContextBuilder.httpClient(), callback)
                            .url(RESET_PASSWORD_URL)
+                           .addHeader("Authorization",
+                                      "Bearer " +
+                                      App.globalData().getString(GlobalData.KEY_ACCESS_TOKEN, ""))
                            .postJson(registerRequest);
     urlFetcher.start();
   }
@@ -116,6 +124,9 @@ public class UserService {
   public void gainCheckCode(String phoneNumber, URLFetcher.Delegate callback) {
     urlFetcher = URLFetcher.create(HttpContextBuilder.httpClient(), callback)
                            .url(CHECKCODE_URL)
+                           .addHeader("Authorization",
+                                      "Bearer " +
+                                      App.globalData().getString(GlobalData.KEY_ACCESS_TOKEN, ""))
                            .postJson(new CheckCodeRequest(phoneNumber));
     urlFetcher.start();
   }
