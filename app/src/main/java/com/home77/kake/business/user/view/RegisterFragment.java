@@ -1,19 +1,22 @@
 package com.home77.kake.business.user.view;
 
-import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.home77.common.base.component.BaseHandler;
+import com.home77.common.base.collection.Params;
+import com.home77.common.base.event.GenericEvent;
+import com.home77.common.ui.widget.Toast;
 import com.home77.kake.App;
 import com.home77.kake.R;
-import com.home77.kake.base.BaseFragment;
-import com.home77.kake.business.user.presenter.RegisterPresenter;
+import com.home77.kake.bs.BaseFragment;
+import com.home77.kake.bs.CmdType;
+import com.home77.kake.bs.MsgType;
+import com.home77.kake.bs.ParamsKey;
+import com.home77.kake.business.user.UserActivity;
 import com.home77.kake.common.event.BroadCastEvent;
 import com.home77.kake.common.event.BroadCastEventConstant;
 
@@ -25,7 +28,7 @@ import butterknife.Unbinder;
 /**
  * @author CJ
  */
-public class RegisterFragment extends BaseFragment<RegisterPresenter> implements RegisterView {
+public class RegisterFragment extends BaseFragment {
 
   @BindView(R.id.user_name_edit_text)
   EditText userNameEditText;
@@ -40,45 +43,45 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter> implements
   TextView getCheckCodeTextView;
   private CountDownTimer countDownTimer;
 
-  @Nullable
   @Override
-  public View onCreateView(LayoutInflater inflater,
-                           @Nullable ViewGroup container,
-                           @Nullable Bundle savedInstanceState) {
-    View view = inflater.inflate(R.layout.fragment_register, container, false);
-    unbinder = ButterKnife.bind(this, view);
-    return view;
-  }
-
-  @Override
-  public void onDestroyView() {
-    super.onDestroyView();
-    unbinder.unbind();
-  }
-
-  @OnClick({R.id.get_check_code_text_view, R.id.register_text_view, R.id.back_image_view})
-  public void onViewClicked(View view) {
-    switch (view.getId()) {
-      case R.id.get_check_code_text_view:
-        presenter.handleGetCheckCodeClick(userNameEditText.getText().toString());
+  public void executeCommand(CmdType cmdType, Params in, Params out) {
+    switch (cmdType) {
+      case VIEW_CREATE:
+        View view =
+            LayoutInflater.from(getContext()).inflate(R.layout.fragment_register, null, false);
+        unbinder = ButterKnife.bind(this, view);
+        out.put(ParamsKey.VIEW, view);
         break;
-      case R.id.register_text_view:
-        presenter.handleRegisterClick(userNameEditText.getText().toString(),
-                                      checkCodeEditText.getText().toString(),
-                                      pswEditText.getText().toString(),
-                                      pswConfirmEditText.getText().toString());
+      case VIEW_DESTORY:
+        if (countDownTimer != null) {
+          countDownTimer.cancel();
+        }
+        unbinder.unbind();
         break;
-      case R.id.back_image_view:
-        presenter.handleBackClick();
+      case REGISTERING:
+        App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_SHOW, null));
         break;
-    }
-  }
-
-  @Override
-  public void onCheckcodeViewCountDown(final int seconds) {
-    BaseHandler.post(new Runnable() {
-      @Override
-      public void run() {
+      case REGISTER_ERROR:
+        if (countDownTimer != null) {
+          countDownTimer.cancel();
+          countDownTimer.onFinish();
+        }
+        App.eventBus()
+           .post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_DISMISS, null));
+        Toast.showShort("注册失败");
+        break;
+      case REGISTER_SUCCESS:
+        if (countDownTimer != null) {
+          countDownTimer.cancel();
+          countDownTimer.onFinish();
+        }
+        App.eventBus()
+           .post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_DISMISS, null));
+        Toast.showShort("注册成功");
+        App.eventBus().post(new GenericEvent(this, UserActivity.EVENT_TO_LOGIN));
+        break;
+      case CHECK_CODE_COUNT_DOWN:
+        int seconds = in.get(ParamsKey.CHECK_CODE_COUNT_DOWN, 1);
         getCheckCodeTextView.setEnabled(false);
         countDownTimer = new CountDownTimer(seconds * 1000, 1000) {
           @Override
@@ -93,24 +96,38 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter> implements
             getCheckCodeTextView.setText("短信获取");
           }
         }.start();
-      }
-    });
+        break;
+      case TOAST:
+        String msg = in.get(ParamsKey.MSG, "");
+        if (TextUtils.isEmpty(msg)) {
+          Toast.showShort(in.get(ParamsKey.MSG_INT, 0));
+        } else {
+          Toast.showShort(msg);
+        }
+        break;
+    }
   }
 
-  @Override
-  public void onRegistering() {
-    App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_SHOW, null));
-  }
-
-  @Override
-  public void onRegisterError(String msg) {
-    App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_DISMISS, null));
-    toast(msg);
-  }
-
-  @Override
-  public void onRegisterSuccess() {
-    App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_DISMISS, null));
-    toast(R.string.register_success);
+  @OnClick({R.id.get_check_code_text_view, R.id.register_text_view, R.id.back_image_view})
+  public void onViewClicked(View view) {
+    switch (view.getId()) {
+      case R.id.get_check_code_text_view:
+        presenter.onMessage(MsgType.CLICK_CHECK_CODE,
+                            Params.create(ParamsKey.PHONE_NUMBER,
+                                          userNameEditText.getText().toString()));
+        break;
+      case R.id.register_text_view:
+        presenter.onMessage(MsgType.CLICK_REGISTER,
+                            Params.create(ParamsKey.PHONE_NUMBER,
+                                          userNameEditText.getText().toString())
+                                  .put(ParamsKey.CHECK_CODE, checkCodeEditText.getText().toString())
+                                  .put(ParamsKey.PASSWORD, pswEditText.getText().toString())
+                                  .put(ParamsKey.PASSWORD_CONFIRM,
+                                       pswConfirmEditText.getText().toString()));
+        break;
+      case R.id.back_image_view:
+        presenter.onMessage(MsgType.CLICK_BACK, null);
+        break;
+    }
   }
 }

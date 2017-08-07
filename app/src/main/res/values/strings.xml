@@ -15,7 +15,7 @@
   <string name="password">密码</string>
   <string name="login">登录</string>
   <string name="login_success">登录成功</string>
-  <string name="usr_name_or_psw_illegal">用户名或密码不符合复杂度要求</string>
+  <string name="usr_name_or_psw_illegal">用户名或密码不符合复杂度要求,要求不少于6位的数字+字母</string>
   <string name="psw_illegal">密码不符合复杂度要求</string>
   <string name="register">注册</string>
   <string name="please_input_psw_again">请再次输入密码</string>

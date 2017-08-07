@@ -5,6 +5,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.text.method.KeyListener;
+import android.text.method.TextKeyListener;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +39,8 @@ public class ProfileFragment extends BaseFragment<ProfilePresenter> implements P
   @BindView(R.id.exist_login_text_view)
   TextView existLoginTextView;
 
+  private KeyListener keyListener;
+
   @Nullable
   @Override
   public View onCreateView(LayoutInflater inflater,
@@ -44,11 +48,14 @@ public class ProfileFragment extends BaseFragment<ProfilePresenter> implements P
                            @Nullable Bundle savedInstanceState) {
     View contentView = inflater.inflate(R.layout.fragment_profile, container, false);
     unbinder = ButterKnife.bind(this, contentView);
+    keyListener = nameTextView.getKeyListener();
+    nameTextView.setKeyListener(null);
     nameTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
       @Override
       public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_DONE) {
-          nameTextView.setEnabled(false);
+          keyListener = nameTextView.getKeyListener();
+          nameTextView.setKeyListener(null);
           presenter.handleEditUserClick(v.getText().toString());
           return true;
         }
@@ -80,7 +87,7 @@ public class ProfileFragment extends BaseFragment<ProfilePresenter> implements P
         presenter.handleAvatarClick();
         break;
       case R.id.edit_image_view:
-        nameTextView.setEnabled(true);
+        nameTextView.setKeyListener(keyListener);
         break;
       case R.id.list_item_kake:
         presenter.handleKakeClick();

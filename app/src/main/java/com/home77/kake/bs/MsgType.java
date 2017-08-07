@@ -12,5 +12,4 @@ public enum MsgType {
 
   // user
   CLICK_CHECK_CODE, CLICK_REGISTER, CLICK_LOGIN, CLICK_SUBMIT,
-
 }
