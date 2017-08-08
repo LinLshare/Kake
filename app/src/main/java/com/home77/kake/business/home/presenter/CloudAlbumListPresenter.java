@@ -28,7 +28,7 @@ public class CloudAlbumListPresenter extends BaseFragmentPresenter {
   private CloudAlbumService cloudAlbumService;
 
   public CloudAlbumListPresenter(BaseView baseView) {
-    super(baseView);
+    super(baseView, null);
     cloudAlbumService = Instance.of(CloudAlbumService.class);
   }
 

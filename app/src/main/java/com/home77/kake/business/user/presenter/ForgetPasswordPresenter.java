@@ -1,10 +1,8 @@
 package com.home77.kake.business.user.presenter;
 
 import com.home77.common.base.collection.Params;
-import com.home77.common.base.event.GenericEvent;
 import com.home77.common.base.pattern.Instance;
 import com.home77.common.net.http.URLFetcher;
-import com.home77.kake.App;
 import com.home77.kake.R;
 import com.home77.kake.bs.BaseFragmentPresenter;
 import com.home77.kake.bs.BaseView;
@@ -15,6 +13,7 @@ import com.home77.kake.business.user.UserActivity;
 import com.home77.kake.common.api.response.CheckcodeResponse;
 import com.home77.kake.common.api.response.Response;
 import com.home77.kake.common.api.service.UserService;
+import com.home77.kake.bs.NavigateCallback;
 import com.home77.kake.common.utils.InputChecker;
 
 /**
@@ -23,8 +22,8 @@ import com.home77.kake.common.utils.InputChecker;
 public class ForgetPasswordPresenter extends BaseFragmentPresenter {
   private UserService userService;
 
-  public ForgetPasswordPresenter(BaseView baseView) {
-    super(baseView);
+  public ForgetPasswordPresenter(BaseView baseView, NavigateCallback navigateCallback) {
+    super(baseView, navigateCallback);
     userService = Instance.of(UserService.class);
   }
 
@@ -32,7 +31,7 @@ public class ForgetPasswordPresenter extends BaseFragmentPresenter {
   public void handleMessage(MsgType msgType, Params params) {
     switch (msgType) {
       case CLICK_BACK:
-        App.eventBus().post(new GenericEvent(this, UserActivity.EVENT_TO_LOGIN));
+        navigateCallback.onNavigate(UserActivity.EVENT_TO_LOGIN);
         break;
       case CLICK_CHECK_CODE:
         handleClickCheckCode(params.get(ParamsKey.PHONE_NUMBER, ""));

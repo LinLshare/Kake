@@ -4,9 +4,9 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
-import com.home77.common.base.event.GenericEvent;
-import com.home77.kake.App;
+import com.home77.common.base.component.BaseHandler;
 import com.home77.kake.R;
+import com.home77.kake.bs.NavigateCallback;
 import com.home77.kake.business.user.presenter.ForgetPasswordPresenter;
 import com.home77.kake.business.user.presenter.LoginPresenter;
 import com.home77.kake.business.user.presenter.ProfilePresenter;
@@ -16,15 +16,10 @@ import com.home77.kake.business.user.view.LoginFragment;
 import com.home77.kake.business.user.view.ProfileFragment;
 import com.home77.kake.business.user.view.RegisterFragment;
 
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.Arrays;
-
 /**
  * @author CJ
  */
-public class UserActivity extends AppCompatActivity {
+public class UserActivity extends AppCompatActivity implements NavigateCallback {
 
   public static final int EVENT_TO_PROFILE = 1;
   public static final int EVENT_TO_LOGIN = 2;
@@ -46,7 +41,6 @@ public class UserActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_user);
-    App.eventBus().register(this);
 
     //1). setUp view
     profileFragment = new ProfileFragment();
@@ -54,10 +48,10 @@ public class UserActivity extends AppCompatActivity {
     registerFragment = new RegisterFragment();
     forgetPasswordFragment = new ForgetPasswordFragment();
     //2) setUp presenter
-    profilePresenter = new ProfilePresenter(profileFragment);
-    loginPresenter = new LoginPresenter(loginFragment);
-    registerPresenter = new RegisterPresenter(registerFragment);
-    forgetPasswordPresenter = new ForgetPasswordPresenter(forgetPasswordFragment);
+    profilePresenter = new ProfilePresenter(profileFragment, this);
+    loginPresenter = new LoginPresenter(loginFragment, this);
+    registerPresenter = new RegisterPresenter(registerFragment, this);
+    forgetPasswordPresenter = new ForgetPasswordPresenter(forgetPasswordFragment, this);
     //3) bind presenter
     profileFragment.setPresenter(profilePresenter);
     loginFragment.setPresenter(loginPresenter);
@@ -69,45 +63,44 @@ public class UserActivity extends AppCompatActivity {
                                .commit();
   }
 
-
-  @Subscribe(threadMode = ThreadMode.MAIN)
-  public void onEvent(GenericEvent navigateEvent) {
-    switch (navigateEvent.eventType) {
-      case EVENT_TO_PROFILE:
-        // clear back stack
-        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
-        getSupportFragmentManager().beginTransaction()
-                                   .replace(R.id.content_layout, profileFragment)
-                                   .commit();
-        break;
-      case EVENT_TO_LOGIN:
-        getSupportFragmentManager().beginTransaction()
-                                   .replace(R.id.content_layout, loginFragment)
-                                   .addToBackStack(null)
-                                   .commit();
-        break;
-      case EVENT_TO_REGISTER:
-        getSupportFragmentManager().beginTransaction()
-                                   .replace(R.id.content_layout, registerFragment)
-                                   .addToBackStack(null)
-                                   .commit();
-        break;
-      case EVENT_TO_FORGET_PSW:
-        getSupportFragmentManager().beginTransaction()
-                                   .replace(R.id.content_layout, forgetPasswordFragment)
-                                   .addToBackStack(null)
-                                   .commit();
-        break;
-      case EVENT_TO_HOME:
-        this.finish();
-        break;
-    }
-  }
-
   @Override
-  protected void onDestroy() {
-    App.eventBus().unregister(this);
-    super.onDestroy();
+  public void onNavigate(final int eventType) {
+    BaseHandler.runOnMainThread(new Runnable() {
+      @Override
+      public void run() {
+        switch (eventType) {
+          case EVENT_TO_PROFILE:
+            // clear back stack
+            getSupportFragmentManager().popBackStack(null,
+                                                     FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+            getSupportFragmentManager().beginTransaction()
+                                       .replace(R.id.content_layout, profileFragment)
+                                       .commit();
+            break;
+          case EVENT_TO_LOGIN:
+            getSupportFragmentManager().beginTransaction()
+                                       .replace(R.id.content_layout, loginFragment)
+                                       .addToBackStack(null)
+                                       .commit();
+            break;
+          case EVENT_TO_REGISTER:
+            getSupportFragmentManager().beginTransaction()
+                                       .replace(R.id.content_layout, registerFragment)
+                                       .addToBackStack(null)
+                                       .commit();
+            break;
+          case EVENT_TO_FORGET_PSW:
+            getSupportFragmentManager().beginTransaction()
+                                       .replace(R.id.content_layout, forgetPasswordFragment)
+                                       .addToBackStack(null)
+                                       .commit();
+            break;
+          case EVENT_TO_HOME:
+            UserActivity.this.finish();
+            break;
+        }
+      }
+    });
   }
 }

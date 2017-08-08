@@ -1,8 +1,6 @@
 package com.home77.kake.business.user.presenter;
 
 import com.home77.common.base.collection.Params;
-import com.home77.common.base.component.BaseHandler;
-import com.home77.common.base.event.GenericEvent;
 import com.home77.common.base.pattern.Instance;
 import com.home77.common.net.http.URLFetcher;
 import com.home77.kake.App;
@@ -12,6 +10,7 @@ import com.home77.kake.bs.BaseFragmentPresenter;
 import com.home77.kake.bs.BaseView;
 import com.home77.kake.bs.CmdType;
 import com.home77.kake.bs.MsgType;
+import com.home77.kake.bs.NavigateCallback;
 import com.home77.kake.bs.ParamsKey;
 import com.home77.kake.business.user.UserActivity;
 import com.home77.kake.common.api.response.CheckcodeResponse;
@@ -25,8 +24,8 @@ import com.home77.kake.common.utils.InputChecker;
 public class RegisterPresenter extends BaseFragmentPresenter {
   private UserService userService;
 
-  public RegisterPresenter(BaseView baseView) {
-    super(baseView);
+  public RegisterPresenter(BaseView baseView, NavigateCallback navigateCallback) {
+    super(baseView, navigateCallback);
     userService = Instance.of(UserService.class);
   }
 
@@ -138,6 +137,6 @@ public class RegisterPresenter extends BaseFragmentPresenter {
   }
 
   private void handleBackClick() {
-    App.eventBus().post(new GenericEvent(this, UserActivity.EVENT_TO_LOGIN));
+    navigateCallback.onNavigate(UserActivity.EVENT_TO_LOGIN);
   }
 }

@@ -31,7 +31,7 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
   private LoadObjectListTask loadObjectListTask;
 
   public LocalPhotoPresenter(BaseView baseView) {
-    super(baseView);
+    super(baseView, null);
   }
 
   @Override

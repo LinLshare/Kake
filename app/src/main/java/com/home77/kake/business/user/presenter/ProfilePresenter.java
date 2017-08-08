@@ -1,7 +1,6 @@
 package com.home77.kake.business.user.presenter;
 
 import com.home77.common.base.collection.Params;
-import com.home77.common.base.event.GenericEvent;
 import com.home77.common.base.pattern.Instance;
 import com.home77.common.net.http.URLFetcher;
 import com.home77.kake.App;
@@ -10,6 +9,7 @@ import com.home77.kake.bs.BaseFragmentPresenter;
 import com.home77.kake.bs.BaseView;
 import com.home77.kake.bs.CmdType;
 import com.home77.kake.bs.MsgType;
+import com.home77.kake.bs.NavigateCallback;
 import com.home77.kake.bs.ParamsKey;
 import com.home77.kake.business.user.UserActivity;
 import com.home77.kake.common.api.response.Response;
@@ -23,8 +23,8 @@ import com.home77.kake.common.event.BroadCastEventConstant;
 public class ProfilePresenter extends BaseFragmentPresenter {
   private UserService userService;
 
-  public ProfilePresenter(BaseView baseView) {
-    super(baseView);
+  public ProfilePresenter(BaseView baseView, NavigateCallback callback) {
+    super(baseView, callback);
     userService = Instance.of(UserService.class);
   }
 
@@ -52,7 +52,7 @@ public class ProfilePresenter extends BaseFragmentPresenter {
   }
 
   private void handleClickBack() {
-    App.eventBus().post(new GenericEvent(this, UserActivity.EVENT_TO_HOME));
+    navigateCallback.onNavigate(UserActivity.EVENT_TO_HOME);
   }
 
   private void handleEditUserNameDone(final String name) {
@@ -92,7 +92,7 @@ public class ProfilePresenter extends BaseFragmentPresenter {
 
   private void handleClickUserName() {
     if (!App.isLogin()) {
-      App.eventBus().post(new GenericEvent(this, UserActivity.EVENT_TO_LOGIN));
+      navigateCallback.onNavigate(UserActivity.EVENT_TO_LOGIN);
     }
   }
 

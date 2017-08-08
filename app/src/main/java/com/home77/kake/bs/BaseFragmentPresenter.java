@@ -17,9 +17,11 @@ public abstract class BaseFragmentPresenter
     implements BasePresenter, FragmentLifeCycle, KeyEventInterface {
 
   protected BaseView baseView;
+  protected NavigateCallback navigateCallback;
 
-  public BaseFragmentPresenter(BaseView baseView) {
+  public BaseFragmentPresenter(BaseView baseView, NavigateCallback navigateCallback) {
     this.baseView = baseView;
+    this.navigateCallback = navigateCallback;
   }
 
   @Override
