@@ -77,7 +77,6 @@ public class RegisterFragment extends BaseFragment {
         App.eventBus()
            .post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_DISMISS, null));
         Toast.showShort("注册成功");
-        App.eventBus().post(new GenericEvent(this, UserActivity.EVENT_TO_LOGIN));
         break;
       case CHECK_CODE_COUNT_DOWN:
         int seconds = in.get(ParamsKey.CHECK_CODE_COUNT_DOWN, 1);

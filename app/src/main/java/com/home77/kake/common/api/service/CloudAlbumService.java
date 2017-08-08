@@ -55,8 +55,8 @@ public class CloudAlbumService {
     urlFetcher.start();
   }
 
-  public void getPhotoList(int albumId, URLFetcher.Delegate callbck) {
-    urlFetcher = URLFetcher.create(HttpContextBuilder.httpClient(), callbck)
+  public void getPhotoList(int albumId, URLFetcher.Delegate callback) {
+    urlFetcher = URLFetcher.create(HttpContextBuilder.httpClient(), callback)
                            .url(getUrl(PHOTO_LIST_URL_FORMAT, albumId + ""))
                            .addHeader("Authorization",
                                       "Bearer " +

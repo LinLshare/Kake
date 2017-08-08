@@ -8,12 +8,12 @@ import com.home77.kake.bs.BaseFragmentPresenter;
 import com.home77.kake.bs.BaseView;
 import com.home77.kake.bs.CmdType;
 import com.home77.kake.bs.MsgType;
+import com.home77.kake.bs.NavigateCallback;
 import com.home77.kake.bs.ParamsKey;
 import com.home77.kake.business.user.UserActivity;
 import com.home77.kake.common.api.response.CheckcodeResponse;
 import com.home77.kake.common.api.response.Response;
 import com.home77.kake.common.api.service.UserService;
-import com.home77.kake.bs.NavigateCallback;
 import com.home77.kake.common.utils.InputChecker;
 
 /**
@@ -100,6 +100,7 @@ public class ForgetPasswordPresenter extends BaseFragmentPresenter {
                              null);
         } else {
           baseView.onCommand(CmdType.PASSWORD_RESET_SUCCESS, null, null);
+          navigateCallback.onNavigate(UserActivity.EVENT_TO_LOGIN);
         }
       }
 

@@ -7,7 +7,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.home77.common.base.collection.Params;
-import com.home77.common.base.event.GenericEvent;
 import com.home77.common.ui.widget.Toast;
 import com.home77.kake.App;
 import com.home77.kake.R;
@@ -15,7 +14,6 @@ import com.home77.kake.bs.BaseFragment;
 import com.home77.kake.bs.CmdType;
 import com.home77.kake.bs.MsgType;
 import com.home77.kake.bs.ParamsKey;
-import com.home77.kake.business.user.UserActivity;
 import com.home77.kake.common.event.BroadCastEvent;
 import com.home77.kake.common.event.BroadCastEventConstant;
 
@@ -91,7 +89,6 @@ public class ForgetPasswordFragment extends BaseFragment {
         App.eventBus()
            .post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_DISMISS, null));
         Toast.showShort("重置密码成功");
-        App.eventBus().post(new GenericEvent(this, UserActivity.EVENT_TO_LOGIN));
         break;
     }
   }

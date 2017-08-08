@@ -18,6 +18,8 @@ import com.home77.kake.business.user.UserActivity;
 import com.home77.kake.common.api.ServerConfig;
 import com.home77.kake.common.api.response.UserResponse;
 import com.home77.kake.common.api.service.UserService;
+import com.home77.kake.common.event.BroadCastEvent;
+import com.home77.kake.common.event.BroadCastEventConstant;
 import com.home77.kake.common.utils.InputChecker;
 
 /**
@@ -61,6 +63,8 @@ public class LoginPresenter extends BaseFragmentPresenter {
                         ServerConfig.BASE_IMG_URL + userResponse.getAvatar())
              .putString(GlobalData.KEY_USER_NAME, userResponse.getName());
           baseView.onCommand(CmdType.LOGIN_SUCCESS, null, null);
+          App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.EVENT_LOGIN, null));
+          navigateCallback.onNavigate(UserActivity.EVENT_TO_PROFILE);
         } else {
           baseView.onCommand(CmdType.LOGIN_ERROR, Params.create(ParamsKey.MSG, "登录失败[0]"), null);
         }

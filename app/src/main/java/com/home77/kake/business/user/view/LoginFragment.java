@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.home77.common.base.collection.Params;
-import com.home77.common.base.event.GenericEvent;
 import com.home77.kake.App;
 import com.home77.kake.R;
 import com.home77.kake.bs.BaseFragment;
@@ -19,8 +18,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-
-import static com.home77.kake.business.user.UserActivity.EVENT_TO_PROFILE;
 
 /**
  * @author CJ
@@ -50,8 +47,6 @@ public class LoginFragment extends BaseFragment {
       case LOGIN_SUCCESS:
         App.eventBus()
            .post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_DISMISS, null));
-        App.eventBus().post(new GenericEvent(LoginFragment.this, EVENT_TO_PROFILE));
-        App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.EVENT_LOGIN, null));
         break;
       case LOGIN_ERROR:
         App.eventBus()

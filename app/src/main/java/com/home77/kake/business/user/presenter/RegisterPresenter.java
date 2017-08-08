@@ -124,6 +124,7 @@ public class RegisterPresenter extends BaseFragmentPresenter {
                                   .putInt(GlobalData.KEY_EXPIRE_IN,
                                           registerResponse.getExpires_in());
                                baseView.onCommand(CmdType.REGISTER_SUCCESS, null, null);
+                               navigateCallback.onNavigate(UserActivity.EVENT_TO_LOGIN);
                              }
                            }
 
