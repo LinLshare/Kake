@@ -35,4 +35,5 @@ public enum CmdType {
   LOGINING,
   LOGIN_SUCCESS,
   LOGIN_ERROR,
+  RENAME_SUCCESS,
 }

@@ -36,31 +36,25 @@ public class CloudAlbumService {
   }
 
   public void getAlbumList(int userId, URLFetcher.Delegate callback) {
-    urlFetcher = URLFetcher.create(HttpContextBuilder.httpClient(), callback)
-                           .url(ALBUM_LIST_URL)
-                           .addHeader("Authorization",
-                                      "Bearer " +
-                                      App.globalData().getString(GlobalData.KEY_ACCESS_TOKEN, ""));
+    urlFetcher = createUrlFetcher(callback).url(ALBUM_LIST_URL);
     urlFetcher.start();
   }
 
   public void createAlbum(int userId, String albumName, URLFetcher.Delegate callback) {
     CreateAlbumRequest request = new CreateAlbumRequest(userId, albumName);
-    urlFetcher = URLFetcher.create(HttpContextBuilder.httpClient(), callback)
-                           .url(ADD_ALBUM_URL)
-                           .addHeader("Authorization",
-                                      "Bearer " +
-                                      App.globalData().getString(GlobalData.KEY_ACCESS_TOKEN, ""))
-                           .postJson(request);
+    urlFetcher = createUrlFetcher(callback).url(ADD_ALBUM_URL).postJson(request);
     urlFetcher.start();
   }
 
   public void getPhotoList(int albumId, URLFetcher.Delegate callback) {
-    urlFetcher = URLFetcher.create(HttpContextBuilder.httpClient(), callback)
-                           .url(getUrl(PHOTO_LIST_URL_FORMAT, albumId + ""))
-                           .addHeader("Authorization",
-                                      "Bearer " +
-                                      App.globalData().getString(GlobalData.KEY_ACCESS_TOKEN, ""));
+    urlFetcher = createUrlFetcher(callback).url(getUrl(PHOTO_LIST_URL_FORMAT, albumId + ""));
     urlFetcher.start();
+  }
+
+  private URLFetcher createUrlFetcher(URLFetcher.Delegate callback) {
+    return URLFetcher.create(HttpContextBuilder.httpClient(), callback)
+                     .addHeader("Authorization",
+                                "Bearer " +
+                                App.globalData().getString(GlobalData.KEY_ACCESS_TOKEN, ""));
   }
 }

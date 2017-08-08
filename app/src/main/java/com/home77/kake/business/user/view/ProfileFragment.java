@@ -1,5 +1,6 @@
 package com.home77.kake.business.user.view;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
@@ -8,11 +9,13 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.home77.common.base.collection.Params;
 import com.home77.common.ui.widget.CircleImageView;
+import com.home77.common.ui.widget.Toast;
 import com.home77.kake.R;
 import com.home77.kake.bs.BaseFragment;
 import com.home77.kake.bs.CmdType;
@@ -70,6 +73,18 @@ public class ProfileFragment extends BaseFragment {
       case VIEW_REFRESH:
         handleViewRefresh(in);
         break;
+      case RENAME_SUCCESS:
+        Toast.showShort("用户名更新成功");
+        hideKeyboard();
+        break;
+    }
+  }
+
+  private void hideKeyboard() {
+    if (nameTextView != null) {
+      InputMethodManager imm =
+          (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+      imm.hideSoftInputFromWindow(nameTextView.getWindowToken(), 0);
     }
   }
 

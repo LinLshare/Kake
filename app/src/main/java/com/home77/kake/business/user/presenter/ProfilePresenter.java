@@ -66,6 +66,7 @@ public class ProfilePresenter extends BaseFragmentPresenter {
                                      switch (response.getCode()) {
                                        case 200:
                                          App.globalData().putString(GlobalData.KEY_USER_NAME, name);
+                                         baseView.onCommand(CmdType.RENAME_SUCCESS, null, null);
                                          break;
                                        default:
                                          baseView.onCommand(CmdType.TOAST,
@@ -94,6 +95,17 @@ public class ProfilePresenter extends BaseFragmentPresenter {
     if (!App.isLogin()) {
       navigateCallback.onNavigate(UserActivity.EVENT_TO_LOGIN);
     }
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    baseView.onCommand(CmdType.VIEW_REFRESH,
+                       Params.create(ParamsKey.USER_NAME,
+                                     App.globalData().getString(GlobalData.KEY_USER_NAME, ""))
+                             .put(ParamsKey.AVATAR_URL,
+                                  App.globalData().getString(GlobalData.KEY_USER_AVATER, "")),
+                       null);
   }
 
   private void handleClickLogout() {

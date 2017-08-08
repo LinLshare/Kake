@@ -36,6 +36,7 @@
       android:layout_centerHorizontal="true"
       android:layout_marginTop="4dp"
       android:background="@null"
+      android:imeActionLabel="确定"
       android:imeOptions="actionDone"
       android:inputType="text"
       android:singleLine="true"
