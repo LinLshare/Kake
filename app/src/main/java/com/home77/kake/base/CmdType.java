@@ -11,6 +11,7 @@ public enum CmdType {
   VIEW_REFRESH,
   TOAST,
   SHOW_MENU,
+  SHOW_ALBUM_INFO,
 
   // local photo presenter
   LOCAL_PHOTO_LIST_LOADING,

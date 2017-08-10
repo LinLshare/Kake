@@ -51,7 +51,7 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
       loadObjectListTask = new LoadObjectListTask();
       loadObjectListTask.execute();
     } else {
-      // TODO: 2017/8/6
+      baseView.onCommand(CmdType.TOAST, Params.create(ParamsKey.MSG, "未连接到相机"), null);
     }
   }
 
@@ -145,7 +145,7 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
         }
 
         baseView.onCommand(CmdType.LOCAL_PHOTO_LIST_LOAD_SUCCESS,
-                           Params.create(ParamsKey.PHOTO_LIST, imageRows),
+                           Params.create(ParamsKey.PHOTO_LIST, photoList),
                            null);
         //        storageInfo.setText(info);
 

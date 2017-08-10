@@ -20,6 +20,7 @@ import com.home77.kake.base.MsgType;
 import com.home77.kake.base.ParamsKey;
 import com.home77.kake.business.home.adapter.LocalPhotoListAdapter;
 import com.home77.kake.business.home.model.Photo;
+import com.home77.kake.common.api.response.Album;
 import com.home77.kake.common.widget.recyclerview.DefaultGridItemDecoration;
 
 import java.util.ArrayList;
@@ -66,7 +67,6 @@ public class CloudPhotoListFragment extends BaseFragment {
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
           @Override
           public void onRefresh() {
-            // TODO: 2017/8/10
             presenter.onMessage(MsgType.VIEW_REFRESH, null);
           }
         });
@@ -93,6 +93,7 @@ public class CloudPhotoListFragment extends BaseFragment {
           }
         });
         out.put(ParamsKey.VIEW, view);
+        presenter.onMessage(MsgType.VIEW_REFRESH, null);
         break;
       case VIEW_DESTROY:
         unbinder.unbind();
@@ -100,8 +101,10 @@ public class CloudPhotoListFragment extends BaseFragment {
       case SHOW_MENU:
         popupMenu.showAsDropDown(menuImageView);
         break;
+      case SHOW_ALBUM_INFO:
+        Album album = in.get(ParamsKey.ALBUM);
+        titleTextView.setText(album.getName() + "");
       case CLOUD_PHOTO_LIST_LOADING:
-
         break;
       case CLOUD_PHOTO_LIST_LOAD_ERROR:
         if (refreshLayout.isRefreshing()) {
@@ -110,7 +113,7 @@ public class CloudPhotoListFragment extends BaseFragment {
         String msg = in.get(ParamsKey.MSG);
         Toast.showShort(msg);
         break;
-      case CLOUD_ALBUM_CREATE_SUCCESS:
+      case CLOUD_PHOTO_LIST_LOAD_SUCCESS:
         if (refreshLayout.isRefreshing()) {
           refreshLayout.setRefreshing(false);
         }

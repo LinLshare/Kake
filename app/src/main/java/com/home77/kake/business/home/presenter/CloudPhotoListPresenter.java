@@ -43,6 +43,7 @@ public class CloudPhotoListPresenter extends BaseFragmentPresenter {
         baseView.onCommand(CmdType.SHOW_MENU, null, null);
         break;
       case VIEW_REFRESH:
+        baseView.onCommand(CmdType.SHOW_ALBUM_INFO, Params.create(ParamsKey.ALBUM, album), null);
         getPhotoList();
         break;
     }

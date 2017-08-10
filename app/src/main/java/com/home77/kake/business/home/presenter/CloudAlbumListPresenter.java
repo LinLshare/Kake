@@ -71,8 +71,7 @@ public class CloudAlbumListPresenter extends BaseFragmentPresenter {
                                             break;
                                           case 400:
                                             baseView.onCommand(CmdType.CLOUD_ALBUM_CREATE_ERROR,
-                                                               Params.create(ParamsKey.MSG,
-                                                                             response.getMessage()),
+                                                               Params.create(ParamsKey.MSG, "相册为空"),
                                                                null);
                                             break;
                                         }
@@ -82,7 +81,7 @@ public class CloudAlbumListPresenter extends BaseFragmentPresenter {
                                     @Override
                                     public void onError(final String msg) {
                                       baseView.onCommand(CmdType.CLOUD_ALBUM_LOAD_ERROR,
-                                                         Params.create(ParamsKey.MSG, msg),
+                                                         Params.create(ParamsKey.MSG, "网络异常"),
                                                          null);
 
                                     }

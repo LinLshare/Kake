@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import com.home77.common.base.collection.Params;
 import com.home77.common.base.component.BaseHandler;
-import com.home77.kake.business.home.presenter.FragmentLifeCycle;
 
 /**
  * @author CJ
