@@ -1,4 +1,4 @@
-package com.home77.kake.bs;
+package com.home77.kake.base;
 
 /**
  * @author CJ

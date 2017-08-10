@@ -11,7 +11,7 @@ import com.home77.common.base.event.GenericEvent;
 import com.home77.common.ui.widget.Toast;
 import com.home77.kake.App;
 import com.home77.kake.R;
-import com.home77.kake.bs.ParamsKey;
+import com.home77.kake.base.ParamsKey;
 import com.home77.kake.business.home.presenter.CloudAlbumListPresenter;
 import com.home77.kake.business.home.presenter.LocalPhotoPresenter;
 import com.home77.kake.business.home.view.CloudAlbumListListFragment;

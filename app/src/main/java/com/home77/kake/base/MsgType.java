@@ -1,4 +1,4 @@
-package com.home77.kake.bs;
+package com.home77.kake.base;
 
 /**
  * @author CJ
@@ -7,7 +7,7 @@ public enum MsgType {
   // common
   VIEW_REFRESH,
   CLICK_BACK,
-
+  CLICK_MENU,
   // cloud album
   CLICK_CREATE_ALBUM_DIALOG_OK,
 

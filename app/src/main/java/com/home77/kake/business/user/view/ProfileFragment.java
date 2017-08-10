@@ -17,10 +17,10 @@ import com.home77.common.base.collection.Params;
 import com.home77.common.ui.widget.CircleImageView;
 import com.home77.common.ui.widget.Toast;
 import com.home77.kake.R;
-import com.home77.kake.bs.BaseFragment;
-import com.home77.kake.bs.CmdType;
-import com.home77.kake.bs.MsgType;
-import com.home77.kake.bs.ParamsKey;
+import com.home77.kake.base.BaseFragment;
+import com.home77.kake.base.CmdType;
+import com.home77.kake.base.MsgType;
+import com.home77.kake.base.ParamsKey;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 

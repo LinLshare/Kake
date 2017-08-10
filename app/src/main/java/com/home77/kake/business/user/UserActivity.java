@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.home77.common.base.component.BaseHandler;
 import com.home77.kake.R;
-import com.home77.kake.bs.NavigateCallback;
+import com.home77.kake.base.NavigateCallback;
 import com.home77.kake.business.user.presenter.ForgetPasswordPresenter;
 import com.home77.kake.business.user.presenter.LoginPresenter;
 import com.home77.kake.business.user.presenter.ProfilePresenter;

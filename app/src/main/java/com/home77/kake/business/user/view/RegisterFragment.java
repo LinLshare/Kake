@@ -7,15 +7,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.home77.common.base.collection.Params;
-import com.home77.common.base.event.GenericEvent;
 import com.home77.common.ui.widget.Toast;
 import com.home77.kake.App;
 import com.home77.kake.R;
-import com.home77.kake.bs.BaseFragment;
-import com.home77.kake.bs.CmdType;
-import com.home77.kake.bs.MsgType;
-import com.home77.kake.bs.ParamsKey;
-import com.home77.kake.business.user.UserActivity;
+import com.home77.kake.base.BaseFragment;
+import com.home77.kake.base.CmdType;
+import com.home77.kake.base.MsgType;
+import com.home77.kake.base.ParamsKey;
 import com.home77.kake.common.event.BroadCastEvent;
 import com.home77.kake.common.event.BroadCastEventConstant;
 

@@ -1,22 +1,10 @@
 package com.home77.kake.base;
 
+import com.home77.common.base.collection.Params;
+
 /**
- * receive all events from views,
- * and then do some logical things,
- * may call views' method for interaction.
- *
  * @author CJ
  */
-public abstract class BasePresenter<T> {
-  protected T attachedView;
-
-  public BasePresenter(T attachedView) {
-    this.attachedView = attachedView;
-  }
-
-  public abstract void start();
-
-  public abstract void onViewCreated();
-
-  public abstract void onViewDestroy();
+public interface BasePresenter {
+  void onMessage(MsgType msgType, Params params);
 }

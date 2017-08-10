@@ -5,7 +5,7 @@ import android.view.View;
 import com.home77.common.base.collection.Params;
 import com.home77.kake.App;
 import com.home77.kake.R;
-import com.home77.kake.bs.ParamsKey;
+import com.home77.kake.base.ParamsKey;
 import com.home77.kake.common.api.response.Album;
 import com.home77.kake.common.event.BroadCastEvent;
 import com.home77.kake.common.event.BroadCastEventConstant;

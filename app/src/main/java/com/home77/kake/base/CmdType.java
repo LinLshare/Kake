@@ -1,4 +1,4 @@
-package com.home77.kake.bs;
+package com.home77.kake.base;
 
 /**
  * @author CJ
@@ -10,6 +10,7 @@ public enum CmdType {
   VIEW_DESTROY,
   VIEW_REFRESH,
   TOAST,
+  SHOW_MENU,
 
   // local photo presenter
   LOCAL_PHOTO_LIST_LOADING,
@@ -23,6 +24,9 @@ public enum CmdType {
   CLOUD_ALBUM_CREATING,
   CLOUD_ALBUM_CREATE_SUCCESS,
   CLOUD_ALBUM_CREATE_ERROR,
+  CLOUD_PHOTO_LIST_LOADING,
+  CLOUD_PHOTO_LIST_LOAD_SUCCESS,
+  CLOUD_PHOTO_LIST_LOAD_ERROR,
 
   // user
   CHECK_CODE_COUNT_DOWN,

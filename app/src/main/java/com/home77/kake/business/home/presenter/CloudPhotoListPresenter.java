@@ -1,13 +1,16 @@
 package com.home77.kake.business.home.presenter;
 
+import com.home77.common.base.collection.Params;
 import com.home77.common.base.component.BaseHandler;
 import com.home77.common.base.pattern.Instance;
 import com.home77.common.net.http.URLFetcher;
-import com.home77.kake.App;
-import com.home77.kake.base.BasePresenter;
+import com.home77.kake.base.BaseFragmentPresenter;
+import com.home77.kake.base.BaseView;
+import com.home77.kake.base.CmdType;
+import com.home77.kake.base.MsgType;
+import com.home77.kake.base.NavigateCallback;
+import com.home77.kake.base.ParamsKey;
 import com.home77.kake.business.home.CloudPhotoActivity;
-import com.home77.kake.business.home.model.Photo;
-import com.home77.kake.business.home.view.CloudPhotoListView;
 import com.home77.kake.common.api.response.Album;
 import com.home77.kake.common.api.response.PhotoListResponse;
 import com.home77.kake.common.api.service.CloudAlbumService;
@@ -17,12 +20,12 @@ import java.util.ArrayList;
 /**
  * @author CJ
  */
-public class CloudPhotoListPresenter extends BasePresenter<CloudPhotoListView> {
+public class CloudPhotoListPresenter extends BaseFragmentPresenter {
   private CloudAlbumService cloudAlbumService;
   private Album album;
 
-  public CloudPhotoListPresenter(CloudPhotoListView attachedView) {
-    super(attachedView);
+  public CloudPhotoListPresenter(BaseView baseView, NavigateCallback navigateCallback) {
+    super(baseView, navigateCallback);
     cloudAlbumService = Instance.of(CloudAlbumService.class);
   }
 
@@ -31,18 +34,18 @@ public class CloudPhotoListPresenter extends BasePresenter<CloudPhotoListView> {
   }
 
   @Override
-  public void start() {
-  }
-
-  @Override
-  public void onViewCreated() {
-    attachedView.onAlbumNameChanged(album.getName());
-    getPhotoList();
-  }
-
-  @Override
-  public void onViewDestroy() {
-
+  public void handleMessage(MsgType msgType, Params params) {
+    switch (msgType) {
+      case CLICK_BACK:
+        navigateCallback.onNavigate(CloudPhotoActivity.EVENT_EXIST);
+        break;
+      case CLICK_MENU:
+        baseView.onCommand(CmdType.SHOW_MENU, null, null);
+        break;
+      case VIEW_REFRESH:
+        getPhotoList();
+        break;
+    }
   }
 
   private void getPhotoList() {
@@ -56,14 +59,21 @@ public class CloudPhotoListPresenter extends BasePresenter<CloudPhotoListView> {
             if (photoListResponse != null) {
               switch (photoListResponse.getCode()) {
                 case 200:
-                  attachedView.onPhotoListUpdated(photoListResponse.getData());
+                  baseView.onCommand(CmdType.CLOUD_PHOTO_LIST_LOAD_SUCCESS,
+                                     Params.create(ParamsKey.PHOTO_LIST,
+                                                   photoListResponse.getData()),
+                                     null);
                   break;
                 case 400:
-                  attachedView.onPhotoListUpdated(new ArrayList<Photo>());
+                  baseView.onCommand(CmdType.CLOUD_PHOTO_LIST_LOAD_SUCCESS,
+                                     Params.create(ParamsKey.PHOTO_LIST, new ArrayList<>()),
+                                     null);
                   break;
               }
             } else {
-              attachedView.onPhotoListUpdateError(photoListResponse.getMessage());
+              baseView.onCommand(CmdType.CLOUD_PHOTO_LIST_LOAD_ERROR,
+                                 Params.create(ParamsKey.MSG, "加载图片失败[-1]"),
+                                 null);
             }
           }
         });
@@ -71,27 +81,10 @@ public class CloudPhotoListPresenter extends BasePresenter<CloudPhotoListView> {
 
       @Override
       public void onError(final String msg) {
-        BaseHandler.post(new Runnable() {
-          @Override
-          public void run() {
-            attachedView.onPhotoListUpdateError(msg);
-          }
-        });
+        baseView.onCommand(CmdType.CLOUD_PHOTO_LIST_LOAD_ERROR,
+                           Params.create(ParamsKey.MSG, "加载图片失败[0]"),
+                           null);
       }
     });
-  }
-
-  public void onMenuNavClick() {
-    attachedView.onShowSubMenu();
-  }
-
-  public void onRefresh() {
-    getPhotoList();
-  }
-
-  public void onBackNavClick() {
-    CloudPhotoActivity.NavEvent navEvent =
-        new CloudPhotoActivity.NavEvent(this, CloudPhotoActivity.NavEvent.CLICK_BACK, null);
-    App.eventBus().post(navEvent);
   }
 }

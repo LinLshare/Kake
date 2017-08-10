@@ -1,15 +1,10 @@
 package com.home77.kake.base;
 
+import com.home77.common.base.collection.Params;
+
 /**
- * just post all events to presenter,
- * and wait presenter to handle.
- *
  * @author CJ
  */
-public interface BaseView<T> {
-  void setPresenter(T presenter);
-
-  void toast(String content);
-
-  void toast(int contentId);
+public interface BaseView {
+  void onCommand(CmdType cmdType, Params in, Params out);
 }

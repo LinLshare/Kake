@@ -1,4 +1,4 @@
-package com.home77.kake.bs;
+package com.home77.kake.base;
 
 import android.os.Bundle;
 import android.view.KeyEvent;
