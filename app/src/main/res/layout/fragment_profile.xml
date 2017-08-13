@@ -26,7 +26,7 @@
       android:layout_height="76dp"
       android:layout_below="@+id/back_image_view"
       android:layout_centerHorizontal="true"
-      android:layout_marginTop="32dp"
+      android:layout_marginTop="24dp"
       android:scaleType="centerCrop"
       android:src="@drawable/user_avatar_def"/>
 
@@ -65,8 +65,8 @@
 
     <ImageView
       android:id="@+id/list_kake_image_view"
-      android:layout_width="32dp"
-      android:layout_height="32dp"
+      android:layout_width="24dp"
+      android:layout_height="24dp"
       android:layout_centerVertical="true"
       android:layout_marginLeft="16dp"
       android:src="@drawable/list_menu_kake"/>
@@ -88,6 +88,8 @@
       android:layout_alignParentRight="true"
       android:layout_centerVertical="true"
       android:layout_marginRight="16dp"
+      android:paddingBottom="4dp"
+      android:paddingTop="4dp"
       android:src="@drawable/list_ic_forward"/>
   </RelativeLayout>
 
@@ -100,8 +102,8 @@
 
     <ImageView
       android:id="@+id/list_photo_image_view"
-      android:layout_width="32dp"
-      android:layout_height="32dp"
+      android:layout_width="24dp"
+      android:layout_height="24dp"
       android:layout_centerVertical="true"
       android:layout_marginLeft="16dp"
       android:src="@drawable/list_menu_uploadedpho"/>
@@ -123,6 +125,8 @@
       android:layout_alignParentRight="true"
       android:layout_centerVertical="true"
       android:layout_marginRight="16dp"
+      android:paddingBottom="4dp"
+      android:paddingTop="4dp"
       android:src="@drawable/list_ic_forward"/>
   </RelativeLayout>
 
@@ -135,8 +139,8 @@
 
     <ImageView
       android:id="@+id/list_help_image_view"
-      android:layout_width="32dp"
-      android:layout_height="32dp"
+      android:layout_width="24dp"
+      android:layout_height="24dp"
       android:layout_centerVertical="true"
       android:layout_marginLeft="16dp"
       android:layout_marginTop="1dp"
@@ -159,6 +163,8 @@
       android:layout_alignParentRight="true"
       android:layout_centerVertical="true"
       android:layout_marginRight="16dp"
+      android:paddingBottom="4dp"
+      android:paddingTop="4dp"
       android:src="@drawable/list_ic_forward"/>
   </RelativeLayout>
 
@@ -171,8 +177,8 @@
 
     <ImageView
       android:id="@+id/list_about_image_view"
-      android:layout_width="32dp"
-      android:layout_height="32dp"
+      android:layout_width="24dp"
+      android:layout_height="24dp"
       android:layout_centerVertical="true"
       android:layout_marginLeft="16dp"
       android:src="@drawable/list_menu_about"/>
@@ -194,6 +200,8 @@
       android:layout_alignParentRight="true"
       android:layout_centerVertical="true"
       android:layout_marginRight="16dp"
+      android:paddingBottom="4dp"
+      android:paddingTop="4dp"
       android:src="@drawable/list_ic_forward"/>
   </RelativeLayout>
 

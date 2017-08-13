@@ -6,7 +6,7 @@
 
   <RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="48dp"
+    android:layout_height="56dp"
     android:background="@color/colorPrimaryDark">
 
     <ImageView
@@ -33,7 +33,7 @@
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="48dp"
+    android:layout_marginTop="56dp"
     android:orientation="vertical">
 
     <ImageView
@@ -77,8 +77,8 @@
       android:id="@+id/update_text_view"
       android:layout_width="match_parent"
       android:layout_height="48dp"
-      android:layout_marginLeft="16dp"
-      android:layout_marginRight="16dp"
+      android:layout_marginLeft="24dp"
+      android:layout_marginRight="24dp"
       android:layout_marginTop="32dp"
       android:background="@color/colorC1"
       android:gravity="center"
