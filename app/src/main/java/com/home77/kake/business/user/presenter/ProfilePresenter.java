@@ -46,7 +46,9 @@ public class ProfilePresenter extends BaseFragmentPresenter {
         handleClickLogout();
         break;
       case VIEW_REFRESH:
-
+        break;
+      case CLICK_ABOUT:
+        navigateCallback.onNavigate(UserActivity.EVENT_TO_ABOUT);
         break;
     }
   }

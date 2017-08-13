@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/colorC2">
+
+  <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:background="@color/colorPrimaryDark">
+
+    <ImageView
+      android:id="@+id/back_image_view"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_centerVertical="true"
+      android:paddingBottom="8dp"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
+      android:paddingTop="8dp"
+      android:src="@drawable/nav_back"/>
+
+    <TextView
+      android:id="@+id/title_text_view"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="true"
+      android:text="关于"
+      android:textColor="@color/colorC1"
+      android:textSize="@dimen/fontSizeF1"/>
+  </RelativeLayout>
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="48dp"
+    android:orientation="vertical">
+
+    <ImageView
+      android:layout_width="100dp"
+      android:layout_height="100dp"
+      android:layout_gravity="center_horizontal"
+      android:layout_marginTop="60dp"
+      android:scaleType="center"
+      android:src="@drawable/about_logo"/>
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:layout_marginTop="16dp"
+      android:text="KAKE 全景相机"
+      android:textColor="@color/colorC6"
+      android:textSize="@dimen/fontSizeF5"/>
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:layout_marginTop="8dp"
+      android:text="V 1.0.255"
+      android:textColor="@color/colorC6"
+      android:textSize="@dimen/fontSizeF3"/>
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:layout_marginTop="32dp"
+      android:gravity="center_horizontal"
+      android:text="www.home77.com\n\n东莞市东城区莞樟路鸿怡大厦c座2c\n\n联系电话：400-877-3877"
+      android:textAllCaps="true"
+      android:textColor="@color/colorC5"
+      android:textSize="@dimen/fontSizeF3"/>
+
+    <TextView
+      android:id="@+id/update_text_view"
+      android:layout_width="match_parent"
+      android:layout_height="48dp"
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="16dp"
+      android:layout_marginTop="32dp"
+      android:background="@color/colorC1"
+      android:gravity="center"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
+      android:text="检查更新"
+      android:textColor="@color/colorC6"
+      android:textSize="@dimen/fontSizeF2"/>
+  </LinearLayout>
+
+  <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_centerHorizontal="true"
+    android:layout_marginBottom="16dp"
+    android:text="东莞市房讯资讯股份有限公司"
+    android:textColor="@color/colorC4"
+    android:textSize="@dimen/fontSizeF3"/>
+
+</RelativeLayout>
