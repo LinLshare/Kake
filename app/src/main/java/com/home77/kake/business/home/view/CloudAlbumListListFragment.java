@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.home77.common.base.collection.Params;
+import com.home77.common.base.pattern.Instance;
+import com.home77.common.ui.model.UiData;
 import com.home77.common.ui.util.SizeHelper;
 import com.home77.common.ui.widget.Toast;
 import com.home77.kake.App;
@@ -68,12 +70,10 @@ public class CloudAlbumListListFragment extends BaseFragment {
         unbinder = ButterKnife.bind(this, view);
         App.eventBus().register(this);
         int spanCount = 3;
-        int outerSpace = SizeHelper.dp(12);
-        int innerSpace = SizeHelper.dp(6);
-        int screenWidth = getResources().getDisplayMetrics().widthPixels;
-        int widthAndHeight =
-            (screenWidth - outerSpace * 2 - (spanCount - 1) * innerSpace) / spanCount;
-        recyclerView.addItemDecoration(new CloudAlbumGridItemDecoration(outerSpace, innerSpace));
+        int space = SizeHelper.dp(6);
+        int screenWidth = Instance.of(UiData.class).winWidth();
+        int widthAndHeight = (screenWidth - (spanCount + 1) * space) / spanCount;
+        recyclerView.addItemDecoration(new CloudAlbumGridItemDecoration(space));
         cloudAlbumListAdapter = new CloudAlbumListAdapter(getContext(), albumList, widthAndHeight);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
         recyclerView.setAdapter(cloudAlbumListAdapter);

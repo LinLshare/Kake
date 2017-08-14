@@ -5,18 +5,14 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.home77.common.base.debug.DLog;
-
 
 public class CloudAlbumGridItemDecoration extends RecyclerView.ItemDecoration {
 
   private static final String TAG = CloudAlbumGridItemDecoration.class.getSimpleName();
-  private int outerSpace;
-  private final int innerSpace;
+  private final int space;
 
-  public CloudAlbumGridItemDecoration(int outerSpace, int innerSpace) {
-    this.outerSpace = outerSpace;
-    this.innerSpace = innerSpace;
+  public CloudAlbumGridItemDecoration(int space) {
+    this.space = space;
   }
 
   @Override
@@ -24,53 +20,35 @@ public class CloudAlbumGridItemDecoration extends RecyclerView.ItemDecoration {
                              View view,
                              RecyclerView parent,
                              RecyclerView.State state) {
-    GridLayoutManager gridLayoutManager = (GridLayoutManager) parent.getLayoutManager();
-    int itemCount = parent.getAdapter().getItemCount();
-    int spanCount = gridLayoutManager.getSpanCount();
-    if (itemCount == 0 || spanCount == 0) {
-      return;
-    }
-    int position = parent.getChildLayoutPosition(view);
-    int row = position / spanCount;
-    int column = position % spanCount;
-    DLog.v(TAG, "%d: (%d, %d)", position, row, column);
-    if (row == 0) { // first row
-      if (column == 0) {
-        outRect.left = outerSpace;
-        outRect.top = outerSpace;
-      } else if (column == spanCount - 1) {
-        outRect.left = innerSpace;
-        outRect.top = outerSpace;
-        outRect.right = outerSpace;
-      } else {
-        outRect.left = innerSpace;
-        outRect.top = outerSpace;
+    GridLayoutManager layoutManager = (GridLayoutManager) parent.getLayoutManager();
+    //判断总的数量是否可以整除
+    int totalCount = layoutManager.getItemCount();
+    int surplusCount = totalCount % layoutManager.getSpanCount();
+    int childPosition = parent.getChildAdapterPosition(view);
+    if (layoutManager.getOrientation() == GridLayoutManager.VERTICAL) {//竖直方向的
+      if (surplusCount == 0 && childPosition > totalCount - layoutManager.getSpanCount() - 1) {
+        //后面几项需要bottom
+        outRect.bottom = space;
+      } else if (surplusCount != 0 && childPosition > totalCount - surplusCount - 1) {
+        outRect.bottom = space;
       }
-    } else if (row == (itemCount - 1) / spanCount) { //lastRow
-      if (column == 0) {
-        outRect.left = outerSpace;
-        outRect.top = innerSpace;
-      } else if (column == spanCount - 1) {
-        outRect.left = innerSpace;
-        outRect.top = innerSpace;
-        outRect.right = outerSpace;
-      } else {
-        outRect.left = innerSpace;
-        outRect.top = innerSpace;
+      if ((childPosition + 1) % layoutManager.getSpanCount() == 0) {//被整除的需要右边
+        outRect.right = space;
       }
-      outRect.bottom = outerSpace;
-    } else { // middle row
-      if (column == 0) {
-        outRect.top = innerSpace;
-        outRect.left = outerSpace;
-      } else if (column == spanCount - 1) {
-        outRect.top = innerSpace;
-        outRect.left = innerSpace;
-        outRect.right = outerSpace;
-      } else {
-        outRect.top = innerSpace;
-        outRect.left = innerSpace;
+      outRect.top = space;
+      outRect.left = space;
+    } else {
+      if (surplusCount == 0 && childPosition > totalCount - layoutManager.getSpanCount() - 1) {
+        //后面几项需要右边
+        outRect.right = space;
+      } else if (surplusCount != 0 && childPosition > totalCount - surplusCount - 1) {
+        outRect.right = space;
       }
+      if ((childPosition + 1) % layoutManager.getSpanCount() == 0) {//被整除的需要下边
+        outRect.bottom = space;
+      }
+      outRect.top = space;
+      outRect.left = space;
     }
   }
 }
