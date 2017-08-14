@@ -26,7 +26,7 @@ public class NormalBottomItem extends LinearLayout implements IBottomItem {
 
     iconImg = new ImageView(context);
     LinearLayout.LayoutParams layoutParams =
-        new LinearLayout.LayoutParams(SizeHelper.dp(32), SizeHelper.dp(32));
+        new LinearLayout.LayoutParams(SizeHelper.dp(24), SizeHelper.dp(24));
     iconImg.setScaleType(ImageView.ScaleType.FIT_CENTER);
     iconImg.setImageResource(iconRes);
     TextView descText = new TextView(context);
