@@ -11,6 +11,9 @@ public enum MsgType {
   // cloud album
   CLICK_CREATE_ALBUM_DIALOG_OK,
 
+  //local photo
+  CLICK_LINCK_CAMERA,
+
   // user
   CLICK_CHECK_CODE,
   CLICK_REGISTER,

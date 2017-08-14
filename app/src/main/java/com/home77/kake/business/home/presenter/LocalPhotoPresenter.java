@@ -40,6 +40,9 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
       case VIEW_REFRESH:
         loadImageAndVideoList();
         break;
+      case CLICK_LINCK_CAMERA:
+        baseView.onCommand(CmdType.OPEN_WIFI_SETTING, null, null);
+        break;
     }
   }
 
@@ -51,7 +54,7 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
       loadObjectListTask = new LoadObjectListTask();
       loadObjectListTask.execute();
     } else {
-      baseView.onCommand(CmdType.TOAST, Params.create(ParamsKey.MSG, "未连接到相机"), null);
+      baseView.onCommand(CmdType.DEVICE_NOT_LINK, null, null);
     }
   }
 
@@ -63,6 +66,10 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
         publishProgress("------");
         HttpConnector camera = new HttpConnector("192.168.1.1");
         DeviceInfo deviceInfo = camera.getDeviceInfo();
+        if (deviceInfo.getSerialNumber().isEmpty()) {
+          baseView.onCommand(CmdType.DEVICE_NOT_LINK, null, null);
+          return null;
+        }
         publishProgress("connected.");
         publishProgress(
             deviceInfo.getClass().getSimpleName() + ":<" + deviceInfo.getModel() + ", " +
@@ -147,65 +154,7 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
         baseView.onCommand(CmdType.LOCAL_PHOTO_LIST_LOAD_SUCCESS,
                            Params.create(ParamsKey.PHOTO_LIST, photoList),
                            null);
-        //        storageInfo.setText(info);
-
-        ////        ImageListArrayAdapter imageListArrayAdapter =
-        ////            new ImageListArrayAdapter(ImageListActivity.this,
-        ////                                      R.layout.listlayout_object,
-        ////                                      imageRows);
-        ////        objectList.setAdapter(imageListArrayAdapter);
-        ////        objectList.setOnItemClickListener(new OnItemClickListener() {
-        ////          @Override
-        ////          public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        ////            ImageRow selectedItem = (ImageRow) parent.getItemAtPosition(position);
-        ////            if (selectedItem.isPhoto()) {
-        ////              byte[] thumbnail = selectedItem.getThumbnail();
-        ////              String fileId = selectedItem.getFileId();
-        ////              GLPhotoActivity.startActivityForResult(ImageListActivity.this,
-        ////                                                     cameraIpAddress,
-        ////                                                     fileId,
-        ////                                                     thumbnail,
-        ////                                                     false);
-        //            } else {
-        //              Toast.makeText(getApplicationContext(), "This isn't a photo.", Toast.LENGTH_SHORT)
-        //                   .show();
-        //            }
-        //          }
-        //        });
-        //        objectList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-        //          private String mFileId;
-        //
-        //          @Override
-        //          public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        //            ImageRow selectedItem = (ImageRow) parent.getItemAtPosition(position);
-        //            mFileId = selectedItem.getFileId();
-        //            String fileName = selectedItem.getFileName();
-
-        //            new AlertDialog.Builder(ImageListActivity.this).setTitle(fileName)
-        //                                                           .setMessage(R.string.delete_dialog_message)
-        //                                                           .setPositiveButton(R.string.dialog_positive_button,
-        //                                                                              new DialogInterface.OnClickListener() {
-        //                                                                                @Override
-        //                                                                                public void onClick(
-        //                                                                                    DialogInterface dialog,
-        //                                                                                    int which) {
-        //                                                                                  DeleteObjectTask
-        //                                                                                      deleteTask =
-        //                                                                                      new DeleteObjectTask();
-        //                                                                                  deleteTask.execute(
-        //                                                                                      mFileId);
-        //                                                                                }
-        //                                                                              })
-        //                                                           .show();
-        //            return true;
-        //          }
-        //        });
-      } else {
-        baseView.onCommand(CmdType.LOCAL_PHOTO_LIST_LOAD_ERROR,
-                           Params.create(ParamsKey.MSG, "加载图片失败"),
-                           null);
       }
-      //      progressBar.setVisibility(View.GONE);
     }
 
     @Override

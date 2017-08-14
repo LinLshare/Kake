@@ -15,4 +15,40 @@
       android:layout_height="match_parent"/>
   </android.support.v4.widget.SwipeRefreshLayout>
 
+  <LinearLayout
+    android:id="@+id/unlink_camera_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:visibility="gone">
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="32dp"
+      android:text="未连接到全景相机"
+      android:textColor="@color/colorC6"
+      android:textSize="@dimen/fontSizeF5"/>
+
+    <ImageView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="32dp"
+      android:src="@drawable/ic_link_failure"/>
+
+    <TextView
+      android:id="@+id/link_camera_text_view"
+      android:layout_width="match_parent"
+      android:layout_height="48dp"
+      android:layout_marginLeft="48dp"
+      android:layout_marginRight="48dp"
+      android:layout_marginTop="48dp"
+      android:background="@color/colorC7"
+      android:gravity="center"
+      android:text="连接相机"
+      android:textColor="@color/colorC1"
+      android:textSize="@dimen/fontSizeF2"/>
+  </LinearLayout>
+
 </FrameLayout>
