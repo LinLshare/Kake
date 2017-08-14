@@ -46,6 +46,12 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
     }
   }
 
+  @Override
+  public void onResume() {
+    super.onResume();
+    loadImageAndVideoList();
+  }
+
   private void loadImageAndVideoList() {
     if (App.hasConnectedToWifi()) {
       if (loadObjectListTask != null && !loadObjectListTask.isCancelled()) {
