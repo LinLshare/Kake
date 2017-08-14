@@ -7,7 +7,7 @@ import android.opengl.GLUtils;
 import android.opengl.Matrix;
 import android.util.Log;
 
-import com.home77.kake.business.home.view.glview.model.UVSphere;
+import com.home77.kake.business.home.model.UVSphere;
 import com.theta360.v2.model.Constants;
 import com.theta360.v2.model.Photo;
 

@@ -1,4 +1,4 @@
-package com.home77.kake.business.home.view.glview.model;
+package com.home77.kake.business.home.model;
 
 
 import android.opengl.GLES20;
