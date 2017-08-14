@@ -11,13 +11,20 @@ public class Photo {
   private String name;
   private String dateTimeZone;
   private byte[] thumbnail;
+  private String fieldId;
 
-  public Photo(int type, String size, String name, String dateTimeZone, byte[] thumbnail) {
+  public Photo(int type,
+               String size,
+               String name,
+               String dateTimeZone,
+               byte[] thumbnail,
+               String fieldId) {
     this.type = type;
     this.size = size;
     this.name = name;
     this.dateTimeZone = dateTimeZone;
     this.thumbnail = thumbnail;
+    this.fieldId = fieldId;
   }
 
   public int getType() {
@@ -59,5 +66,9 @@ public class Photo {
 
   public void setSize(String size) {
     this.size = size;
+  }
+
+  public String getFieldId() {
+    return fieldId;
   }
 }

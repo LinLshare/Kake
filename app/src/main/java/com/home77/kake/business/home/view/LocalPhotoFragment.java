@@ -20,6 +20,7 @@ import com.home77.kake.base.MsgType;
 import com.home77.kake.base.ParamsKey;
 import com.home77.kake.business.home.adapter.LocalPhotoListAdapter;
 import com.home77.kake.business.home.model.Photo;
+import com.home77.kake.common.api.ServerConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,6 +100,15 @@ public class LocalPhotoFragment extends BaseFragment {
         Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
         startActivity(intent);
         break;
+      case TO_PHOTO_VIEW_ACTIVITY: {
+        Photo photo = in.get(ParamsKey.PHOTO);
+        GLPhotoActivity.startActivityForResult(getActivity(),
+                                               ServerConfig.CAMERA_HOST,
+                                               photo.getFieldId(),
+                                               photo.getThumbnail(),
+                                               true);
+      }
+      break;
     }
   }
 

@@ -12,7 +12,8 @@ public final class BroadCastEventConstant {
 
   public static final int EVENT_LOGOUT = 103_1;
   public static final int EVENT_LOGIN = 103_2;
-
   public static final int WIFI_CONNECTED = 104_1;
   public static final int WIFI_LOST = 104_2;
+
+  public static final int CLICK_LOCAL_PHOTO = 105_1;
 }

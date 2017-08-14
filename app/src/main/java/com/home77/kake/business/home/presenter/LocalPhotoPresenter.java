@@ -12,11 +12,17 @@ import com.home77.kake.base.CmdType;
 import com.home77.kake.base.MsgType;
 import com.home77.kake.base.ParamsKey;
 import com.home77.kake.business.home.model.Photo;
+import com.home77.kake.common.api.ServerConfig;
+import com.home77.kake.common.event.BroadCastEvent;
+import com.home77.kake.common.event.BroadCastEventConstant;
 import com.theta360.v2.network.DeviceInfo;
 import com.theta360.v2.network.HttpConnector;
 import com.theta360.v2.network.ImageInfo;
 import com.theta360.v2.network.StorageInfo;
 import com.theta360.v2.view.ImageRow;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -32,6 +38,13 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
 
   public LocalPhotoPresenter(BaseView baseView) {
     super(baseView, null);
+    App.eventBus().register(this);
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    App.eventBus().unregister(this);
   }
 
   @Override
@@ -70,7 +83,7 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
       baseView.onCommand(CmdType.LOCAL_PHOTO_LIST_LOADING, null, null);
       try {
         publishProgress("------");
-        HttpConnector camera = new HttpConnector("192.168.1.1");
+        HttpConnector camera = new HttpConnector(ServerConfig.CAMERA_HOST);
         DeviceInfo deviceInfo = camera.getDeviceInfo();
         if (deviceInfo.getSerialNumber().isEmpty()) {
           baseView.onCommand(CmdType.DEVICE_NOT_LINK, null, null);
@@ -153,7 +166,8 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
                                     imgRow.getFileSize() + "",
                                     imgRow.getFileName(),
                                     imgRow.getCaptureDate(),
-                                    imgRow.getThumbnail()));
+                                    imgRow.getThumbnail(),
+                                    imgRow.getFileId()));
           }
         }
 
@@ -165,6 +179,15 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
 
     @Override
     protected void onCancelled() {
+    }
+  }
+
+  @Subscribe(threadMode = ThreadMode.MAIN)
+  public void onEvent(BroadCastEvent event) {
+    switch (event.getEvent()) {
+      case BroadCastEventConstant.CLICK_LOCAL_PHOTO:
+        baseView.onCommand(CmdType.TO_PHOTO_VIEW_ACTIVITY, event.getParams(), null);
+        break;
     }
   }
 

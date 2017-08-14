@@ -18,6 +18,7 @@ public enum CmdType {
   LOCAL_PHOTO_LIST_LOAD_SUCCESS,
   LOCAL_PHOTO_LIST_LOAD_ERROR,
   DEVICE_NOT_LINK,
+  TO_PHOTO_VIEW_ACTIVITY,
   OPEN_WIFI_SETTING,
 
   // cloud album list presenter

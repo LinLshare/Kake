@@ -15,7 +15,8 @@ ext {
     picasso: '2.5.+',
     base_rvadapter: '3.0.3',
     butterknife: '8.7.0',
-    android_gradle: '2.3.2'
+    android_gradle: '2.3.2',
+    photo_view: '2.0.0',
   ]
 
   test_versions = [
@@ -31,7 +32,8 @@ ext {
     picasso: "com.squareup.picasso:picasso:${versions.picasso}",
     design: "com.android.support:design:${versions.android_support_v7}",
     base_rvadapter: "com.zhy:base-rvadapter:${versions.base_rvadapter}",
-    butterknife: "com.jakewharton:butterknife:${versions.butterknife}"
+    butterknife: "com.jakewharton:butterknife:${versions.butterknife}",
+    photo_view: "com.github.chrisbanes:PhotoView:${versions.photo_view}",
   ]
 
   test_libraries = [

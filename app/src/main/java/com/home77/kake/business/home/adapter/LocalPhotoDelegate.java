@@ -2,8 +2,13 @@ package com.home77.kake.business.home.adapter;
 
 import android.graphics.BitmapFactory;
 
+import com.home77.common.base.collection.Params;
+import com.home77.kake.App;
 import com.home77.kake.R;
+import com.home77.kake.base.ParamsKey;
 import com.home77.kake.business.home.model.Photo;
+import com.home77.kake.common.event.BroadCastEvent;
+import com.home77.kake.common.event.BroadCastEventConstant;
 import com.zhy.adapter.recyclerview.base.ItemViewDelegate;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
@@ -29,5 +34,8 @@ public class LocalPhotoDelegate implements ItemViewDelegate<Photo> {
                           BitmapFactory.decodeByteArray(photo.getThumbnail(),
                                                         0,
                                                         photo.getThumbnail().length));
+    App.eventBus()
+       .post(new BroadCastEvent(BroadCastEventConstant.CLICK_LOCAL_PHOTO,
+                                Params.create(ParamsKey.PHOTO, photo)));
   }
 }

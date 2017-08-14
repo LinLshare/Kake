@@ -19,6 +19,7 @@ public final class ParamsKey {
 
   // local photo
   public static final int PHOTO_LIST = 301;
+  public static final int PHOTO = 301_1;
 
   //user
   public static final int PHONE_NUMBER = 401_1;
