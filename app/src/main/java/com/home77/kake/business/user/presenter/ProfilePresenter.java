@@ -17,6 +17,8 @@ import com.home77.kake.common.api.service.UserService;
 import com.home77.kake.common.event.BroadCastEvent;
 import com.home77.kake.common.event.BroadCastEventConstant;
 
+import java.io.File;
+
 /**
  * @author CJ
  */
@@ -35,6 +37,7 @@ public class ProfilePresenter extends BaseFragmentPresenter {
         handleClickBack();
         break;
       case CLICK_AVATAR:
+        baseView.onCommand(CmdType.SHOW_AVATAR_SELECT_DIALOG, null, null);
         break;
       case CLICK_USER_NAME:
         handleClickUserName();
@@ -50,6 +53,23 @@ public class ProfilePresenter extends BaseFragmentPresenter {
       case CLICK_ABOUT:
         navigateCallback.onNavigate(UserActivity.EVENT_TO_ABOUT);
         break;
+      case TAKE_AVATAR_FILE: {
+        File file = params.get(ParamsKey.FILE);
+
+        baseView.onCommand(CmdType.AVATAR_UPDATING, null, null);
+        userService.updateAvater(file, new URLFetcher.Delegate() {
+          @Override
+          public void onSuccess(URLFetcher source) {
+            baseView.onCommand(CmdType.AVATAR_UPDATE_SUCCESS, null, null);
+          }
+
+          @Override
+          public void onError(String msg) {
+            baseView.onCommand(CmdType.AVATAR_UPDATE_ERROR, null, null);
+          }
+        });
+      }
+      break;
     }
   }
 

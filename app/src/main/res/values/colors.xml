@@ -14,5 +14,11 @@
   <color name="colorC4">#cccccc</color>
   <color name="colorC5">#999999</color>
   <color name="colorC6">#666666</color>
-
+  <!--take photo-->
+  <color name="multiple_image_select_primaryDark">@color/colorPrimaryDark</color>
+  <color name="multiple_image_select_primary">@color/colorPrimary</color>
+  <color name="multiple_image_select_accent">@color/colorAccent</color>
+  <color name="multiple_image_select_primaryText">#FFFFFF</color>
+  <color name="multiple_image_select_secondaryText">#727272</color>
+  <color name="multiple_image_select_toolbarPrimaryText">#FFFFFF</color>
 </resources>

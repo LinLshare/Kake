@@ -29,6 +29,7 @@ public enum MsgType {
   CLICK_ABOUT,
   CLICK_HELP,
   CLICK_LOGOUT,
+  TAKE_AVATAR_FILE,
   //about
   CLICK_UPDATE,
 }

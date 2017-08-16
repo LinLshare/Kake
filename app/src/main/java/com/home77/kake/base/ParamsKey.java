@@ -11,6 +11,7 @@ public final class ParamsKey {
   public static final int MSG_INT = 102_2;
   public static final int BUNDLE = 103;
   public static final int TITLE = 104;
+  public static final int FILE= 105;
 
   // cloud album
   public static final int ALBUM_LIST = 201_1;

@@ -17,6 +17,7 @@ ext {
     butterknife: '8.7.0',
     android_gradle: '2.3.2',
     photo_view: '2.0.0',
+    take_photo: '4.0.0',
   ]
 
   test_versions = [
@@ -34,6 +35,7 @@ ext {
     base_rvadapter: "com.zhy:base-rvadapter:${versions.base_rvadapter}",
     butterknife: "com.jakewharton:butterknife:${versions.butterknife}",
     photo_view: "com.github.chrisbanes:PhotoView:${versions.photo_view}",
+    take_photo: "com.jph.takephoto:takephoto_library:${versions.take_photo}"
   ]
 
   test_libraries = [

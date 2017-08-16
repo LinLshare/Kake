@@ -132,6 +132,11 @@ public final class URLFetcher {
     return postJson(request);
   }
 
+  public URLFetcher postRequestBody(RequestBody requestBody) {
+    mRequestBuilder.post(requestBody);
+    return this;
+  }
+
   // actions
 
   public boolean start() {

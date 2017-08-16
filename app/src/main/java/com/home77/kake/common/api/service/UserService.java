@@ -10,6 +10,12 @@ import com.home77.kake.common.api.request.TokenValidateRequest;
 import com.home77.kake.common.api.request.UpdateUserNameRequest;
 import com.home77.kake.common.api.response.TokenValidateResponse;
 
+import java.io.File;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+
 import static com.home77.kake.common.api.ServerConfig.HOST;
 
 /**
@@ -23,6 +29,7 @@ public class UserService {
   private static final String VALIDATE_URL;
   private static final String RESET_PASSWORD_URL;
   private static final String UPDATE_USER_NAME_URL;
+  private static final String UPDATE_AVATAR_URL;
 
   static {
     VALIDATE_URL = String.format("http://%s/oauth/token", HOST);
@@ -31,6 +38,7 @@ public class UserService {
     USER_URL = String.format("http://%s/api/v1/user", HOST);
     RESET_PASSWORD_URL = String.format("http://%s/api/v1/resetpassword", HOST);
     UPDATE_USER_NAME_URL = String.format("http://%s/api/v1/user/changename", HOST);
+    UPDATE_AVATAR_URL = String.format("http://%s/api/v1/user/changephoto", HOST);
   }
 
   private URLFetcher urlFetcher;
@@ -65,10 +73,7 @@ public class UserService {
              .putInt(GlobalData.KEY_EXPIRE_IN, tokenValidateResponse.getExpires_in())
              .putString(GlobalData.KEY_TOKEN_TYPE, tokenValidateResponse.getAccess_token());
 
-          urlFetcher = URLFetcher.create(HttpContextBuilder.httpClient(), callback)
-                                 .url(USER_URL)
-                                 .addHeader("Authorization",
-                                            "Bearer " + tokenValidateResponse.getAccess_token());
+          urlFetcher = createUrlFetcher(callback).url(USER_URL);
           urlFetcher.start();
         } else {
           callback.onError("parse response error");
@@ -100,14 +105,21 @@ public class UserService {
 
   public void updateUserName(int userId, String newName, URLFetcher.Delegate callback) {
     UpdateUserNameRequest registerRequest = new UpdateUserNameRequest(userId, newName);
-    urlFetcher = URLFetcher.create(HttpContextBuilder.httpClient(), callback)
-                           .url(UPDATE_USER_NAME_URL)
-                           .addHeader("Authorization",
-                                      "Bearer " +
-                                      App.globalData().getString(GlobalData.KEY_ACCESS_TOKEN, ""))
-                           .postJson(registerRequest);
+    urlFetcher = createUrlFetcher(callback).url(UPDATE_USER_NAME_URL).postJson(registerRequest);
     urlFetcher.start();
   }
+
+  public void updateAvater(File file, URLFetcher.Delegate callback) {
+    RequestBody fileBody = RequestBody.create(MediaType.parse("image/*"), file);
+    RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                                                         .addFormDataPart("file",
+                                                                          "head_image",
+                                                                          fileBody)
+                                                         .build();
+    urlFetcher = createUrlFetcher(callback).url(UPDATE_AVATAR_URL).postRequestBody(requestBody);
+    urlFetcher.start();
+  }
+
 
   public void resetPassword(String phoneNumber,
                             String checkCode,
@@ -118,23 +130,20 @@ public class UserService {
     registerRequest.setCode(checkCode);
     registerRequest.setRepassword(password);
     registerRequest.setPassword(password);
-    urlFetcher = URLFetcher.create(HttpContextBuilder.httpClient(), callback)
-                           .url(RESET_PASSWORD_URL)
-                           .addHeader("Authorization",
-                                      "Bearer " +
-                                      App.globalData().getString(GlobalData.KEY_ACCESS_TOKEN, ""))
-                           .postJson(registerRequest);
+    urlFetcher = createUrlFetcher(callback).url(RESET_PASSWORD_URL).postJson(registerRequest);
     urlFetcher.start();
   }
 
   public void gainCheckCode(String phoneNumber, URLFetcher.Delegate callback) {
-    urlFetcher = URLFetcher.create(HttpContextBuilder.httpClient(), callback)
-                           .url(CHECKCODE_URL)
-                           .addHeader("Authorization",
-                                      "Bearer " +
-                                      App.globalData().getString(GlobalData.KEY_ACCESS_TOKEN, ""))
-                           .postJson(new CheckCodeRequest(phoneNumber));
+    urlFetcher =
+        createUrlFetcher(callback).url(CHECKCODE_URL).postJson(new CheckCodeRequest(phoneNumber));
     urlFetcher.start();
   }
 
+  private URLFetcher createUrlFetcher(URLFetcher.Delegate callback) {
+    return URLFetcher.create(HttpContextBuilder.httpClient(), callback)
+                     .addHeader("Authorization",
+                                "Bearer " +
+                                App.globalData().getString(GlobalData.KEY_ACCESS_TOKEN, ""));
+  }
 }
