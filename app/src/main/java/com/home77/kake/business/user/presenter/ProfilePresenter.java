@@ -1,6 +1,7 @@
 package com.home77.kake.business.user.presenter;
 
 import com.home77.common.base.collection.Params;
+import com.home77.common.base.debug.DLog;
 import com.home77.common.base.pattern.Instance;
 import com.home77.common.net.http.URLFetcher;
 import com.home77.kake.App;
@@ -23,6 +24,7 @@ import java.io.File;
  * @author CJ
  */
 public class ProfilePresenter extends BaseFragmentPresenter {
+  private static final String TAG = ProfilePresenter.class.getSimpleName();
   private UserService userService;
 
   public ProfilePresenter(BaseView baseView, NavigateCallback callback) {
@@ -57,14 +59,20 @@ public class ProfilePresenter extends BaseFragmentPresenter {
         File file = params.get(ParamsKey.FILE);
 
         baseView.onCommand(CmdType.AVATAR_UPDATING, null, null);
-        userService.updateAvater(file, new URLFetcher.Delegate() {
+        userService.updateAvatar(file, new URLFetcher.Delegate() {
           @Override
           public void onSuccess(URLFetcher source) {
-            baseView.onCommand(CmdType.AVATAR_UPDATE_SUCCESS, null, null);
+            Response response = source.responseClass(Response.class);
+            if (response != null && response.getCode() == 200) {
+              baseView.onCommand(CmdType.AVATAR_UPDATE_SUCCESS, null, null);
+            } else {
+              baseView.onCommand(CmdType.AVATAR_UPDATE_ERROR, null, null);
+            }
           }
 
           @Override
           public void onError(String msg) {
+            DLog.d(TAG, msg + "");
             baseView.onCommand(CmdType.AVATAR_UPDATE_ERROR, null, null);
           }
         });

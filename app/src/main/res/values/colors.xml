@@ -14,6 +14,9 @@
   <color name="colorC4">#cccccc</color>
   <color name="colorC5">#999999</color>
   <color name="colorC6">#666666</color>
+
+  <color name="colorTransparent70">#4c312D2A</color>
+
   <!--take photo-->
   <color name="multiple_image_select_primaryDark">@color/colorPrimaryDark</color>
   <color name="multiple_image_select_primary">@color/colorPrimary</color>

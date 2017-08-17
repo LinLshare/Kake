@@ -8,6 +8,7 @@
   <uses-feature
     android:glEsVersion="0x00020000"
     android:required="true"/>
+
   <application
     android:name=".App"
     android:allowBackup="true"
@@ -26,6 +27,8 @@
       </intent-filter>
     </activity>
     <activity android:name=".business.home.CloudPhotoActivity">
+    </activity>
+    <activity android:name=".business.camera.CameraActivity">
     </activity>
   </application>
 

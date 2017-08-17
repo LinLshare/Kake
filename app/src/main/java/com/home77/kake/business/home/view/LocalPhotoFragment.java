@@ -69,9 +69,11 @@ public class LocalPhotoFragment extends BaseFragment {
         break;
       case LOCAL_PHOTO_LIST_LOADING:
         unlinkCameraLayout.setVisibility(View.GONE);
+        refreshLayout.setVisibility(View.VISIBLE);
         break;
       case LOCAL_PHOTO_LIST_LOAD_SUCCESS:
         unlinkCameraLayout.setVisibility(View.GONE);
+        refreshLayout.setVisibility(View.VISIBLE);
         if (refreshLayout.isRefreshing()) {
           refreshLayout.setRefreshing(false);
         }
@@ -82,6 +84,7 @@ public class LocalPhotoFragment extends BaseFragment {
         break;
       case LOCAL_PHOTO_LIST_LOAD_ERROR:
         unlinkCameraLayout.setVisibility(View.GONE);
+        refreshLayout.setVisibility(View.VISIBLE);
         if (refreshLayout.isRefreshing()) {
           refreshLayout.setRefreshing(false);
         }
@@ -95,6 +98,7 @@ public class LocalPhotoFragment extends BaseFragment {
           refreshLayout.setRefreshing(false);
         }
         unlinkCameraLayout.setVisibility(View.VISIBLE);
+        refreshLayout.setVisibility(View.GONE);
         break;
       case OPEN_WIFI_SETTING:
         Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);

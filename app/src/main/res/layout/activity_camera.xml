@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="#00000000">
+  <!--camera view-->
+  <com.theta360.v2.view.MJpegView
+    android:id="@+id/live_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
+
+  <!--top-->
+  <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:layout_gravity="top"
+    android:background="@color/colorTransparent70">
+
+    <ImageView
+      android:id="@+id/back_image_view"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_centerVertical="true"
+      android:paddingBottom="8dp"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
+      android:paddingTop="8dp"
+      android:src="@drawable/nav_back"/>
+  </RelativeLayout>
+
+  <!--bottom-->
+  <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:layout_gravity="bottom"
+    android:background="@color/colorTransparent70">
+
+    <ImageView
+      android:id="@+id/pre_image_view"
+      android:layout_width="48dp"
+      android:layout_height="48dp"
+      android:layout_alignParentLeft="true"
+      android:layout_centerVertical="true"
+      android:layout_marginLeft="32dp"
+      android:src="@drawable/cam_pho_def"/>
+
+    <ImageView
+      android:id="@+id/shoot_image_view"
+      android:layout_width="64dp"
+      android:layout_height="64dp"
+      android:layout_centerInParent="true"
+      android:src="@drawable/cam_shoot"/>
+
+    <ImageView
+      android:id="@+id/bright_image_view"
+      android:layout_width="32dp"
+      android:layout_height="32dp"
+      android:layout_alignParentRight="true"
+      android:layout_centerVertical="true"
+      android:layout_marginRight="32dp"
+      android:src="@drawable/cam_bright"/>
+  </RelativeLayout>
+</FrameLayout>

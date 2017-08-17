@@ -12,6 +12,7 @@ import com.home77.common.ui.widget.Toast;
 import com.home77.kake.App;
 import com.home77.kake.R;
 import com.home77.kake.base.ParamsKey;
+import com.home77.kake.business.camera.CameraActivity;
 import com.home77.kake.business.home.presenter.CloudAlbumListPresenter;
 import com.home77.kake.business.home.presenter.LocalPhotoPresenter;
 import com.home77.kake.business.home.view.CloudAlbumListListFragment;
@@ -98,8 +99,11 @@ public class HomeActivity extends AppCompatActivity
         titleTextView.setText(R.string.local_photo);
         pagerMainTab.setCurrentItem(index, false);
         break;
-      case 1:
-        break;
+      case 1: {
+        Intent intent = new Intent(this, CameraActivity.class);
+        startActivity(intent);
+      }
+      break;
       case 2:
         titleTextView.setText(R.string.cloud_album);
         pagerMainTab.setCurrentItem(index, false);

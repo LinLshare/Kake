@@ -134,7 +134,11 @@ public class ProfileFragment extends BaseFragment
       }
       break;
       case AVATAR_UPDATE_SUCCESS:
+        Toast.showShort("头像更新成功");
         Picasso.with(getContext()).load(file).into(avatarImageView);
+        break;
+      case AVATAR_UPDATE_ERROR:
+        Toast.showShort("头像更新失败");
         break;
     }
   }

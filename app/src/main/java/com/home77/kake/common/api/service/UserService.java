@@ -1,5 +1,6 @@
 package com.home77.kake.common.api.service;
 
+import com.home77.common.base.debug.DLog;
 import com.home77.common.net.http.HttpContextBuilder;
 import com.home77.common.net.http.URLFetcher;
 import com.home77.kake.App;
@@ -30,6 +31,7 @@ public class UserService {
   private static final String RESET_PASSWORD_URL;
   private static final String UPDATE_USER_NAME_URL;
   private static final String UPDATE_AVATAR_URL;
+  private static final String TAG = UserService.class.getSimpleName();
 
   static {
     VALIDATE_URL = String.format("http://%s/oauth/token", HOST);
@@ -109,12 +111,15 @@ public class UserService {
     urlFetcher.start();
   }
 
-  public void updateAvater(File file, URLFetcher.Delegate callback) {
+  public void updateAvatar(File file, URLFetcher.Delegate callback) {
+    String userId = App.globalData().getString(GlobalData.KEY_USER_ID, "");
+    DLog.d(TAG, "user id: " + userId);
     RequestBody fileBody = RequestBody.create(MediaType.parse("image/*"), file);
     RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
                                                          .addFormDataPart("file",
                                                                           "head_image",
                                                                           fileBody)
+                                                         .addFormDataPart("user_id", userId)
                                                          .build();
     urlFetcher = createUrlFetcher(callback).url(UPDATE_AVATAR_URL).postRequestBody(requestBody);
     urlFetcher.start();
