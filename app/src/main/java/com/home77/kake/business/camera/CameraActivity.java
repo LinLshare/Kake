@@ -69,7 +69,10 @@ public class CameraActivity extends AppCompatActivity {
   protected void onResume() {
     super.onResume();
     liveView.play();
+    runPreviewTask();
+  }
 
+  private void runPreviewTask() {
     if (livePreviewTask != null) {
       livePreviewTask.cancel(true);
       livePreviewTask = new ShowLiveViewTask();
@@ -255,6 +258,7 @@ public class CameraActivity extends AppCompatActivity {
             preImageView.setImageBitmap(BitmapFactory.decodeByteArray(thumbnailImage,
                                                                       0,
                                                                       thumbnailImage.length));
+            runPreviewTask();
             preImageView.setOnClickListener(new View.OnClickListener() {
               @Override
               public void onClick(View v) {
