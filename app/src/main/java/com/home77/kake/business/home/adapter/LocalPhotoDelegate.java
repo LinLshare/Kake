@@ -1,6 +1,7 @@
 package com.home77.kake.business.home.adapter;
 
 import android.graphics.BitmapFactory;
+import android.view.View;
 
 import com.home77.common.base.collection.Params;
 import com.home77.kake.App;
@@ -27,15 +28,20 @@ public class LocalPhotoDelegate implements ItemViewDelegate<Photo> {
   }
 
   @Override
-  public void convert(final ViewHolder holder, Photo photo, int position) {
+  public void convert(final ViewHolder holder, final Photo photo, int position) {
     holder.setText(R.id.size_image_view, photo.getSize());
     holder.setText(R.id.name_text_view, photo.getName());
     holder.setImageBitmap(R.id.photo_image_view,
                           BitmapFactory.decodeByteArray(photo.getThumbnail(),
                                                         0,
                                                         photo.getThumbnail().length));
-    App.eventBus()
-       .post(new BroadCastEvent(BroadCastEventConstant.CLICK_LOCAL_PHOTO,
-                                Params.create(ParamsKey.PHOTO, photo)));
+    holder.getConvertView().setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        App.eventBus()
+           .post(new BroadCastEvent(BroadCastEventConstant.CLICK_LOCAL_PHOTO,
+                                    Params.create(ParamsKey.PHOTO, photo)));
+      }
+    });
   }
 }

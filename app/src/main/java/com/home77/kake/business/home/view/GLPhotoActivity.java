@@ -7,17 +7,20 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
 
 import com.home77.common.base.debug.DLog;
 import com.home77.kake.R;
-import com.theta360.v2.glview.GLPhotoView;
+import com.home77.kake.business.home.view.glview.GLPhotoView;
 import com.theta360.v2.model.Photo;
 import com.theta360.v2.model.RotateInertia;
 import com.theta360.v2.network.HttpConnector;
@@ -58,6 +61,10 @@ public class GLPhotoActivity extends Activity implements ConfigurationDialog.Dia
   protected void onCreate(final Bundle savedInstanceState) {
 
     super.onCreate(savedInstanceState);
+    requestWindowFeature(Window.FEATURE_NO_TITLE);//取消标题栏
+    getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                         WindowManager.LayoutParams.FLAG_FULLSCREEN);//全屏
+
     setContentView(R.layout.activity_glphoto);
 
     Intent intent = getIntent();

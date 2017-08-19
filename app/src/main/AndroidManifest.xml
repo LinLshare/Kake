@@ -26,6 +26,7 @@
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
+    <activity android:name=".business.home.view.GLPhotoActivity"/>
     <activity android:name=".business.home.CloudPhotoActivity">
     </activity>
     <activity android:name=".business.camera.CameraActivity">
