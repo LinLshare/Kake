@@ -11,23 +11,23 @@
     android:layout_height="match_parent"/>
 
   <!--top-->
-  <RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="56dp"
-    android:layout_gravity="top"
-    android:background="@color/colorTransparent70">
+  <!--<RelativeLayout-->
+  <!--android:layout_width="match_parent"-->
+  <!--android:layout_height="56dp"-->
+  <!--android:layout_gravity="top"-->
+  <!--android:background="@color/colorTransparent70">-->
 
-    <ImageView
-      android:id="@+id/back_image_view"
-      android:layout_width="wrap_content"
-      android:layout_height="match_parent"
-      android:layout_centerVertical="true"
-      android:paddingBottom="8dp"
-      android:paddingLeft="16dp"
-      android:paddingRight="16dp"
-      android:paddingTop="8dp"
-      android:src="@drawable/nav_back"/>
-  </RelativeLayout>
+  <!--<ImageView-->
+  <!--android:id="@+id/back_image_view"-->
+  <!--android:layout_width="wrap_content"-->
+  <!--android:layout_height="match_parent"-->
+  <!--android:layout_centerVertical="true"-->
+  <!--android:paddingBottom="8dp"-->
+  <!--android:paddingLeft="16dp"-->
+  <!--android:paddingRight="16dp"-->
+  <!--android:paddingTop="8dp"-->
+  <!--android:src="@drawable/nav_back"/>-->
+  <!--</RelativeLayout>-->
 
   <!--bottom-->
   <RelativeLayout
@@ -47,9 +47,10 @@
 
     <ImageView
       android:id="@+id/shoot_image_view"
-      android:layout_width="64dp"
+      android:layout_width="wrap_content"
       android:layout_height="64dp"
       android:layout_centerInParent="true"
+      android:scaleType="centerInside"
       android:src="@drawable/cam_shoot"/>
 
     <ImageView
@@ -59,6 +60,7 @@
       android:layout_alignParentRight="true"
       android:layout_centerVertical="true"
       android:layout_marginRight="32dp"
+      android:scaleType="centerInside"
       android:src="@drawable/cam_bright"/>
   </RelativeLayout>
 </FrameLayout>

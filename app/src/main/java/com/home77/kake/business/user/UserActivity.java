@@ -4,9 +4,12 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
+import com.home77.common.base.collection.Params;
 import com.home77.common.base.component.BaseHandler;
 import com.home77.kake.R;
 import com.home77.kake.base.NavigateCallback;
+import com.home77.kake.base.ParamsKey;
+import com.home77.kake.business.home.HomeActivity;
 import com.home77.kake.business.user.presenter.AboutPresenter;
 import com.home77.kake.business.user.presenter.ForgetPasswordPresenter;
 import com.home77.kake.business.user.presenter.LoginPresenter;
@@ -72,7 +75,7 @@ public class UserActivity extends AppCompatActivity implements NavigateCallback 
   }
 
   @Override
-  public void onNavigate(final int eventType) {
+  public void onNavigate(final int eventType, final Params params) {
     BaseHandler.runOnMainThread(new Runnable() {
       @Override
       public void run() {
@@ -105,6 +108,12 @@ public class UserActivity extends AppCompatActivity implements NavigateCallback 
                                        .commit();
             break;
           case EVENT_TO_HOME:
+            if (params != null) {
+              Boolean flag = params.get(ParamsKey.FLAG);
+              if (flag != null && flag) {
+                setResult(HomeActivity.RESULT_CODE_CLOUD_ALBUM);
+              }
+            }
             UserActivity.this.finish();
             break;
           case EVENT_TO_ABOUT:

@@ -35,6 +35,7 @@ public class App extends Application {
 
 
   private static boolean IS_LOGIN;
+  private static boolean IS_LINCKED_CAMERA;
 
   @Override
   public void onCreate() {
@@ -133,6 +134,10 @@ public class App extends Application {
     return IS_LOGIN;
   }
 
+  public static boolean isIsLinckedCamera() {
+    return IS_LINCKED_CAMERA;
+  }
+
   @Subscribe(threadMode = ThreadMode.MAIN)
   public void onEvent(BroadCastEvent event) {
     switch (event.getEvent()) {
@@ -153,6 +158,12 @@ public class App extends Application {
         break;
       case BroadCastEventConstant.EVENT_LOGIN:
         IS_LOGIN = true;
+        break;
+      case BroadCastEventConstant.CAMERA_LINKED:
+        IS_LINCKED_CAMERA = true;
+        break;
+      case BroadCastEventConstant.CAMERA_UNLINKED:
+        IS_LINCKED_CAMERA = false;
         break;
     }
   }
@@ -185,6 +196,7 @@ public class App extends Application {
                                      super.onLost(network);
                                      //Ap lost
                                      hasConnectedToWifi = false;
+                                     IS_LINCKED_CAMERA = false;
                                    }
                                  });
     }

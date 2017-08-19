@@ -37,7 +37,7 @@ public class CloudPhotoListPresenter extends BaseFragmentPresenter {
   public void handleMessage(MsgType msgType, Params params) {
     switch (msgType) {
       case CLICK_BACK:
-        navigateCallback.onNavigate(CloudPhotoActivity.EVENT_EXIST);
+        navigateCallback.onNavigate(CloudPhotoActivity.EVENT_EXIST, null);
         break;
       case CLICK_MENU:
         baseView.onCommand(CmdType.SHOW_MENU, null, null);

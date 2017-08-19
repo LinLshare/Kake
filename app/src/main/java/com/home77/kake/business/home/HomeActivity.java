@@ -100,8 +100,12 @@ public class HomeActivity extends AppCompatActivity
         pagerMainTab.setCurrentItem(index, false);
         break;
       case 1: {
-        Intent intent = new Intent(this, CameraActivity.class);
-        startActivity(intent);
+        if (App.isIsLinckedCamera()) {
+          Intent intent = new Intent(this, CameraActivity.class);
+          startActivity(intent);
+        } else {
+          Toast.showShort("请先连接到全景相机");
+        }
       }
       break;
       case 2:
@@ -127,9 +131,23 @@ public class HomeActivity extends AppCompatActivity
     return super.onKeyDown(keyCode, event);
   }
 
+  private static final int REQUEST_CODE_USER = 101;
+  public static final int RESULT_CODE_CLOUD_ALBUM = 201;
+
   @OnClick(R.id.user_image_view)
   public void onViewClicked() {
-    startActivity(new Intent(this, UserActivity.class));
+    Intent intent = new Intent(this, UserActivity.class);
+    startActivityForResult(intent, REQUEST_CODE_USER);
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if (requestCode == REQUEST_CODE_USER && resultCode == RESULT_CODE_CLOUD_ALBUM) {
+      titleTextView.setText(R.string.cloud_album);
+      pagerMainTab.setCurrentItem(2, false);
+      mainBottomBar.selectBottomBarItem(2);
+    }
   }
 
   @Subscribe(threadMode = ThreadMode.MAIN)

@@ -31,7 +31,7 @@ public class ForgetPasswordPresenter extends BaseFragmentPresenter {
   public void handleMessage(MsgType msgType, Params params) {
     switch (msgType) {
       case CLICK_BACK:
-        navigateCallback.onNavigate(UserActivity.EVENT_TO_LOGIN);
+        navigateCallback.onNavigate(UserActivity.EVENT_TO_LOGIN, null);
         break;
       case CLICK_CHECK_CODE:
         handleClickCheckCode(params.get(ParamsKey.PHONE_NUMBER, ""));
@@ -100,7 +100,7 @@ public class ForgetPasswordPresenter extends BaseFragmentPresenter {
                              null);
         } else {
           baseView.onCommand(CmdType.PASSWORD_RESET_SUCCESS, null, null);
-          navigateCallback.onNavigate(UserActivity.EVENT_TO_LOGIN);
+          navigateCallback.onNavigate(UserActivity.EVENT_TO_LOGIN, null);
         }
       }
 

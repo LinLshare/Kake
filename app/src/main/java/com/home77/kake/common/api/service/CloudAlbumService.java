@@ -25,9 +25,8 @@ public class CloudAlbumService {
     PHOTO_LIST_URL_FORMAT = "http://" + HOST + "/api/v1/album/%s/photolist";
   }
 
-  @SuppressWarnings("Format is String")
-  private String getUrl(String urlFormat, String... path) {
-    return String.format(urlFormat, path);
+  private String getPhotoListUrl(String path) {
+    return String.format(PHOTO_LIST_URL_FORMAT, path);
   }
 
   private URLFetcher urlFetcher;
@@ -47,7 +46,7 @@ public class CloudAlbumService {
   }
 
   public void getPhotoList(int albumId, URLFetcher.Delegate callback) {
-    urlFetcher = createUrlFetcher(callback).url(getUrl(PHOTO_LIST_URL_FORMAT, albumId + ""));
+    urlFetcher = createUrlFetcher(callback).url(getPhotoListUrl(albumId + ""));
     urlFetcher.start();
   }
 

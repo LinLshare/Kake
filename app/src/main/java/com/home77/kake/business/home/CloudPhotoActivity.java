@@ -3,6 +3,7 @@ package com.home77.kake.business.home;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.home77.common.base.collection.Params;
 import com.home77.common.base.component.BaseHandler;
 import com.home77.kake.R;
 import com.home77.kake.base.NavigateCallback;
@@ -34,7 +35,7 @@ public class CloudPhotoActivity extends AppCompatActivity implements NavigateCal
   }
 
   @Override
-  public void onNavigate(final int eventType) {
+  public void onNavigate(final int eventType, final Params params) {
     BaseHandler.runOnMainThread(new Runnable() {
       @Override
       public void run() {

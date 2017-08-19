@@ -1,8 +1,8 @@
 package com.home77.kake.business.camera;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -11,9 +11,13 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.home77.common.base.debug.DLog;
+import com.home77.common.ui.widget.Toast;
+import com.home77.kake.App;
 import com.home77.kake.R;
 import com.home77.kake.business.home.view.GLPhotoActivity;
 import com.home77.kake.common.api.ServerConfig;
+import com.home77.kake.common.event.BroadCastEvent;
+import com.home77.kake.common.event.BroadCastEventConstant;
 import com.theta360.v2.network.HttpConnector;
 import com.theta360.v2.network.HttpEventListener;
 import com.theta360.v2.view.MJpegInputStream;
@@ -43,14 +47,16 @@ public class CameraActivity extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    requestWindowFeature(Window.FEATURE_NO_TITLE);//取消标题栏
+    getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                         WindowManager.LayoutParams.FLAG_FULLSCREEN);//全屏
     setContentView(R.layout.activity_camera);
     ButterKnife.bind(this);
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      Window window = getWindow();
-      window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-      window.setStatusBarColor(getResources().getColor(R.color.colorTransparent70));
-    }
-
+    //    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+    //      Window window = getWindow();
+    //      window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+    //      window.setStatusBarColor(getResources().getColor(R.color.colorTransparent70));
+    //    }
   }
 
   @Override
@@ -81,12 +87,9 @@ public class CameraActivity extends AppCompatActivity {
     }
   }
 
-  @OnClick({R.id.back_image_view, R.id.shoot_image_view, R.id.bright_image_view})
+  @OnClick({R.id.shoot_image_view, R.id.bright_image_view})
   public void onViewClicked(View view) {
     switch (view.getId()) {
-      case R.id.back_image_view:
-        this.finish();
-        break;
       case R.id.shoot_image_view:
         new ShootTask().execute();
         break;
@@ -163,12 +166,16 @@ public class CameraActivity extends AppCompatActivity {
     @Override
     protected void onPostExecute(HttpConnector.ShootResult result) {
       if (result == HttpConnector.ShootResult.FAIL_CAMERA_DISCONNECTED) {
+        Toast.showShort("拍照失败，相机未连接");
         DLog.d(TAG, "takePicture:FAIL_CAMERA_DISCONNECTED");
       } else if (result == HttpConnector.ShootResult.FAIL_STORE_FULL) {
+        Toast.showShort("拍照失败，相机存储已满");
         DLog.d(TAG, "takePicture:FAIL_STORE_FULL");
       } else if (result == HttpConnector.ShootResult.FAIL_DEVICE_BUSY) {
+        Toast.showShort("拍照失败，相机很忙");
         DLog.d(TAG, "takePicture:FAIL_DEVICE_BUSY");
       } else if (result == HttpConnector.ShootResult.SUCCESS) {
+        Toast.showShort("拍照成功");
         DLog.d(TAG, "takePicture:SUCCESS");
       }
     }
@@ -182,6 +189,7 @@ public class CameraActivity extends AppCompatActivity {
         if (newStatus) {
           DLog.d(TAG, "takePicture:FINISHED");
         } else {
+          App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_SHOW, null));
           DLog.d(TAG, "takePicture:IN PROGRESS");
         }
 
@@ -196,6 +204,8 @@ public class CameraActivity extends AppCompatActivity {
 
       @Override
       public void onCompleted() {
+        App.eventBus()
+           .post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_DISMISS, null));
         DLog.d(TAG, "CaptureComplete");
         if (ImageAdd) {
           runOnUiThread(new Runnable() {
@@ -210,6 +220,8 @@ public class CameraActivity extends AppCompatActivity {
 
       @Override
       public void onError(String errorMessage) {
+        App.eventBus()
+           .post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_DISMISS, null));
         DLog.e(TAG, "CaptureError " + errorMessage);
         runOnUiThread(new Runnable() {
           @Override
@@ -236,12 +248,25 @@ public class CameraActivity extends AppCompatActivity {
       if (thumbnail != null) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] thumbnailImage = baos.toByteArray();
-        GLPhotoActivity.startActivityForResult(CameraActivity.this,
-                                               ServerConfig.CAMERA_HOST,
-                                               fileId,
-                                               thumbnailImage,
-                                               true);
+        final byte[] thumbnailImage = baos.toByteArray();
+        runOnUiThread(new Runnable() {
+          @Override
+          public void run() {
+            preImageView.setImageBitmap(BitmapFactory.decodeByteArray(thumbnailImage,
+                                                                      0,
+                                                                      thumbnailImage.length));
+            preImageView.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                GLPhotoActivity.startActivityForResult(CameraActivity.this,
+                                                       ServerConfig.CAMERA_HOST,
+                                                       fileId,
+                                                       thumbnailImage,
+                                                       true);
+              }
+            });
+          }
+        });
       } else {
         publishProgress("failed to get file data.");
       }

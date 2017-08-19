@@ -1,12 +1,9 @@
 package com.home77.kake.business.user.presenter;
 
-import android.text.TextUtils;
-
 import com.home77.common.base.collection.Params;
 import com.home77.common.base.pattern.Instance;
 import com.home77.common.net.http.URLFetcher;
 import com.home77.kake.App;
-import com.home77.kake.GlobalData;
 import com.home77.kake.R;
 import com.home77.kake.base.BaseFragmentPresenter;
 import com.home77.kake.base.BaseView;
@@ -15,7 +12,6 @@ import com.home77.kake.base.MsgType;
 import com.home77.kake.base.NavigateCallback;
 import com.home77.kake.base.ParamsKey;
 import com.home77.kake.business.user.UserActivity;
-import com.home77.kake.common.api.ServerConfig;
 import com.home77.kake.common.api.response.UserResponse;
 import com.home77.kake.common.api.service.UserService;
 import com.home77.kake.common.event.BroadCastEvent;
@@ -34,7 +30,7 @@ public class LoginPresenter extends BaseFragmentPresenter {
   }
 
   private void handleBackClick() {
-    navigateCallback.onNavigate(UserActivity.EVENT_TO_PROFILE);
+    navigateCallback.onNavigate(UserActivity.EVENT_TO_PROFILE, null);
   }
 
   private void handleLoginClick(final String userName, String password) {
@@ -53,7 +49,7 @@ public class LoginPresenter extends BaseFragmentPresenter {
           userService.saveUserInfo(userResponse);
           baseView.onCommand(CmdType.LOGIN_SUCCESS, null, null);
           App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.EVENT_LOGIN, null));
-          navigateCallback.onNavigate(UserActivity.EVENT_TO_PROFILE);
+          navigateCallback.onNavigate(UserActivity.EVENT_TO_PROFILE, null);
         } else {
           baseView.onCommand(CmdType.LOGIN_ERROR, Params.create(ParamsKey.MSG, "登录失败[0]"), null);
         }
@@ -67,11 +63,11 @@ public class LoginPresenter extends BaseFragmentPresenter {
   }
 
   private void handleForgetPasswordClick() {
-    navigateCallback.onNavigate(UserActivity.EVENT_TO_FORGET_PSW);
+    navigateCallback.onNavigate(UserActivity.EVENT_TO_FORGET_PSW, null);
   }
 
   private void handleRegisterUserClick() {
-    navigateCallback.onNavigate(UserActivity.EVENT_TO_REGISTER);
+    navigateCallback.onNavigate(UserActivity.EVENT_TO_REGISTER, null);
   }
 
   @Override

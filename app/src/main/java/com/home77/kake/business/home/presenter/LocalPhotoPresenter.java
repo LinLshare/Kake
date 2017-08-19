@@ -86,6 +86,7 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
         HttpConnector camera = new HttpConnector(ServerConfig.CAMERA_HOST);
         DeviceInfo deviceInfo = camera.getDeviceInfo();
         if (deviceInfo.getSerialNumber().isEmpty()) {
+          App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.CAMERA_UNLINKED, null));
           baseView.onCommand(CmdType.DEVICE_NOT_LINK, null, null);
           return null;
         }
@@ -170,7 +171,7 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
                                     imgRow.getFileId()));
           }
         }
-
+        App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.CAMERA_LINKED, null));
         baseView.onCommand(CmdType.LOCAL_PHOTO_LIST_LOAD_SUCCESS,
                            Params.create(ParamsKey.PHOTO_LIST, photoList),
                            null);

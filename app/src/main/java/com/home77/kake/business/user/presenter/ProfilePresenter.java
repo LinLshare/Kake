@@ -54,7 +54,11 @@ public class ProfilePresenter extends BaseFragmentPresenter {
       case VIEW_REFRESH:
         break;
       case CLICK_ABOUT:
-        navigateCallback.onNavigate(UserActivity.EVENT_TO_ABOUT);
+        navigateCallback.onNavigate(UserActivity.EVENT_TO_ABOUT, null);
+        break;
+      case CLICK_CLOUD_ALBUM:
+        navigateCallback.onNavigate(UserActivity.EVENT_TO_HOME,
+                                    Params.create(ParamsKey.FLAG, true));
         break;
       case TAKE_AVATAR_FILE: {
         File file = params.get(ParamsKey.FILE);
@@ -83,7 +87,7 @@ public class ProfilePresenter extends BaseFragmentPresenter {
   }
 
   private void handleClickBack() {
-    navigateCallback.onNavigate(UserActivity.EVENT_TO_HOME);
+    navigateCallback.onNavigate(UserActivity.EVENT_TO_HOME, null);
   }
 
   private void handleEditUserNameDone(final String name) {
@@ -124,7 +128,7 @@ public class ProfilePresenter extends BaseFragmentPresenter {
 
   private void handleClickUserName() {
     if (!App.isLogin()) {
-      navigateCallback.onNavigate(UserActivity.EVENT_TO_LOGIN);
+      navigateCallback.onNavigate(UserActivity.EVENT_TO_LOGIN, null);
     }
   }
 

@@ -21,7 +21,7 @@ public class AboutPresenter extends BaseFragmentPresenter {
   public void handleMessage(MsgType msgType, Params params) {
     switch (msgType) {
       case CLICK_BACK:
-        navigateCallback.onNavigate(UserActivity.EVENT_TO_PROFILE);
+        navigateCallback.onNavigate(UserActivity.EVENT_TO_PROFILE, null);
         break;
       case CLICK_UPDATE:
         baseView.onCommand(CmdType.TOAST, Params.create(ParamsKey.MSG, "已是最新版本"), null);
