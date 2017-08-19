@@ -60,6 +60,9 @@ public class ProfilePresenter extends BaseFragmentPresenter {
         navigateCallback.onNavigate(UserActivity.EVENT_TO_HOME,
                                     Params.create(ParamsKey.FLAG, true));
         break;
+      case CLICK_HELP:
+        navigateCallback.onNavigate(UserActivity.EVENT_TO_HELP, null);
+        break;
       case TAKE_AVATAR_FILE: {
         File file = params.get(ParamsKey.FILE);
 

@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/colorC3"
+  android:orientation="vertical">
+
+  <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:background="@color/colorPrimaryDark">
+
+    <ImageView
+      android:id="@+id/back_image_view"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_centerVertical="true"
+      android:paddingBottom="8dp"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
+      android:paddingTop="8dp"
+      android:src="@drawable/nav_back"/>
+
+    <TextView
+      android:id="@+id/title_text_view"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="true"
+      android:text="帮助与反馈"
+      android:textColor="@color/colorC1"
+      android:textSize="@dimen/fontSizeF1"/>
+  </RelativeLayout>
+
+  <ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
+      <!--help-->
+      <TextView
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="@color/colorC3"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:text="常见问题QA"
+        android:textColor="@color/colorC6"
+        android:textSize="@dimen/fontSizeF2"/>
+
+      <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="1dp"
+        android:background="@color/colorC2"
+        android:paddingLeft="16dp">
+
+
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerVertical="true"
+          android:singleLine="true"
+          android:text="如何使用APP连接相机？"
+          android:textColor="@color/colorC6"
+          android:textSize="@dimen/fontSizeF3"/>
+
+        <ImageView
+          android:layout_width="24dp"
+          android:layout_height="24dp"
+          android:layout_alignParentRight="true"
+          android:layout_centerVertical="true"
+          android:layout_marginRight="16dp"
+          android:paddingBottom="4dp"
+          android:paddingTop="4dp"
+          android:src="@drawable/list_ic_forward"/>
+      </RelativeLayout>
+
+      <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="1dp"
+        android:background="@color/colorC2"
+        android:paddingLeft="16dp">
+
+
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerVertical="true"
+          android:singleLine="true"
+          android:text="连接不上相机WIFI？"
+          android:textColor="@color/colorC6"
+          android:textSize="@dimen/fontSizeF3"/>
+
+        <ImageView
+          android:layout_width="24dp"
+          android:layout_height="24dp"
+          android:layout_alignParentRight="true"
+          android:layout_centerVertical="true"
+          android:layout_marginRight="16dp"
+          android:paddingBottom="4dp"
+          android:paddingTop="4dp"
+          android:src="@drawable/list_ic_forward"/>
+      </RelativeLayout>
+
+      <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="1dp"
+        android:background="@color/colorC2"
+        android:paddingLeft="16dp">
+
+
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerVertical="true"
+          android:singleLine="true"
+          android:text="服务协议"
+          android:textColor="@color/colorC6"
+          android:textSize="@dimen/fontSizeF3"/>
+
+        <ImageView
+          android:layout_width="24dp"
+          android:layout_height="24dp"
+          android:layout_alignParentRight="true"
+          android:layout_centerVertical="true"
+          android:layout_marginRight="16dp"
+          android:paddingBottom="4dp"
+          android:paddingTop="4dp"
+          android:src="@drawable/list_ic_forward"/>
+      </RelativeLayout>
+
+      <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="1dp"
+        android:background="@color/colorC2"
+        android:paddingLeft="16dp">
+
+
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerVertical="true"
+          android:singleLine="true"
+          android:text="其他"
+          android:textColor="@color/colorC6"
+          android:textSize="@dimen/fontSizeF3"/>
+
+        <ImageView
+          android:layout_width="24dp"
+          android:layout_height="24dp"
+          android:layout_alignParentRight="true"
+          android:layout_centerVertical="true"
+          android:layout_marginRight="16dp"
+          android:paddingBottom="4dp"
+          android:paddingTop="4dp"
+          android:src="@drawable/list_ic_forward"/>
+      </RelativeLayout>
+      <!--feedback-->
+
+      <EditText
+        android:id="@+id/feedback_edit"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_margin="16dp"
+        android:background="@color/colorC1"
+        android:gravity="top"
+        android:hint="欢迎反馈任何意见和问题，您的建议是我们进步的动力！"
+        android:padding="16dp"
+        android:textColor="@color/colorC5"
+        android:textSize="@dimen/fontSizeF3"/>
+
+      <TextView
+        android:id="@+id/submit_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="32dp"
+        android:background="@color/colorAccent"
+        android:gravity="center"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="提交"
+        android:textColor="@color/colorC1"
+        android:textSize="@dimen/fontSizeF2"/>
+    </LinearLayout>
+
+  </ScrollView>
+</LinearLayout>

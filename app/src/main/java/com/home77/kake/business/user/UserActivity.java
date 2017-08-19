@@ -12,11 +12,13 @@ import com.home77.kake.base.ParamsKey;
 import com.home77.kake.business.home.HomeActivity;
 import com.home77.kake.business.user.presenter.AboutPresenter;
 import com.home77.kake.business.user.presenter.ForgetPasswordPresenter;
+import com.home77.kake.business.user.presenter.HelpAndFeedbackPresenter;
 import com.home77.kake.business.user.presenter.LoginPresenter;
 import com.home77.kake.business.user.presenter.ProfilePresenter;
 import com.home77.kake.business.user.presenter.RegisterPresenter;
 import com.home77.kake.business.user.view.AboutFragment;
 import com.home77.kake.business.user.view.ForgetPasswordFragment;
+import com.home77.kake.business.user.view.HelpAndFeedbackFragment;
 import com.home77.kake.business.user.view.LoginFragment;
 import com.home77.kake.business.user.view.ProfileFragment;
 import com.home77.kake.business.user.view.RegisterFragment;
@@ -33,6 +35,7 @@ public class UserActivity extends AppCompatActivity implements NavigateCallback 
   public static final int EVENT_EXIST_LOGIN = 5;
   public static final int EVENT_TO_FORGET_PSW = 6;
   public static final int EVENT_TO_ABOUT = 7;
+  public static final int EVENT_TO_HELP = 8;
 
   private ProfileFragment profileFragment;
   private LoginFragment loginFragment;
@@ -44,6 +47,8 @@ public class UserActivity extends AppCompatActivity implements NavigateCallback 
   private ForgetPasswordPresenter forgetPasswordPresenter;
   private AboutFragment aboutFragment;
   private AboutPresenter aboutPresenter;
+  private HelpAndFeedbackFragment helpAndFeedbackFragment;
+  private HelpAndFeedbackPresenter helpAndFeedbackPresenter;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -56,18 +61,21 @@ public class UserActivity extends AppCompatActivity implements NavigateCallback 
     registerFragment = new RegisterFragment();
     forgetPasswordFragment = new ForgetPasswordFragment();
     aboutFragment = new AboutFragment();
+    helpAndFeedbackFragment = new HelpAndFeedbackFragment();
     //2) setUp presenter
     profilePresenter = new ProfilePresenter(profileFragment, this);
     loginPresenter = new LoginPresenter(loginFragment, this);
     registerPresenter = new RegisterPresenter(registerFragment, this);
     forgetPasswordPresenter = new ForgetPasswordPresenter(forgetPasswordFragment, this);
     aboutPresenter = new AboutPresenter(aboutFragment, this);
+    helpAndFeedbackPresenter = new HelpAndFeedbackPresenter(helpAndFeedbackFragment, this);
     //3) bind presenter
     profileFragment.setPresenter(profilePresenter);
     loginFragment.setPresenter(loginPresenter);
     registerFragment.setPresenter(registerPresenter);
     forgetPasswordFragment.setPresenter(forgetPasswordPresenter);
     aboutFragment.setPresenter(aboutPresenter);
+    helpAndFeedbackFragment.setPresenter(helpAndFeedbackPresenter);
     //4) commit init fragment
     getSupportFragmentManager().beginTransaction()
                                .add(R.id.content_layout, profileFragment)
@@ -119,6 +127,12 @@ public class UserActivity extends AppCompatActivity implements NavigateCallback 
           case EVENT_TO_ABOUT:
             getSupportFragmentManager().beginTransaction()
                                        .replace(R.id.content_layout, aboutFragment)
+                                       .addToBackStack(null)
+                                       .commit();
+            break;
+          case EVENT_TO_HELP:
+            getSupportFragmentManager().beginTransaction()
+                                       .replace(R.id.content_layout, helpAndFeedbackFragment)
                                        .addToBackStack(null)
                                        .commit();
             break;
