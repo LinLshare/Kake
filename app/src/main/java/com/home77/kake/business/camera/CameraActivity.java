@@ -50,6 +50,7 @@ public class CameraActivity extends AppCompatActivity {
       window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
       window.setStatusBarColor(getResources().getColor(R.color.colorTransparent70));
     }
+
   }
 
   @Override
@@ -66,8 +67,10 @@ public class CameraActivity extends AppCompatActivity {
     if (livePreviewTask != null) {
       livePreviewTask.cancel(true);
       livePreviewTask = new ShowLiveViewTask();
-      livePreviewTask.execute(ServerConfig.CAMERA_HOST);
+    } else {
+      livePreviewTask = new ShowLiveViewTask();
     }
+    livePreviewTask.execute(ServerConfig.CAMERA_HOST);
   }
 
   @Override

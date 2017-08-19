@@ -1,6 +1,5 @@
 package com.home77.kake.business.home.view;
 
-
 import android.content.Intent;
 import android.provider.Settings;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -72,8 +71,6 @@ public class LocalPhotoFragment extends BaseFragment {
         refreshLayout.setVisibility(View.VISIBLE);
         break;
       case LOCAL_PHOTO_LIST_LOAD_SUCCESS:
-        unlinkCameraLayout.setVisibility(View.GONE);
-        refreshLayout.setVisibility(View.VISIBLE);
         if (refreshLayout.isRefreshing()) {
           refreshLayout.setRefreshing(false);
         }
@@ -83,8 +80,6 @@ public class LocalPhotoFragment extends BaseFragment {
         localPhotoListAdapter.notifyDataSetChanged();
         break;
       case LOCAL_PHOTO_LIST_LOAD_ERROR:
-        unlinkCameraLayout.setVisibility(View.GONE);
-        refreshLayout.setVisibility(View.VISIBLE);
         if (refreshLayout.isRefreshing()) {
           refreshLayout.setRefreshing(false);
         }

@@ -1,15 +1,19 @@
 package com.home77.kake.common.api.service;
 
+import android.text.TextUtils;
+
 import com.home77.common.base.debug.DLog;
 import com.home77.common.net.http.HttpContextBuilder;
 import com.home77.common.net.http.URLFetcher;
 import com.home77.kake.App;
 import com.home77.kake.GlobalData;
+import com.home77.kake.common.api.ServerConfig;
 import com.home77.kake.common.api.request.CheckCodeRequest;
 import com.home77.kake.common.api.request.RegisterRequest;
 import com.home77.kake.common.api.request.TokenValidateRequest;
 import com.home77.kake.common.api.request.UpdateUserNameRequest;
 import com.home77.kake.common.api.response.TokenValidateResponse;
+import com.home77.kake.common.api.response.UserResponse;
 
 import java.io.File;
 
@@ -74,9 +78,7 @@ public class UserService {
              .putString(GlobalData.KEY_REFRESH_TOKEN, tokenValidateResponse.getRefresh_token())
              .putInt(GlobalData.KEY_EXPIRE_IN, tokenValidateResponse.getExpires_in())
              .putString(GlobalData.KEY_TOKEN_TYPE, tokenValidateResponse.getAccess_token());
-
-          urlFetcher = createUrlFetcher(callback).url(USER_URL);
-          urlFetcher.start();
+          getUserInfo(callback);
         } else {
           callback.onError("parse response error");
         }
@@ -87,6 +89,24 @@ public class UserService {
         callback.onError(msg);
       }
     });
+  }
+
+  public void saveUserInfo(UserResponse userResponse) {
+    String name = userResponse.getName();
+    if (TextUtils.isEmpty(name)) {
+      name = userResponse.getMobile();
+    }
+    App.globalData()
+       .putInt(GlobalData.KEY_USER_ID, userResponse.getId())
+       .putString(GlobalData.KEY_USER_MOBILE, userResponse.getMobile())
+       .putString(GlobalData.KEY_USER_NAME, name)
+       .putString(GlobalData.KEY_USER_AVATER, ServerConfig.BASE_IMG_URL + userResponse.getAvatar())
+       .putString(GlobalData.KEY_USER_NAME, userResponse.getName());
+  }
+
+  public void getUserInfo(URLFetcher.Delegate callback) {
+    urlFetcher = createUrlFetcher(callback).url(USER_URL);
+    urlFetcher.start();
   }
 
   public void register(String phoneNumber,
@@ -117,7 +137,7 @@ public class UserService {
     RequestBody fileBody = RequestBody.create(MediaType.parse("image/*"), file);
     RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
                                                          .addFormDataPart("file",
-                                                                          "head_image",
+                                                                          file.getName(),
                                                                           fileBody)
                                                          .addFormDataPart("user_id", userId)
                                                          .build();

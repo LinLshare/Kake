@@ -50,18 +50,7 @@ public class LoginPresenter extends BaseFragmentPresenter {
       public void onSuccess(URLFetcher source) {
         final UserResponse userResponse = source.responseClass(UserResponse.class);
         if (userResponse != null) {
-          // 图片需要拼接host
-          String name = userResponse.getName();
-          if (TextUtils.isEmpty(name)) {
-            name = userResponse.getMobile();
-          }
-          App.globalData()
-             .putInt(GlobalData.KEY_USER_ID, userResponse.getId())
-             .putString(GlobalData.KEY_USER_MOBILE, userResponse.getMobile())
-             .putString(GlobalData.KEY_USER_NAME, name)
-             .putString(GlobalData.KEY_USER_AVATER,
-                        ServerConfig.BASE_IMG_URL + userResponse.getAvatar())
-             .putString(GlobalData.KEY_USER_NAME, userResponse.getName());
+          userService.saveUserInfo(userResponse);
           baseView.onCommand(CmdType.LOGIN_SUCCESS, null, null);
           App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.EVENT_LOGIN, null));
           navigateCallback.onNavigate(UserActivity.EVENT_TO_PROFILE);

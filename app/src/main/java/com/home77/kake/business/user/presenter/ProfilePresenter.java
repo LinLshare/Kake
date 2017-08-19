@@ -14,6 +14,7 @@ import com.home77.kake.base.NavigateCallback;
 import com.home77.kake.base.ParamsKey;
 import com.home77.kake.business.user.UserActivity;
 import com.home77.kake.common.api.response.Response;
+import com.home77.kake.common.api.response.UserResponse;
 import com.home77.kake.common.api.service.UserService;
 import com.home77.kake.common.event.BroadCastEvent;
 import com.home77.kake.common.event.BroadCastEventConstant;
@@ -130,12 +131,32 @@ public class ProfilePresenter extends BaseFragmentPresenter {
   @Override
   public void onResume() {
     super.onResume();
-    baseView.onCommand(CmdType.VIEW_REFRESH,
-                       Params.create(ParamsKey.USER_NAME,
-                                     App.globalData().getString(GlobalData.KEY_USER_NAME, ""))
-                             .put(ParamsKey.AVATAR_URL,
-                                  App.globalData().getString(GlobalData.KEY_USER_AVATER, "")),
-                       null);
+    userService.getUserInfo(new URLFetcher.Delegate() {
+      @Override
+      public void onSuccess(URLFetcher source) {
+        UserResponse userResponse = source.responseClass(UserResponse.class);
+        if (userResponse != null) {
+          userService.saveUserInfo(userResponse);
+        }
+        baseView.onCommand(CmdType.VIEW_REFRESH,
+                           Params.create(ParamsKey.USER_NAME,
+                                         App.globalData().getString(GlobalData.KEY_USER_NAME, ""))
+                                 .put(ParamsKey.AVATAR_URL,
+                                      App.globalData().getString(GlobalData.KEY_USER_AVATER, "")),
+                           null);
+      }
+
+      @Override
+      public void onError(String msg) {
+        baseView.onCommand(CmdType.VIEW_REFRESH,
+                           Params.create(ParamsKey.USER_NAME,
+                                         App.globalData().getString(GlobalData.KEY_USER_NAME, ""))
+                                 .put(ParamsKey.AVATAR_URL,
+                                      App.globalData().getString(GlobalData.KEY_USER_AVATER, "")),
+                           null);
+      }
+    });
+
   }
 
   private void handleClickLogout() {
