@@ -10,6 +10,7 @@ public enum MsgType {
   CLICK_MENU,
   // cloud album
   CLICK_CREATE_ALBUM_DIALOG_OK,
+  CLICK_IMPORT_PHOTO,
 
   //local photo
   CLICK_LINCK_CAMERA,

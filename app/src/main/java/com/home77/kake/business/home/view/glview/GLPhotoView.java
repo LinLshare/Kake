@@ -29,7 +29,7 @@ public class GLPhotoView extends GLSurfaceView {
 
   private float mPrevX, mPrevY;
 
-  private RotateInertia mRotateInertia = RotateInertia.INERTIA_0;
+  private RotateInertia mRotateInertia = RotateInertia.INERTIA_50;
 
   /**
    * Constructor

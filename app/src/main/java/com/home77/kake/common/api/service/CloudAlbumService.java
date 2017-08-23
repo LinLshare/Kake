@@ -6,6 +6,12 @@ import com.home77.kake.App;
 import com.home77.kake.GlobalData;
 import com.home77.kake.common.api.request.CreateAlbumRequest;
 
+import java.io.File;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+
 import static com.home77.kake.common.api.ServerConfig.HOST;
 
 /**
@@ -47,6 +53,19 @@ public class CloudAlbumService {
 
   public void getPhotoList(int albumId, URLFetcher.Delegate callback) {
     urlFetcher = createUrlFetcher(callback).url(getPhotoListUrl(albumId + ""));
+    urlFetcher.start();
+  }
+
+
+  public void uploadPhoto(String photoHash, File file, URLFetcher.Delegate callback) {
+    RequestBody fileBody = RequestBody.create(MediaType.parse("image/*"), file);
+    RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                                                         .addFormDataPart("file",
+                                                                          file.getName(),
+                                                                          fileBody)
+                                                         .addFormDataPart("photo_hash", photoHash)
+                                                         .build();
+    urlFetcher = createUrlFetcher(callback).url(UPLOAD_PHOTO_URL).postRequestBody(requestBody);
     urlFetcher.start();
   }
 

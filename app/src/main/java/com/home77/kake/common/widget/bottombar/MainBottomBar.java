@@ -92,11 +92,11 @@ public class MainBottomBar extends LinearLayout implements View.OnClickListener 
       IBottomItem bottomItem = (IBottomItem) view;
       bottomItem.shrink(shrinkAnimation);
     }
-    if (view instanceof ImageBottomItem) {
-      //do nothing
-    } else {
-      selectBottomBarItem(position);
-    }
+    //    if (view instanceof ImageBottomItem) {
+    //do nothing
+    //    } else {
+    selectBottomBarItem(position);
+    //    }
   }
 
   public interface OnTabItemClickListener {

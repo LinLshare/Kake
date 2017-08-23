@@ -1,5 +1,9 @@
 package com.home77.kake.business.home.presenter;
 
+import android.content.Intent;
+
+import com.darsh.multipleimageselect.helpers.Constants;
+import com.darsh.multipleimageselect.models.Image;
 import com.home77.common.base.collection.Params;
 import com.home77.common.base.component.BaseHandler;
 import com.home77.common.base.pattern.Instance;
@@ -16,6 +20,8 @@ import com.home77.kake.common.api.response.PhotoListResponse;
 import com.home77.kake.common.api.service.CloudAlbumService;
 
 import java.util.ArrayList;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * @author CJ
@@ -46,7 +52,26 @@ public class CloudPhotoListPresenter extends BaseFragmentPresenter {
         baseView.onCommand(CmdType.SHOW_ALBUM_INFO, Params.create(ParamsKey.ALBUM, album), null);
         getPhotoList();
         break;
+      case CLICK_IMPORT_PHOTO:
+        // show local image selector
+        baseView.onCommand(CmdType.SHOW_PHOTO_SELECTOR, null, null);
+        // upload to cloud
+        // add to album
+        break;
     }
+  }
+
+  @Override
+  public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if (requestCode == Constants.REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+      //The array list has the image paths of the selected images
+      ArrayList<Image> images = data.getParcelableArrayListExtra(Constants.INTENT_EXTRA_IMAGES);
+    }
+  }
+
+  private void upload(){
+
   }
 
   private void getPhotoList() {

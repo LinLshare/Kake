@@ -13,8 +13,10 @@ import com.home77.kake.App;
 import com.home77.kake.R;
 import com.home77.kake.base.ParamsKey;
 import com.home77.kake.business.camera.CameraActivity;
+import com.home77.kake.business.home.presenter.CameraUnlinkPresenter;
 import com.home77.kake.business.home.presenter.CloudAlbumListPresenter;
 import com.home77.kake.business.home.presenter.LocalPhotoPresenter;
+import com.home77.kake.business.home.view.CameraUnlinkFragment;
 import com.home77.kake.business.home.view.CloudAlbumListListFragment;
 import com.home77.kake.business.home.view.LocalPhotoFragment;
 import com.home77.kake.business.user.UserActivity;
@@ -46,7 +48,6 @@ public class HomeActivity extends AppCompatActivity
   MainBottomBar mainBottomBar;
   @BindView(R.id.title_text_view)
   TextView titleTextView;
-  private CloudAlbumListListFragment cloudAlbumListFragment;
   private Unbinder unbinder;
 
   @Override
@@ -70,14 +71,18 @@ public class HomeActivity extends AppCompatActivity
     LocalPhotoPresenter localPhotoPresenter = new LocalPhotoPresenter(localPhotoFragment);
     localPhotoFragment.setPresenter(localPhotoPresenter);
 
-    cloudAlbumListFragment = new CloudAlbumListListFragment();
+    CloudAlbumListListFragment cloudAlbumListFragment = new CloudAlbumListListFragment();
     CloudAlbumListPresenter cloudAlbumListPresenter =
         new CloudAlbumListPresenter(cloudAlbumListFragment);
     cloudAlbumListFragment.setPresenter(cloudAlbumListPresenter);
 
+    CameraUnlinkFragment cameraUnlinkFragment = new CameraUnlinkFragment();
+    CameraUnlinkPresenter cameraUnlinkPresenter = new CameraUnlinkPresenter(cameraUnlinkFragment);
+    cameraUnlinkFragment.setPresenter(cameraUnlinkPresenter);
+
     ArrayList<Fragment> fragmentList = new ArrayList<>();
     fragmentList.add(localPhotoFragment);
-    fragmentList.add(new Fragment()); //占位
+    fragmentList.add(cameraUnlinkFragment);
     fragmentList.add(cloudAlbumListFragment);
     FragmentPagerAdapter adapter =
         new FragmentPagerAdapter(getSupportFragmentManager(), fragmentList);
@@ -104,7 +109,8 @@ public class HomeActivity extends AppCompatActivity
           Intent intent = new Intent(this, CameraActivity.class);
           startActivity(intent);
         } else {
-          Toast.showShort("请先连接到全景相机");
+          titleTextView.setText("咔客全景相机");
+          pagerMainTab.setCurrentItem(index, false);
         }
       }
       break;

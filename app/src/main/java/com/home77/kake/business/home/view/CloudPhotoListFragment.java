@@ -1,5 +1,6 @@
 package com.home77.kake.business.home.view;
 
+import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.darsh.multipleimageselect.activities.AlbumSelectActivity;
+import com.darsh.multipleimageselect.helpers.Constants;
 import com.home77.common.base.collection.Params;
 import com.home77.common.ui.util.SizeHelper;
 import com.home77.common.ui.widget.Toast;
@@ -82,7 +85,7 @@ public class CloudPhotoListFragment extends BaseFragment {
                   .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                      presenter.onMessage(MsgType.CLICK_IMPORT_PHOTO, null);
                       popupMenu.dismiss();
                     }
                   });
@@ -126,6 +129,12 @@ public class CloudPhotoListFragment extends BaseFragment {
         this.photoList.addAll(photoList);
         localPhotoListAdapter.notifyDataSetChanged();
         break;
+      case SHOW_PHOTO_SELECTOR: {
+        Intent intent = new Intent(getActivity(), AlbumSelectActivity.class);
+        intent.putExtra(Constants.INTENT_EXTRA_LIMIT, 9);
+        startActivityForResult(intent, Constants.REQUEST_CODE);
+      }
+      break;
     }
   }
 
