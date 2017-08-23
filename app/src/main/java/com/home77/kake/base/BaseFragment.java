@@ -1,5 +1,6 @@
 package com.home77.kake.base;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,6 +22,11 @@ public abstract class BaseFragment extends Fragment implements BaseView {
   protected BaseFragmentPresenter presenter;
 
   public BaseFragment() {
+  }
+
+  @Override
+  public Context context() {
+    return getContext();
   }
 
   public void setPresenter(BaseFragmentPresenter presenter) {

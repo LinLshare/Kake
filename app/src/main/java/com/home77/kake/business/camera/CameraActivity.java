@@ -266,6 +266,7 @@ public class CameraActivity extends AppCompatActivity {
                                                        ServerConfig.CAMERA_HOST,
                                                        fileId,
                                                        thumbnailImage,
+                                                       fileId.replace("/", "."),
                                                        true);
               }
             });

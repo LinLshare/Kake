@@ -22,7 +22,7 @@ import com.home77.kake.base.CmdType;
 import com.home77.kake.base.MsgType;
 import com.home77.kake.base.ParamsKey;
 import com.home77.kake.business.home.adapter.LocalPhotoListAdapter;
-import com.home77.kake.business.home.model.Photo;
+import com.home77.kake.business.home.model.LocalPhoto;
 import com.home77.kake.common.api.response.Album;
 import com.home77.kake.common.widget.recyclerview.DefaultGridItemDecoration;
 
@@ -48,7 +48,7 @@ public class CloudPhotoListFragment extends BaseFragment {
   Unbinder unbinder;
   @BindView(R.id.menu_image_view)
   ImageView menuImageView;
-  private List<Photo> photoList = new ArrayList<>();
+  private List<LocalPhoto> photoList = new ArrayList<>();
   private LocalPhotoListAdapter localPhotoListAdapter;
   private PopupWindow popupMenu;
 
@@ -120,7 +120,7 @@ public class CloudPhotoListFragment extends BaseFragment {
         if (refreshLayout.isRefreshing()) {
           refreshLayout.setRefreshing(false);
         }
-        List<Photo> photoList = in.get(ParamsKey.PHOTO_LIST);
+        List<LocalPhoto> photoList = in.get(ParamsKey.PHOTO_LIST);
         if (photoList.isEmpty()) {
           Toast.showShort("暂无图片");
           return;

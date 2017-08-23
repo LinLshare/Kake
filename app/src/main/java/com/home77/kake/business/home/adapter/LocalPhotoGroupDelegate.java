@@ -1,26 +1,26 @@
 package com.home77.kake.business.home.adapter;
 
 import com.home77.kake.R;
-import com.home77.kake.business.home.model.Photo;
+import com.home77.kake.business.home.model.LocalPhoto;
 import com.zhy.adapter.recyclerview.base.ItemViewDelegate;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 /**
  * @author CJ
  */
-public class LocalPhotoGroupDelegate implements ItemViewDelegate<Photo> {
+public class LocalPhotoGroupDelegate implements ItemViewDelegate<LocalPhoto> {
   @Override
   public int getItemViewLayoutId() {
     return R.layout.layout_item_photo_group;
   }
 
   @Override
-  public boolean isForViewType(Photo item, int position) {
-    return item.getType() == Photo.TYPE_GROUP;
+  public boolean isForViewType(LocalPhoto item, int position) {
+    return false;
   }
 
   @Override
-  public void convert(ViewHolder holder, Photo photo, int position) {
-    holder.setText(R.id.group_name_text_view, photo.getDateTimeZone());
+  public void convert(ViewHolder holder, LocalPhoto photo, int position) {
+    holder.setText(R.id.group_name_text_view, "");
   }
 }

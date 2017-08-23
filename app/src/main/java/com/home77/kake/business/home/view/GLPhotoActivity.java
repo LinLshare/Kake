@@ -7,8 +7,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,7 +19,10 @@ import android.view.WindowManager;
 import android.widget.ProgressBar;
 
 import com.home77.common.base.debug.DLog;
+import com.home77.common.base.pattern.Instance;
 import com.home77.kake.R;
+import com.home77.kake.business.camera.ImageDataStorage;
+import com.home77.kake.business.home.model.LocalPhoto;
 import com.home77.kake.business.home.view.glview.GLPhotoView;
 import com.theta360.v2.model.Photo;
 import com.theta360.v2.model.RotateInertia;
@@ -29,6 +32,8 @@ import com.theta360.v2.network.ImageData;
 import com.theta360.v2.view.ConfigurationDialog;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 
 
 /**
@@ -39,14 +44,17 @@ public class GLPhotoActivity extends Activity implements ConfigurationDialog.Dia
   private static final String CAMERA_IP_ADDRESS = "CAMERA_IP_ADDRESS";
   private static final String OBJECT_ID = "OBJECT_ID";
   private static final String THUMBNAIL = "THUMBNAIL";
+  private static final String LOCAL_PHOTO = "LOCAL_PHOTO";
+  private static final String NAME = "NAME";
   private static final String TAG = GLPhotoActivity.class.getSimpleName();
 
   private GLPhotoView mGLPhotoView;
 
   private Photo mTexture = null;
-  private LoadPhotoTask mLoadPhotoTask = null;
+  private AsyncTask mLoadPhotoTask = null;
+  private String name;
 
-  private RotateInertia mRotateInertia = RotateInertia.INERTIA_0;
+  private RotateInertia mRotateInertia = RotateInertia.INERTIA_50;
 
   public static final int REQUEST_REFRESH_LIST = 100;
   public static final int REQUEST_NOT_REFRESH_LIST = 101;
@@ -66,23 +74,47 @@ public class GLPhotoActivity extends Activity implements ConfigurationDialog.Dia
                          WindowManager.LayoutParams.FLAG_FULLSCREEN);//全屏
 
     setContentView(R.layout.activity_glphoto);
+    mGLPhotoView = (GLPhotoView) findViewById(R.id.photo_image);
 
     Intent intent = getIntent();
-    String cameraIpAddress = intent.getStringExtra(CAMERA_IP_ADDRESS);
-    String fileId = intent.getStringExtra(OBJECT_ID);
-    byte[] byteThumbnail = intent.getByteArrayExtra(THUMBNAIL);
+    LocalPhoto localPhoto = (LocalPhoto) intent.getSerializableExtra(LOCAL_PHOTO);
 
-    ByteArrayInputStream inputStreamThumbnail = new ByteArrayInputStream(byteThumbnail);
-    Drawable thumbnail = BitmapDrawable.createFromStream(inputStreamThumbnail, null);
+    if (localPhoto == null) { // load camera
+      String cameraIpAddress = intent.getStringExtra(CAMERA_IP_ADDRESS);
+      String fileId = intent.getStringExtra(OBJECT_ID);
+      name = intent.getStringExtra(NAME);
+      byte[] byteThumbnail = intent.getByteArrayExtra(THUMBNAIL);
+      ByteArrayInputStream inputStreamThumbnail = new ByteArrayInputStream(byteThumbnail);
+      Drawable thumbnail = BitmapDrawable.createFromStream(inputStreamThumbnail, null);
+      Photo _thumbnail = new Photo(((BitmapDrawable) thumbnail).getBitmap());
+      mGLPhotoView.setTexture(_thumbnail);
+      mGLPhotoView.setmRotateInertia(mRotateInertia);
+      new LoadPhotoTask(cameraIpAddress, fileId).execute();
+    } else { // load local
+      new LoadLocalPhotoTask().execute(localPhoto);
+    }
+  }
 
-    Photo _thumbnail = new Photo(((BitmapDrawable) thumbnail).getBitmap());
+  private class LoadLocalPhotoTask extends AsyncTask<LocalPhoto, String, Bitmap> {
 
-    mGLPhotoView = (GLPhotoView) findViewById(R.id.photo_image);
-    mGLPhotoView.setTexture(_thumbnail);
-    mGLPhotoView.setmRotateInertia(mRotateInertia);
+    @Override
+    protected Bitmap doInBackground(LocalPhoto... params) {
+      LocalPhoto localPhoto = params[0];
+      return BitmapFactory.decodeFile(localPhoto.getPath());
+    }
 
-    mLoadPhotoTask = new LoadPhotoTask(cameraIpAddress, fileId);
-    mLoadPhotoTask.execute();
+    @Override
+    protected void onPostExecute(Bitmap bitmap) {
+      // TODO: 2017/8/24 get share
+      ImageDataStorage imageDataStorage = Instance.of(ImageDataStorage.class);
+      mTexture = new Photo(bitmap,
+                           imageDataStorage.getYaw(),
+                           imageDataStorage.getPitch(),
+                           imageDataStorage.getRoll());
+      if (null != mGLPhotoView) {
+        mGLPhotoView.setTexture(mTexture);
+      }
+    }
   }
 
   @Override
@@ -125,14 +157,6 @@ public class GLPhotoActivity extends Activity implements ConfigurationDialog.Dia
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     super.onOptionsItemSelected(item);
-    //        switch (item.getItemId()) {
-    //            case R.id.configuration:
-    //                FragmentManager mgr = getFragmentManager();
-    //                ConfigurationDialog.show(mgr, mRotateInertia);
-    //                break;
-    //            default:
-    //                break;
-    //        }
     return true;
   }
 
@@ -218,6 +242,26 @@ public class GLPhotoActivity extends Activity implements ConfigurationDialog.Dia
           }
         });
         publishProgress("finish to download");
+        //create a file to write bitmap data
+        File pictureDir =
+            new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                     "kake");
+        if (!pictureDir.exists()) {
+          boolean mkdir = pictureDir.mkdir();
+        }
+        File f = new File(pictureDir, name.replace("JPG", "jpg"));
+        if (!f.getParentFile().exists()) {
+          f.getParentFile().mkdir();
+        }
+        boolean newFile = f.createNewFile();
+
+        //Convert bitmap to byte array
+        byte[] bitmapdata = resizedImageData.getRawData();
+        //write the bytes in file
+        FileOutputStream fos = new FileOutputStream(f);
+        fos.write(bitmapdata);
+        fos.flush();
+        // save meta data
 
         return resizedImageData;
 
@@ -252,11 +296,13 @@ public class GLPhotoActivity extends Activity implements ConfigurationDialog.Dia
 
         Bitmap __bitmap = BitmapFactory.decodeByteArray(dataObject, 0, dataObject.length);
 
+
         progressBar.setVisibility(View.GONE);
 
         Double yaw = imageData.getYaw();
         Double pitch = imageData.getPitch();
         Double roll = imageData.getRoll();
+        Instance.of(ImageDataStorage.class).putYaw(yaw).putPitch(pitch).putRoll(roll);
         DLog.d(TAG, "<Angle: yaw=" + yaw + ", pitch=" + pitch + ", roll=" + roll + ">");
         mTexture = new Photo(__bitmap, yaw, pitch, roll);
         if (null != mGLPhotoView) {
@@ -266,6 +312,21 @@ public class GLPhotoActivity extends Activity implements ConfigurationDialog.Dia
         DLog.d(TAG, "failed to download image");
       }
     }
+  }
+
+  public static void startActivityForResult(Activity activity,
+                                            LocalPhoto localPhoto,
+                                            boolean refreshAfterClose) {
+    int requestCode;
+    if (refreshAfterClose) {
+      requestCode = REQUEST_REFRESH_LIST;
+    } else {
+      requestCode = REQUEST_NOT_REFRESH_LIST;
+    }
+
+    Intent intent = new Intent(activity, GLPhotoActivity.class);
+    intent.putExtra(LOCAL_PHOTO, localPhoto);
+    activity.startActivityForResult(intent, requestCode);
   }
 
   /**
@@ -286,6 +347,7 @@ public class GLPhotoActivity extends Activity implements ConfigurationDialog.Dia
                                             String cameraIpAddress,
                                             String fileId,
                                             byte[] thumbnail,
+                                            String name,
                                             boolean refreshAfterClose) {
     int requestCode;
     if (refreshAfterClose) {
@@ -297,6 +359,7 @@ public class GLPhotoActivity extends Activity implements ConfigurationDialog.Dia
     Intent intent = new Intent(activity, GLPhotoActivity.class);
     intent.putExtra(CAMERA_IP_ADDRESS, cameraIpAddress);
     intent.putExtra(OBJECT_ID, fileId);
+    intent.putExtra(NAME, name);
     intent.putExtra(THUMBNAIL, thumbnail);
     activity.startActivityForResult(intent, requestCode);
   }

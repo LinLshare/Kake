@@ -1,6 +1,7 @@
 package com.home77.kake.business.home;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import com.home77.common.base.event.GenericEvent;
 import com.home77.common.ui.widget.Toast;
 import com.home77.kake.App;
 import com.home77.kake.R;
+import com.home77.kake.base.CmdType;
 import com.home77.kake.base.ParamsKey;
 import com.home77.kake.business.camera.CameraActivity;
 import com.home77.kake.business.home.presenter.CameraUnlinkPresenter;
@@ -21,6 +23,7 @@ import com.home77.kake.business.home.view.CloudAlbumListListFragment;
 import com.home77.kake.business.home.view.LocalPhotoFragment;
 import com.home77.kake.business.user.UserActivity;
 import com.home77.kake.common.adapter.FragmentPagerAdapter;
+import com.home77.kake.common.api.ServerConfig;
 import com.home77.kake.common.api.response.Album;
 import com.home77.kake.common.event.BroadCastEvent;
 import com.home77.kake.common.event.BroadCastEventConstant;
@@ -28,6 +31,8 @@ import com.home77.kake.common.widget.ScrollConfigurableViewPager;
 import com.home77.kake.common.widget.bottombar.ImageBottomItem;
 import com.home77.kake.common.widget.bottombar.MainBottomBar;
 import com.home77.kake.common.widget.bottombar.NormalBottomItem;
+import com.theta360.v2.network.DeviceInfo;
+import com.theta360.v2.network.HttpConnector;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -88,6 +93,36 @@ public class HomeActivity extends AppCompatActivity
         new FragmentPagerAdapter(getSupportFragmentManager(), fragmentList);
     pagerMainTab.setAdapter(adapter);
     pagerMainTab.setOffscreenPageLimit(fragmentList.size());
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+
+    // check device
+    new AsyncTask<Void, String, Boolean>() {
+      @Override
+      protected Boolean doInBackground(Void... params) {
+        HttpConnector camera = new HttpConnector(ServerConfig.CAMERA_HOST);
+        DeviceInfo deviceInfo = camera.getDeviceInfo();
+        return !deviceInfo.getSerialNumber().isEmpty();
+      }
+
+      @Override
+      protected void onPostExecute(Boolean aBoolean) {
+        if (aBoolean) {
+          App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.CAMERA_LINKED, null));
+          if (pagerMainTab.getCurrentItem() == 1) {
+            titleTextView.setText(R.string.local_photo);
+            pagerMainTab.setCurrentItem(0, false);
+            Intent intent = new Intent(HomeActivity.this, CameraActivity.class);
+            startActivity(intent);
+          }
+        } else {
+          App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.CAMERA_UNLINKED, null));
+        }
+      }
+    }.execute();
   }
 
   @Override

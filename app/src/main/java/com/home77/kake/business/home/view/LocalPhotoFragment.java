@@ -15,8 +15,7 @@ import com.home77.kake.base.CmdType;
 import com.home77.kake.base.MsgType;
 import com.home77.kake.base.ParamsKey;
 import com.home77.kake.business.home.adapter.LocalPhotoListAdapter;
-import com.home77.kake.business.home.model.Photo;
-import com.home77.kake.common.api.ServerConfig;
+import com.home77.kake.business.home.model.LocalPhoto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +32,7 @@ public class LocalPhotoFragment extends BaseFragment {
   SwipeRefreshLayout refreshLayout;
   Unbinder unbinder;
 
-  private List<Photo> photoList = new ArrayList<>();
+  private List<LocalPhoto> photoList = new ArrayList<>();
   private LocalPhotoListAdapter localPhotoListAdapter;
 
   @Override
@@ -66,7 +65,7 @@ public class LocalPhotoFragment extends BaseFragment {
         if (refreshLayout.isRefreshing()) {
           refreshLayout.setRefreshing(false);
         }
-        List<Photo> photoList = in.get(ParamsKey.PHOTO_LIST, null);
+        List<LocalPhoto> photoList = in.get(ParamsKey.PHOTO_LIST, null);
         this.photoList.clear();
         this.photoList.addAll(photoList);
         localPhotoListAdapter.notifyDataSetChanged();
@@ -86,12 +85,13 @@ public class LocalPhotoFragment extends BaseFragment {
         }
         break;
       case TO_PHOTO_VIEW_ACTIVITY: {
-        Photo photo = in.get(ParamsKey.PHOTO);
-        GLPhotoActivity.startActivityForResult(getActivity(),
-                                               ServerConfig.CAMERA_HOST,
-                                               photo.getFieldId(),
-                                               photo.getThumbnail(),
-                                               true);
+        LocalPhoto photo = in.get(ParamsKey.PHOTO);
+        GLPhotoActivity.startActivityForResult(getActivity(), photo, true);
+        //        GLPhotoActivity.startActivityForResult(getActivity(),
+        //                                               ServerConfig.CAMERA_HOST,
+        //                                               photo.getFieldId(),
+        //                                               photo.getThumbnail(),
+        //                                               true);
       }
       break;
     }
