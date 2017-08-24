@@ -78,39 +78,51 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
       if (!pictureDir.exists()) {
         boolean b = pictureDir.mkdir();
       }
-      Uri uri = Uri.fromFile(pictureDir);
-      Cursor cursor = baseView.context()
-                              .getContentResolver()
-                              .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                                     imgProjection,
-                                     MediaStore.Images.Media.MIME_TYPE + "=" + "'image/jpeg'",
-                                     null,
-                                     MediaStore.Images.Media.DATE_ADDED);
-      if (cursor == null) {
-        // error
-        return null;
+      ArrayList<LocalPhoto> temp = new ArrayList<>();
+      File[] files = pictureDir.listFiles();
+      for (File f : files) {
+        if (f.getName().endsWith("jpg")) {
+          temp.add(new LocalPhoto(f.hashCode(),
+                                  f.getName(),
+                                  f.length(),
+                                  f.lastModified(),
+                                  f.getAbsolutePath()));
+        }
       }
 
-      ArrayList<LocalPhoto> temp = new ArrayList<>();
-      if (cursor.moveToLast()) {
-        do {
-          if (Thread.interrupted()) {
-            return null;
-          }
-          long id = cursor.getLong(cursor.getColumnIndex(imgProjection[0]));
-          String name = cursor.getString(cursor.getColumnIndex(imgProjection[1]));
-          long size = cursor.getLong(cursor.getColumnIndex(imgProjection[2]));
-          String path = cursor.getString(cursor.getColumnIndex(imgProjection[3]));
-          long date = cursor.getLong(cursor.getColumnIndex(imgProjection[4]));
-          file = new File(path);
-          if (file.exists()) {
-            if (path.contains("kake")) {
-              temp.add(new LocalPhoto(id, name, size, date, path));
-            }
-          }
-        } while (cursor.moveToPrevious());
-      }
-      cursor.close();
+
+      //      Cursor cursor = baseView.context()
+      //                              .getContentResolver()
+      //                              .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+      //                                     imgProjection,
+      //                                     MediaStore.Images.Media.MIME_TYPE + "=" + "'image/jpeg'" +
+      //                                     " AND " + MediaStore.Images.Media.DATA + " like " + "'%kake%'",
+      //                                     null,
+      //                                     MediaStore.Images.Media.DATE_ADDED);
+      //      if (cursor == null) {
+      //        // error
+      //        return null;
+      //      }
+      //
+      //      if (cursor.moveToLast()) {
+      //        do {
+      //          if (Thread.interrupted()) {
+      //            return null;
+      //          }
+      //          long id = cursor.getLong(cursor.getColumnIndex(imgProjection[0]));
+      //          String name = cursor.getString(cursor.getColumnIndex(imgProjection[1]));
+      //          long size = cursor.getLong(cursor.getColumnIndex(imgProjection[2]));
+      //          String path = cursor.getString(cursor.getColumnIndex(imgProjection[3]));
+      //          long date = cursor.getLong(cursor.getColumnIndex(imgProjection[4]));
+      //          file = new File(path);
+      //          if (file.exists()) {
+      ////            if (path.contains("kake")) {
+      //              temp.add(new LocalPhoto(id, name, size, date, path));
+      ////            }
+      //          }
+      //        } while (cursor.moveToPrevious());
+      //      }
+      //      cursor.close();
       return temp;
     }
 

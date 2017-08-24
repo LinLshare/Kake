@@ -4,6 +4,8 @@ import android.graphics.BitmapFactory;
 import android.view.View;
 
 import com.home77.common.base.collection.Params;
+import com.home77.common.base.util.FileHelper;
+import com.home77.common.base.util.UnitHelper;
 import com.home77.kake.App;
 import com.home77.kake.R;
 import com.home77.kake.base.ParamsKey;
@@ -29,7 +31,7 @@ public class LocalPhotoDelegate implements ItemViewDelegate<LocalPhoto> {
 
   @Override
   public void convert(final ViewHolder holder, final LocalPhoto photo, int position) {
-    holder.setText(R.id.size_image_view, photo.getSize() + "");
+    holder.setText(R.id.size_image_view, UnitHelper.formatBytesInByte(photo.getSize(), true) + "");
     holder.setText(R.id.name_text_view, photo.getName());
     holder.setImageBitmap(R.id.photo_image_view, BitmapFactory.decodeFile(photo.getPath()));
     holder.getConvertView().setOnClickListener(new View.OnClickListener() {

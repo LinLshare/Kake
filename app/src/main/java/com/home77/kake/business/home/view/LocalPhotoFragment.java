@@ -8,12 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.home77.common.base.collection.Params;
+import com.home77.common.base.pattern.Instance;
 import com.home77.common.ui.widget.Toast;
 import com.home77.kake.R;
 import com.home77.kake.base.BaseFragment;
 import com.home77.kake.base.CmdType;
 import com.home77.kake.base.MsgType;
 import com.home77.kake.base.ParamsKey;
+import com.home77.kake.business.camera.ImageDataStorage;
+import com.home77.kake.business.home.PhotoViewActivity;
 import com.home77.kake.business.home.adapter.LocalPhotoListAdapter;
 import com.home77.kake.business.home.model.LocalPhoto;
 
@@ -86,12 +89,11 @@ public class LocalPhotoFragment extends BaseFragment {
         break;
       case TO_PHOTO_VIEW_ACTIVITY: {
         LocalPhoto photo = in.get(ParamsKey.PHOTO);
-        GLPhotoActivity.startActivityForResult(getActivity(), photo, true);
-        //        GLPhotoActivity.startActivityForResult(getActivity(),
-        //                                               ServerConfig.CAMERA_HOST,
-        //                                               photo.getFieldId(),
-        //                                               photo.getThumbnail(),
-        //                                               true);
+        if (Instance.of(ImageDataStorage.class).bind(photo.getName()).getYaw() == 0L) {
+          PhotoViewActivity.start(getActivity(), photo);
+        } else {
+          GLPhotoActivity.startActivityForResult(getActivity(), photo, true);
+        }
       }
       break;
     }

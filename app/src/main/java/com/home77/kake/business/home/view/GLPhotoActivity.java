@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -105,8 +106,8 @@ public class GLPhotoActivity extends Activity implements ConfigurationDialog.Dia
 
     @Override
     protected void onPostExecute(Bitmap bitmap) {
-      // TODO: 2017/8/24 get share
       ImageDataStorage imageDataStorage = Instance.of(ImageDataStorage.class);
+      imageDataStorage.bind(name);
       mTexture = new Photo(bitmap,
                            imageDataStorage.getYaw(),
                            imageDataStorage.getPitch(),
@@ -249,7 +250,7 @@ public class GLPhotoActivity extends Activity implements ConfigurationDialog.Dia
         if (!pictureDir.exists()) {
           boolean mkdir = pictureDir.mkdir();
         }
-        File f = new File(pictureDir, name.replace("JPG", "jpg"));
+        File f = new File(pictureDir, name);
         if (!f.getParentFile().exists()) {
           f.getParentFile().mkdir();
         }
@@ -261,8 +262,11 @@ public class GLPhotoActivity extends Activity implements ConfigurationDialog.Dia
         FileOutputStream fos = new FileOutputStream(f);
         fos.write(bitmapdata);
         fos.flush();
-        // save meta data
-
+        // insert image
+        //        MediaStore.Images.Media.insertImage(getContentResolver(),
+        //                                            f.getPath(),
+        //                                            f.getName(),
+        //                                            f.getName());
         return resizedImageData;
 
       } catch (Throwable throwable) {
@@ -302,7 +306,7 @@ public class GLPhotoActivity extends Activity implements ConfigurationDialog.Dia
         Double yaw = imageData.getYaw();
         Double pitch = imageData.getPitch();
         Double roll = imageData.getRoll();
-        Instance.of(ImageDataStorage.class).putYaw(yaw).putPitch(pitch).putRoll(roll);
+        Instance.of(ImageDataStorage.class).bind(name).putYaw(yaw).putPitch(pitch).putRoll(roll);
         DLog.d(TAG, "<Angle: yaw=" + yaw + ", pitch=" + pitch + ", roll=" + roll + ">");
         mTexture = new Photo(__bitmap, yaw, pitch, roll);
         if (null != mGLPhotoView) {
