@@ -16,6 +16,7 @@ import com.darsh.multipleimageselect.helpers.Constants;
 import com.home77.common.base.collection.Params;
 import com.home77.common.ui.util.SizeHelper;
 import com.home77.common.ui.widget.Toast;
+import com.home77.kake.App;
 import com.home77.kake.R;
 import com.home77.kake.base.BaseFragment;
 import com.home77.kake.base.CmdType;
@@ -24,6 +25,8 @@ import com.home77.kake.base.ParamsKey;
 import com.home77.kake.business.home.adapter.LocalPhotoListAdapter;
 import com.home77.kake.business.home.model.LocalPhoto;
 import com.home77.kake.common.api.response.Album;
+import com.home77.kake.common.event.BroadCastEvent;
+import com.home77.kake.common.event.BroadCastEventConstant;
 import com.home77.kake.common.widget.recyclerview.DefaultGridItemDecoration;
 
 import java.util.ArrayList;
@@ -135,6 +138,19 @@ public class CloudPhotoListFragment extends BaseFragment {
         startActivityForResult(intent, Constants.REQUEST_CODE);
       }
       break;
+      case PHOTO_UPLOADING:
+        App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_SHOW, null));
+        break;
+      case PHOTO_UPLOAD_ERROR:
+        App.eventBus()
+           .post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_DISMISS, null));
+        Toast.showShort("上传失败");
+        break;
+      case PHOTO_UPLOAD_SUCCESS:
+        App.eventBus()
+           .post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_DISMISS, null));
+        Toast.showShort("上传成功");
+        break;
     }
   }
 

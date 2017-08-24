@@ -1,12 +1,16 @@
 package com.home77.kake.common.api.service;
 
+import com.home77.common.base.debug.DLog;
+import com.home77.common.base.util.HashHelper;
 import com.home77.common.net.http.HttpContextBuilder;
 import com.home77.common.net.http.URLFetcher;
 import com.home77.kake.App;
 import com.home77.kake.GlobalData;
+import com.home77.kake.common.api.request.AddPhotoRequest;
 import com.home77.kake.common.api.request.CreateAlbumRequest;
 
 import java.io.File;
+import java.io.RandomAccessFile;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -23,11 +27,14 @@ public class CloudAlbumService {
   private final static String ADD_ALBUM_URL;
   private final static String UPLOAD_PHOTO_URL;
   private final static String PHOTO_LIST_URL_FORMAT;
+  private final static String ADD_PHOTO_URL;
+  private static final String TAG = CloudAlbumService.class.getSimpleName();
 
   static {
     ALBUM_LIST_URL = String.format("http://%s/api/v1/album/albumlist", HOST);
     ADD_ALBUM_URL = String.format("http://%s/api/v1/album/addalbum", HOST);
     UPLOAD_PHOTO_URL = String.format("http://%s/api/v1/album/uploadphoto", HOST);
+    ADD_PHOTO_URL = String.format("http://%s/api/v1/album/addphoto", HOST);
     PHOTO_LIST_URL_FORMAT = "http://" + HOST + "/api/v1/album/%s/photolist";
   }
 
@@ -56,14 +63,19 @@ public class CloudAlbumService {
     urlFetcher.start();
   }
 
+  public void addPhoto(AddPhotoRequest request, URLFetcher.Delegate callback) {
+    urlFetcher = createUrlFetcher(callback).url(ADD_PHOTO_URL).postJson(request);
+    urlFetcher.start();
+  }
 
-  public void uploadPhoto(String photoHash, File file, URLFetcher.Delegate callback) {
+  public void uploadPhoto(String fileHash,File file, URLFetcher.Delegate callback) {
+
     RequestBody fileBody = RequestBody.create(MediaType.parse("image/*"), file);
     RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
                                                          .addFormDataPart("file",
                                                                           file.getName(),
                                                                           fileBody)
-                                                         .addFormDataPart("photo_hash", photoHash)
+                                                         .addFormDataPart("photo_hash", fileHash)
                                                          .build();
     urlFetcher = createUrlFetcher(callback).url(UPLOAD_PHOTO_URL).postRequestBody(requestBody);
     urlFetcher.start();
