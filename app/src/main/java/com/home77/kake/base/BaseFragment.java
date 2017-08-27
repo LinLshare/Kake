@@ -1,5 +1,6 @@
 package com.home77.kake.base;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,6 +30,11 @@ public abstract class BaseFragment extends Fragment implements BaseView {
     return getContext();
   }
 
+  @Override
+  public Activity activity() {
+    return getActivity();
+  }
+
   public void setPresenter(BaseFragmentPresenter presenter) {
     this.presenter = presenter;
   }
@@ -39,14 +45,14 @@ public abstract class BaseFragment extends Fragment implements BaseView {
                            @Nullable ViewGroup container,
                            @Nullable Bundle savedInstanceState) {
     View view = presenter.onCreateView(inflater, container, savedInstanceState);
-    view.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-      @Override
-      public void onSystemUiVisibilityChange(int visibility) {
-        if (visibility == View.VISIBLE) {
-          presenter.onMessage(MsgType.VIEW_REFRESH, null);
-        }
-      }
-    });
+    //    view.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+    //      @Override
+    //      public void onSystemUiVisibilityChange(int visibility) {
+    //        if (visibility == View.VISIBLE) {
+    //          presenter.onMessage(MsgType.VIEW_REFRESH, null);
+    //        }
+    //      }
+    //    });
     return view;
   }
 

@@ -27,6 +27,10 @@ public abstract class BaseFragmentPresenter
   }
 
   @Override
+  public void start(Params params) {
+  }
+
+  @Override
   public View onCreateView(LayoutInflater inflater,
                            ViewGroup container,
                            Bundle savedInstanceState) {

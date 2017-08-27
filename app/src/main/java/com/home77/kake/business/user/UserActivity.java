@@ -37,6 +37,7 @@ public class UserActivity extends AppCompatActivity implements NavigateCallback 
   public static final int EVENT_TO_ABOUT = 7;
   public static final int EVENT_TO_HELP = 8;
 
+  public static final String EXTRA_FIRST_EVENT = "extra_first_event";
   private ProfileFragment profileFragment;
   private LoginFragment loginFragment;
   private ProfilePresenter profilePresenter;
@@ -77,9 +78,8 @@ public class UserActivity extends AppCompatActivity implements NavigateCallback 
     aboutFragment.setPresenter(aboutPresenter);
     helpAndFeedbackFragment.setPresenter(helpAndFeedbackPresenter);
     //4) commit init fragment
-    getSupportFragmentManager().beginTransaction()
-                               .add(R.id.content_layout, profileFragment)
-                               .commit();
+    int intExtra = getIntent().getIntExtra(EXTRA_FIRST_EVENT, EVENT_TO_PROFILE);
+    onNavigate(intExtra, null);
   }
 
   @Override

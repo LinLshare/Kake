@@ -5,13 +5,16 @@ import android.text.TextUtils;
 import com.home77.common.base.collection.Params;
 import com.home77.common.base.pattern.Instance;
 import com.home77.common.net.http.URLFetcher;
+import com.home77.common.ui.widget.Toast;
 import com.home77.kake.App;
 import com.home77.kake.GlobalData;
 import com.home77.kake.base.BaseFragmentPresenter;
 import com.home77.kake.base.BaseView;
 import com.home77.kake.base.CmdType;
 import com.home77.kake.base.MsgType;
+import com.home77.kake.base.NavigateCallback;
 import com.home77.kake.base.ParamsKey;
+import com.home77.kake.business.home.HomeActivity;
 import com.home77.kake.common.api.response.AlbumListResponse;
 import com.home77.kake.common.api.response.Response;
 import com.home77.kake.common.api.service.CloudAlbumService;
@@ -27,8 +30,8 @@ public class CloudAlbumListPresenter extends BaseFragmentPresenter {
   private static final String TAG = CloudAlbumListPresenter.class.getSimpleName();
   private CloudAlbumService cloudAlbumService;
 
-  public CloudAlbumListPresenter(BaseView baseView) {
-    super(baseView, null);
+  public CloudAlbumListPresenter(BaseView baseView, NavigateCallback navigateCallback) {
+    super(baseView, navigateCallback);
     cloudAlbumService = Instance.of(CloudAlbumService.class);
   }
 
@@ -42,6 +45,17 @@ public class CloudAlbumListPresenter extends BaseFragmentPresenter {
       case VIEW_REFRESH:
         getAlbumList();
         break;
+    }
+  }
+
+  @Override
+  public void start(Params params) {
+    super.start(params);
+    if (App.isLogin()) {
+      getAlbumList();
+    } else {
+      Toast.showShort("客官，登录后才可以查看云相册~");
+      navigateCallback.onNavigate(HomeActivity.NAVIGATE_TO_USER, null);
     }
   }
 

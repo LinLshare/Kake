@@ -73,6 +73,13 @@ public class CloudPhotoListPresenter extends BaseFragmentPresenter {
   }
 
   @Override
+  public void start(Params params) {
+    super.start(params);
+    baseView.onCommand(CmdType.SHOW_ALBUM_INFO, Params.create(ParamsKey.ALBUM, album), null);
+    getPhotoList();
+  }
+
+  @Override
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
     if (requestCode == Constants.REQUEST_CODE && resultCode == RESULT_OK && data != null) {

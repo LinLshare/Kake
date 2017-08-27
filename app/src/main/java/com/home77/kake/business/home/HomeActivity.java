@@ -1,18 +1,25 @@
 package com.home77.kake.business.home;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.widget.TextView;
 
-import com.home77.common.base.event.GenericEvent;
+import com.home77.common.base.collection.Params;
 import com.home77.common.ui.widget.Toast;
 import com.home77.kake.App;
 import com.home77.kake.R;
-import com.home77.kake.base.CmdType;
+import com.home77.kake.base.NavigateCallback;
 import com.home77.kake.base.ParamsKey;
 import com.home77.kake.business.camera.CameraActivity;
 import com.home77.kake.business.home.presenter.CameraUnlinkPresenter;
@@ -25,6 +32,7 @@ import com.home77.kake.business.user.UserActivity;
 import com.home77.kake.common.adapter.FragmentPagerAdapter;
 import com.home77.kake.common.api.ServerConfig;
 import com.home77.kake.common.api.response.Album;
+import com.home77.kake.common.api.service.UserService;
 import com.home77.kake.common.event.BroadCastEvent;
 import com.home77.kake.common.event.BroadCastEventConstant;
 import com.home77.kake.common.widget.ScrollConfigurableViewPager;
@@ -45,8 +53,9 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class HomeActivity extends AppCompatActivity
-    implements MainBottomBar.OnTabItemClickListener {
+    implements MainBottomBar.OnTabItemClickListener, NavigateCallback {
 
+  public static final int NAVIGATE_TO_USER = 101;
   @BindView(R.id.main_pager)
   ScrollConfigurableViewPager pagerMainTab;
   @BindView(R.id.main_bottom_bar)
@@ -54,6 +63,10 @@ public class HomeActivity extends AppCompatActivity
   @BindView(R.id.title_text_view)
   TextView titleTextView;
   private Unbinder unbinder;
+  private LocalPhotoPresenter localPhotoPresenter;
+  private CloudAlbumListPresenter cloudAlbumListPresenter;
+  private CameraUnlinkPresenter cameraUnlinkPresenter;
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -73,16 +86,15 @@ public class HomeActivity extends AppCompatActivity
 
     LocalPhotoFragment localPhotoFragment = new LocalPhotoFragment();
     // setup presenter
-    LocalPhotoPresenter localPhotoPresenter = new LocalPhotoPresenter(localPhotoFragment);
+    localPhotoPresenter = new LocalPhotoPresenter(localPhotoFragment);
     localPhotoFragment.setPresenter(localPhotoPresenter);
 
     CloudAlbumListListFragment cloudAlbumListFragment = new CloudAlbumListListFragment();
-    CloudAlbumListPresenter cloudAlbumListPresenter =
-        new CloudAlbumListPresenter(cloudAlbumListFragment);
+    cloudAlbumListPresenter = new CloudAlbumListPresenter(cloudAlbumListFragment, this);
     cloudAlbumListFragment.setPresenter(cloudAlbumListPresenter);
 
     CameraUnlinkFragment cameraUnlinkFragment = new CameraUnlinkFragment();
-    CameraUnlinkPresenter cameraUnlinkPresenter = new CameraUnlinkPresenter(cameraUnlinkFragment);
+    cameraUnlinkPresenter = new CameraUnlinkPresenter(cameraUnlinkFragment);
     cameraUnlinkFragment.setPresenter(cameraUnlinkPresenter);
 
     ArrayList<Fragment> fragmentList = new ArrayList<>();
@@ -138,6 +150,7 @@ public class HomeActivity extends AppCompatActivity
       case 0:
         titleTextView.setText(R.string.local_photo);
         pagerMainTab.setCurrentItem(index, false);
+        localPhotoPresenter.start(null);
         break;
       case 1: {
         if (App.isIsLinckedCamera()) {
@@ -152,6 +165,7 @@ public class HomeActivity extends AppCompatActivity
       case 2:
         titleTextView.setText(R.string.cloud_album);
         pagerMainTab.setCurrentItem(index, false);
+        cloudAlbumListPresenter.start(null);
         break;
     }
   }
@@ -173,6 +187,7 @@ public class HomeActivity extends AppCompatActivity
   }
 
   private static final int REQUEST_CODE_USER = 101;
+  private static final int REQUEST_CODE_USER_LOGIN = 101_1;
   public static final int RESULT_CODE_CLOUD_ALBUM = 201;
 
   @OnClick(R.id.user_image_view)
@@ -184,17 +199,20 @@ public class HomeActivity extends AppCompatActivity
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
-    if (requestCode == REQUEST_CODE_USER && resultCode == RESULT_CODE_CLOUD_ALBUM) {
-      titleTextView.setText(R.string.cloud_album);
-      pagerMainTab.setCurrentItem(2, false);
-      mainBottomBar.selectBottomBarItem(2);
-    }
-  }
-
-  @Subscribe(threadMode = ThreadMode.MAIN)
-  public void onEvent(GenericEvent navigateEvent) {
-    if (!navigateEvent.isSameSender(this)) {
-      return;
+    switch (requestCode) {
+      case REQUEST_CODE_USER: {
+        if (resultCode == RESULT_CODE_CLOUD_ALBUM) {
+          titleTextView.setText(R.string.cloud_album);
+          pagerMainTab.setCurrentItem(2, false);
+          mainBottomBar.selectBottomBarItem(2);
+          cloudAlbumListPresenter.start(null);
+        }
+      }
+      break;
+      case REQUEST_CODE_USER_LOGIN: {
+        cloudAlbumListPresenter.start(null);
+      }
+      break;
     }
   }
 
@@ -206,6 +224,17 @@ public class HomeActivity extends AppCompatActivity
         Intent intent = new Intent(this, CloudPhotoActivity.class);
         intent.putExtra(CloudPhotoActivity.EXTRA_ALBUM, album);
         startActivity(intent);
+        break;
+    }
+  }
+
+  @Override
+  public void onNavigate(int eventType, Params params) {
+    switch (eventType) {
+      case NAVIGATE_TO_USER:
+        Intent intent = new Intent(this, UserActivity.class);
+        intent.putExtra(UserActivity.EXTRA_FIRST_EVENT, UserActivity.EVENT_TO_LOGIN);
+        startActivityForResult(intent, REQUEST_CODE_USER_LOGIN);
         break;
     }
   }

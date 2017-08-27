@@ -1,13 +1,18 @@
 package com.home77.kake.business.home.presenter;
 
-import android.database.Cursor;
-import android.net.Uri;
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 
 import com.home77.common.base.collection.Params;
+import com.home77.common.ui.widget.Toast;
 import com.home77.kake.App;
 import com.home77.kake.base.BaseFragmentPresenter;
 import com.home77.kake.base.BaseView;
@@ -33,12 +38,6 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
   private static final String TAG = LocalPhotoPresenter.class.getSimpleName();
   private LoadLocalImageTask loadObjectListTask;
 
-  private final String[] imgProjection = new String[] {
-      MediaStore.Images.Media._ID, MediaStore.Images.Media.DISPLAY_NAME,
-      MediaStore.Images.Media.SIZE, MediaStore.Images.Media.DATA,
-      MediaStore.Images.Media.DATE_MODIFIED
-  };
-
   public LocalPhotoPresenter(BaseView baseView) {
     super(baseView, null);
     App.eventBus().register(this);
@@ -48,6 +47,49 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
   public void onDestroyView() {
     super.onDestroyView();
     App.eventBus().unregister(this);
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    requestPermissions();
+  }
+
+  @Override
+  public void start(Params params) {
+    super.start(params);
+    loadImageAndVideoList();
+  }
+
+  @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+  private static final String[] REQUEST_PERMISSIONS = {Manifest.permission.READ_EXTERNAL_STORAGE};
+  private static final int REQUEST_PERMISSION_CODE = 10001;
+
+  private void requestPermissions() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      if (ContextCompat.checkSelfPermission(baseView.context(), REQUEST_PERMISSIONS[0]) ==
+          PackageManager.PERMISSION_GRANTED) {
+        start(null);
+        return;
+      }
+      ActivityCompat.requestPermissions(baseView.activity(),
+                                        REQUEST_PERMISSIONS,
+                                        REQUEST_PERMISSION_CODE);
+    }
+
+  }
+
+  @Override
+  public void onRequestPermissionsResult(int requestCode,
+                                         @NonNull String[] permissions,
+                                         @NonNull int[] grantResults) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    if (requestCode == REQUEST_PERMISSION_CODE &&
+        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+      start(null);
+    } else {
+      Toast.showShort("咔客全景相机需要读写外存权限");
+    }
   }
 
   @Override
@@ -71,7 +113,6 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
     @Override
     protected List<LocalPhoto> doInBackground(Void... params) {
       baseView.onCommand(CmdType.LOCAL_PHOTO_LIST_LOADING, null, null);
-      File file;
       File pictureDir =
           new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
                    "kake");
@@ -80,6 +121,9 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
       }
       ArrayList<LocalPhoto> temp = new ArrayList<>();
       File[] files = pictureDir.listFiles();
+      if (files == null) {
+        return null;
+      }
       for (File f : files) {
         if (f.getName().endsWith("jpg")) {
           temp.add(new LocalPhoto(f.hashCode(),
@@ -90,39 +134,6 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
         }
       }
 
-
-      //      Cursor cursor = baseView.context()
-      //                              .getContentResolver()
-      //                              .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-      //                                     imgProjection,
-      //                                     MediaStore.Images.Media.MIME_TYPE + "=" + "'image/jpeg'" +
-      //                                     " AND " + MediaStore.Images.Media.DATA + " like " + "'%kake%'",
-      //                                     null,
-      //                                     MediaStore.Images.Media.DATE_ADDED);
-      //      if (cursor == null) {
-      //        // error
-      //        return null;
-      //      }
-      //
-      //      if (cursor.moveToLast()) {
-      //        do {
-      //          if (Thread.interrupted()) {
-      //            return null;
-      //          }
-      //          long id = cursor.getLong(cursor.getColumnIndex(imgProjection[0]));
-      //          String name = cursor.getString(cursor.getColumnIndex(imgProjection[1]));
-      //          long size = cursor.getLong(cursor.getColumnIndex(imgProjection[2]));
-      //          String path = cursor.getString(cursor.getColumnIndex(imgProjection[3]));
-      //          long date = cursor.getLong(cursor.getColumnIndex(imgProjection[4]));
-      //          file = new File(path);
-      //          if (file.exists()) {
-      ////            if (path.contains("kake")) {
-      //              temp.add(new LocalPhoto(id, name, size, date, path));
-      ////            }
-      //          }
-      //        } while (cursor.moveToPrevious());
-      //      }
-      //      cursor.close();
       return temp;
     }
 

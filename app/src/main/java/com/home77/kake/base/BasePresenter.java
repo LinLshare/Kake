@@ -7,4 +7,6 @@ import com.home77.common.base.collection.Params;
  */
 public interface BasePresenter {
   void onMessage(MsgType msgType, Params params);
+
+  void start(Params params);
 }
