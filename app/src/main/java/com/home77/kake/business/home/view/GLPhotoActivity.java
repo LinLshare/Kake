@@ -131,7 +131,6 @@ public class GLPhotoActivity extends Activity implements ConfigurationDialog.Dia
         }
       } catch (Exception e) {
         DLog.e(TAG, e.getMessage());
-      } finally {
         GLPhotoActivity.this.finish();
         PhotoViewActivity.start(getApplicationContext(), path);
       }
