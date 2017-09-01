@@ -6,11 +6,22 @@ import java.io.Serializable;
  * @author CJ
  */
 public class LocalPhoto implements Serializable {
+  private boolean isTitle;
   private long id;
   private String name;
   private long size;
   private long date;
   private String path;
+
+  public static LocalPhoto makeTitle(long date) {
+    LocalPhoto localPhoto = new LocalPhoto();
+    localPhoto.isTitle = true;
+    localPhoto.date = date;
+    return localPhoto;
+  }
+
+  private LocalPhoto() {
+  }
 
   public LocalPhoto(long id, String name, long size, long date, String path) {
     this.id = id;
@@ -38,5 +49,9 @@ public class LocalPhoto implements Serializable {
 
   public String getPath() {
     return path;
+  }
+
+  public boolean isTitle() {
+    return isTitle;
   }
 }

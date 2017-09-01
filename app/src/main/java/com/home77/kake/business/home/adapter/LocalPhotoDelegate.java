@@ -1,18 +1,27 @@
 package com.home77.kake.business.home.adapter;
 
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.home77.common.base.collection.Params;
+import com.home77.common.base.pattern.Instance;
 import com.home77.common.base.util.UnitHelper;
+import com.home77.common.ui.model.UiData;
 import com.home77.kake.App;
 import com.home77.kake.R;
 import com.home77.kake.base.ParamsKey;
 import com.home77.kake.business.home.model.LocalPhoto;
 import com.home77.kake.common.event.BroadCastEvent;
 import com.home77.kake.common.event.BroadCastEventConstant;
+import com.home77.kake.common.utils.BitmapHelper;
+import com.squareup.picasso.Picasso;
 import com.zhy.adapter.recyclerview.base.ItemViewDelegate;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
+
+import java.io.File;
 
 /**
  * @author CJ
@@ -25,14 +34,23 @@ public class LocalPhotoDelegate implements ItemViewDelegate<LocalPhoto> {
 
   @Override
   public boolean isForViewType(LocalPhoto item, int position) {
-    return true;
+    return !item.isTitle();
   }
 
   @Override
   public void convert(final ViewHolder holder, final LocalPhoto photo, int position) {
     holder.setText(R.id.size_image_view, UnitHelper.formatBytesInByte(photo.getSize(), true) + "");
     holder.setText(R.id.name_text_view, photo.getName());
-    holder.setImageBitmap(R.id.photo_image_view, BitmapFactory.decodeFile(photo.getPath()));
+    BitmapFactory.Options options = new BitmapFactory.Options();
+    options.inJustDecodeBounds = true;
+    BitmapFactory.decodeFile(photo.getPath(), options);
+    int width = options.outWidth;
+    int winWidth = Instance.of(UiData.class).winWidth();
+    options.inJustDecodeBounds = false;
+    options.inSampleSize = width > winWidth / 3 ? width / (winWidth / 3) : 1;
+    Bitmap bitmap = BitmapFactory.decodeFile(photo.getPath(), options);
+    holder.setImageBitmap(R.id.photo_image_view, bitmap);
+
     holder.getConvertView().setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {

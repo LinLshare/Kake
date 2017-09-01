@@ -31,7 +31,11 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -131,14 +135,34 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
       for (File f : files) {
         if (f.getName().endsWith("jpg")) {
           temp.add(new LocalPhoto(f.hashCode(),
-                                  f.getName(),
+                                  f.getName().split("\\.jpg")[0],
                                   f.length(),
                                   f.lastModified(),
                                   f.getAbsolutePath()));
+          DLog.d(TAG, "jpg: " + f.getName() + " # " + f.lastModified());
         }
       }
-
-      return temp;
+      Collections.sort(temp, new Comparator<LocalPhoto>() {
+        @Override
+        public int compare(LocalPhoto o1, LocalPhoto o2) {
+          return (int) (o2.getDate() - o1.getDate());
+        }
+      });
+      List<LocalPhoto> temp2 = new ArrayList<>(temp);
+      int lastDay = 0;
+      int titleCount = 0;
+      for (int i = 0; i < temp.size(); i++) {
+        LocalPhoto photo = temp.get(i);
+        Calendar instance = Calendar.getInstance();
+        instance.setTimeInMillis(photo.getDate());
+        int currentDay = instance.get(Calendar.DAY_OF_MONTH);
+        if (lastDay != currentDay) {
+          temp2.add(i + titleCount, LocalPhoto.makeTitle(photo.getDate()));
+          titleCount++;
+          lastDay = currentDay;
+        }
+      }
+      return temp2;
     }
 
     @Override
