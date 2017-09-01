@@ -2,16 +2,18 @@ package com.home77.kake.business.home.presenter;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
 import com.home77.common.base.collection.Params;
+import com.home77.common.base.debug.DLog;
 import com.home77.common.ui.widget.Toast;
 import com.home77.kake.App;
 import com.home77.kake.base.BaseFragmentPresenter;
@@ -26,7 +28,9 @@ import com.home77.kake.common.event.BroadCastEventConstant;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -157,8 +161,43 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
   public void onEvent(BroadCastEvent event) {
     switch (event.getEvent()) {
       case BroadCastEventConstant.CLICK_LOCAL_PHOTO:
-        baseView.onCommand(CmdType.TO_PHOTO_VIEW_ACTIVITY, event.getParams(), null);
+        LocalPhoto localPhoto = event.getParams().get(ParamsKey.LOCAL_PHOTO);
+        new LoadLocalPhotoTask().execute(localPhoto);
+
         break;
+    }
+  }
+
+
+  private class LoadLocalPhotoTask extends AsyncTask<LocalPhoto, String, byte[]> {
+
+    private LocalPhoto localPhoto;
+
+    @Override
+    protected byte[] doInBackground(LocalPhoto... params) {
+      localPhoto = params[0];
+      byte[] imageData = null;
+      try {
+        final int THUMBNAIL_SIZE = 64;
+        FileInputStream fis = new FileInputStream(localPhoto.getPath());
+        Bitmap imageBitmap = BitmapFactory.decodeStream(fis);
+        imageBitmap = Bitmap.createScaledBitmap(imageBitmap, THUMBNAIL_SIZE, THUMBNAIL_SIZE, false);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        imageData = baos.toByteArray();
+      } catch (Exception ex) {
+        DLog.e(TAG, ex.getMessage());
+      }
+      return imageData;
+    }
+
+    @Override
+    protected void onPostExecute(byte[] b) {
+      baseView.onCommand(CmdType.TO_PHOTO_VIEW_ACTIVITY,
+                         Params.create(ParamsKey._THUMBNAIL, b)
+                               .put(ParamsKey.PHOTO_NAME, localPhoto.getName())
+                               .put(ParamsKey.FILE_PATH, localPhoto.getPath()),
+                         null);
     }
   }
 }

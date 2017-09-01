@@ -4,7 +4,6 @@ import android.graphics.BitmapFactory;
 import android.view.View;
 
 import com.home77.common.base.collection.Params;
-import com.home77.common.base.util.FileHelper;
 import com.home77.common.base.util.UnitHelper;
 import com.home77.kake.App;
 import com.home77.kake.R;
@@ -39,7 +38,7 @@ public class LocalPhotoDelegate implements ItemViewDelegate<LocalPhoto> {
       public void onClick(View v) {
         App.eventBus()
            .post(new BroadCastEvent(BroadCastEventConstant.CLICK_LOCAL_PHOTO,
-                                    Params.create(ParamsKey.PHOTO, photo)));
+                                    Params.create(ParamsKey.LOCAL_PHOTO, photo)));
       }
     });
   }

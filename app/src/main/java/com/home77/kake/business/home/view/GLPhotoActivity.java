@@ -9,7 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,11 +29,13 @@ import com.theta360.v2.model.RotateInertia;
 import com.theta360.v2.network.HttpConnector;
 import com.theta360.v2.network.HttpDownloadListener;
 import com.theta360.v2.network.ImageData;
+import com.theta360.v2.network.XMP;
 import com.theta360.v2.view.ConfigurationDialog;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.RandomAccessFile;
 
 
 /**
@@ -45,8 +46,9 @@ public class GLPhotoActivity extends Activity implements ConfigurationDialog.Dia
   private static final String CAMERA_IP_ADDRESS = "CAMERA_IP_ADDRESS";
   private static final String OBJECT_ID = "OBJECT_ID";
   private static final String THUMBNAIL = "THUMBNAIL";
-  private static final String LOCAL_PHOTO = "LOCAL_PHOTO";
   private static final String NAME = "NAME";
+  private static final String PATH = "PATH";
+  private static final String IS_LOCAL = "IS_LOCAL";
   private static final String TAG = GLPhotoActivity.class.getSimpleName();
 
   private GLPhotoView mGLPhotoView;
@@ -54,6 +56,7 @@ public class GLPhotoActivity extends Activity implements ConfigurationDialog.Dia
   private Photo mTexture = null;
   private AsyncTask mLoadPhotoTask = null;
   private String name;
+  private boolean isLocal;
 
   private RotateInertia mRotateInertia = RotateInertia.INERTIA_50;
 
@@ -76,42 +79,49 @@ public class GLPhotoActivity extends Activity implements ConfigurationDialog.Dia
 
     setContentView(R.layout.activity_glphoto);
     mGLPhotoView = (GLPhotoView) findViewById(R.id.photo_image);
-
     Intent intent = getIntent();
-    LocalPhoto localPhoto = (LocalPhoto) intent.getSerializableExtra(LOCAL_PHOTO);
+    isLocal = intent.getBooleanExtra(IS_LOCAL, false);
+    byte[] byteThumbnail = intent.getByteArrayExtra(THUMBNAIL);
+    name = intent.getStringExtra(NAME);
+    ByteArrayInputStream inputStreamThumbnail = new ByteArrayInputStream(byteThumbnail);
+    Drawable thumbnail = BitmapDrawable.createFromStream(inputStreamThumbnail, null);
+    Photo _thumbnail = new Photo(((BitmapDrawable) thumbnail).getBitmap());
+    mGLPhotoView.setTexture(_thumbnail);
+    mGLPhotoView.setmRotateInertia(mRotateInertia);
 
-    if (localPhoto == null) { // load camera
+    if (!isLocal) { // load camera
       String cameraIpAddress = intent.getStringExtra(CAMERA_IP_ADDRESS);
       String fileId = intent.getStringExtra(OBJECT_ID);
-      name = intent.getStringExtra(NAME);
-      byte[] byteThumbnail = intent.getByteArrayExtra(THUMBNAIL);
-      ByteArrayInputStream inputStreamThumbnail = new ByteArrayInputStream(byteThumbnail);
-      Drawable thumbnail = BitmapDrawable.createFromStream(inputStreamThumbnail, null);
-      Photo _thumbnail = new Photo(((BitmapDrawable) thumbnail).getBitmap());
-      mGLPhotoView.setTexture(_thumbnail);
-      mGLPhotoView.setmRotateInertia(mRotateInertia);
       new LoadPhotoTask(cameraIpAddress, fileId).execute();
     } else { // load local
-      new LoadLocalPhotoTask().execute(localPhoto);
+      String path = intent.getStringExtra(PATH);
+      new LoadLocalPhotoTask().execute(path);
     }
   }
 
-  private class LoadLocalPhotoTask extends AsyncTask<LocalPhoto, String, Bitmap> {
+  private class LoadLocalPhotoTask extends AsyncTask<String, String, byte[]> {
 
     @Override
-    protected Bitmap doInBackground(LocalPhoto... params) {
-      LocalPhoto localPhoto = params[0];
-      return BitmapFactory.decodeFile(localPhoto.getPath());
+    protected byte[] doInBackground(String... path) {
+      RandomAccessFile f = null;
+      byte[] b = null;
+      try {
+        f = new RandomAccessFile(path[0], "r");
+        b = new byte[(int) f.length()];
+        f.readFully(b);
+      } catch (java.io.IOException e) {
+        e.printStackTrace();
+      }
+      return b;
     }
 
     @Override
-    protected void onPostExecute(Bitmap bitmap) {
-      ImageDataStorage imageDataStorage = Instance.of(ImageDataStorage.class);
-      imageDataStorage.bind(name);
-      mTexture = new Photo(bitmap,
-                           imageDataStorage.getYaw(),
-                           imageDataStorage.getPitch(),
-                           imageDataStorage.getRoll());
+    protected void onPostExecute(byte[] b) {
+      XMP xmp = new XMP(b);
+      mTexture = new Photo(BitmapFactory.decodeByteArray(b, 0, b.length),
+                           Double.valueOf(0),
+                           xmp.getPosePitchDegrees(),
+                           xmp.getPoseRollDegrees());
       if (null != mGLPhotoView) {
         mGLPhotoView.setTexture(mTexture);
       }
@@ -142,7 +152,6 @@ public class GLPhotoActivity extends Activity implements ConfigurationDialog.Dia
     super.onCreateOptionsMenu(menu);
     MenuInflater inflater = getMenuInflater();
     inflater.inflate(com.theta360.v2.R.menu.configuration, menu);
-
     return true;
   }
 
@@ -319,7 +328,9 @@ public class GLPhotoActivity extends Activity implements ConfigurationDialog.Dia
   }
 
   public static void startActivityForResult(Activity activity,
-                                            LocalPhoto localPhoto,
+                                            String name,
+                                            String path,
+                                            byte[] thumbnail,
                                             boolean refreshAfterClose) {
     int requestCode;
     if (refreshAfterClose) {
@@ -329,7 +340,10 @@ public class GLPhotoActivity extends Activity implements ConfigurationDialog.Dia
     }
 
     Intent intent = new Intent(activity, GLPhotoActivity.class);
-    intent.putExtra(LOCAL_PHOTO, localPhoto);
+    intent.putExtra(THUMBNAIL, thumbnail);
+    intent.putExtra(IS_LOCAL, true);
+    intent.putExtra(NAME, name);
+    intent.putExtra(PATH, path);
     activity.startActivityForResult(intent, requestCode);
   }
 
@@ -364,6 +378,7 @@ public class GLPhotoActivity extends Activity implements ConfigurationDialog.Dia
     intent.putExtra(CAMERA_IP_ADDRESS, cameraIpAddress);
     intent.putExtra(OBJECT_ID, fileId);
     intent.putExtra(NAME, name);
+    intent.putExtra(IS_LOCAL, false);
     intent.putExtra(THUMBNAIL, thumbnail);
     activity.startActivityForResult(intent, requestCode);
   }

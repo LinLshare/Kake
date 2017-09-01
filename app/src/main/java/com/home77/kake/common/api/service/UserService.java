@@ -100,7 +100,7 @@ public class UserService {
        .putInt(GlobalData.KEY_USER_ID, userResponse.getId())
        .putString(GlobalData.KEY_USER_MOBILE, userResponse.getMobile())
        .putString(GlobalData.KEY_USER_NAME, name)
-       .putString(GlobalData.KEY_USER_AVATER, ServerConfig.BASE_IMG_URL + userResponse.getAvatar())
+       .putString(GlobalData.KEY_USER_AVATER, userResponse.getAvatar())
        .putString(GlobalData.KEY_USER_NAME, userResponse.getName());
   }
 

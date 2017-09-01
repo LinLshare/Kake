@@ -11,8 +11,9 @@ public final class ParamsKey {
   public static final int MSG_INT = 102_2;
   public static final int BUNDLE = 103;
   public static final int TITLE = 104;
-  public static final int FILE= 105;
+  public static final int FILE = 105;
   public static final int FLAG = 106;
+  public static final int FILE_PATH = 107;
 
   // cloud album
   public static final int ALBUM_LIST = 201_1;
@@ -21,7 +22,9 @@ public final class ParamsKey {
 
   // local photo
   public static final int PHOTO_LIST = 301;
-  public static final int PHOTO = 301_1;
+  public static final int LOCAL_PHOTO = 301_1;
+  public static final int _THUMBNAIL = 302;
+  public static final int PHOTO_NAME = 303;
 
   //user
   public static final int PHONE_NUMBER = 401_1;

@@ -1,5 +1,6 @@
 package com.home77.kake.business.user.presenter;
 
+import com.google.gson.reflect.TypeToken;
 import com.home77.common.base.collection.Params;
 import com.home77.common.base.debug.DLog;
 import com.home77.common.base.pattern.Instance;
@@ -141,26 +142,18 @@ public class ProfilePresenter extends BaseFragmentPresenter {
     userService.getUserInfo(new URLFetcher.Delegate() {
       @Override
       public void onSuccess(URLFetcher source) {
-        UserResponse userResponse = source.responseClass(UserResponse.class);
+        final Response<UserResponse> userResponse =
+            source.responseClass(new TypeToken<Response<UserResponse>>() {
+            });
         if (userResponse != null) {
-          userService.saveUserInfo(userResponse);
+          userService.saveUserInfo(userResponse.getData());
         }
-        baseView.onCommand(CmdType.VIEW_REFRESH,
-                           Params.create(ParamsKey.USER_NAME,
-                                         App.globalData().getString(GlobalData.KEY_USER_NAME, ""))
-                                 .put(ParamsKey.AVATAR_URL,
-                                      App.globalData().getString(GlobalData.KEY_USER_AVATER, "")),
-                           null);
+        baseView.onCommand(CmdType.VIEW_REFRESH, null, null);
       }
 
       @Override
       public void onError(String msg) {
-        baseView.onCommand(CmdType.VIEW_REFRESH,
-                           Params.create(ParamsKey.USER_NAME,
-                                         App.globalData().getString(GlobalData.KEY_USER_NAME, ""))
-                                 .put(ParamsKey.AVATAR_URL,
-                                      App.globalData().getString(GlobalData.KEY_USER_AVATER, "")),
-                           null);
+        //        baseView.onCommand(CmdType.VIEW_REFRESH, null, null);
       }
     });
 

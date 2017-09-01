@@ -8,15 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.home77.common.base.collection.Params;
-import com.home77.common.base.pattern.Instance;
 import com.home77.common.ui.widget.Toast;
 import com.home77.kake.R;
 import com.home77.kake.base.BaseFragment;
 import com.home77.kake.base.CmdType;
 import com.home77.kake.base.MsgType;
 import com.home77.kake.base.ParamsKey;
-import com.home77.kake.business.camera.ImageDataStorage;
-import com.home77.kake.business.home.PhotoViewActivity;
 import com.home77.kake.business.home.adapter.LocalPhotoListAdapter;
 import com.home77.kake.business.home.model.LocalPhoto;
 
@@ -88,12 +85,15 @@ public class LocalPhotoFragment extends BaseFragment {
         }
         break;
       case TO_PHOTO_VIEW_ACTIVITY: {
-        LocalPhoto photo = in.get(ParamsKey.PHOTO);
-        if (Instance.of(ImageDataStorage.class).bind(photo.getName()).getYaw() == 0L) {
-          PhotoViewActivity.start(getActivity(), photo);
-        } else {
-          GLPhotoActivity.startActivityForResult(getActivity(), photo, true);
-        }
+        byte[] _thumbnail = in.get(ParamsKey._THUMBNAIL);
+        String photoName = in.get(ParamsKey.PHOTO_NAME);
+        String path = in.get(ParamsKey.FILE_PATH);
+        //        if (Instance.of(ImageDataStorage.class).bind(photo.getName()).getYaw() == 0L) {
+        //          PhotoViewActivity.start(getActivity(), photo);
+        //        } else {
+
+        GLPhotoActivity.startActivityForResult(getActivity(), photoName, path, _thumbnail, true);
+        //        }
       }
       break;
     }

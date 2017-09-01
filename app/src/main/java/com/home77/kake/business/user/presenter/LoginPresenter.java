@@ -1,5 +1,6 @@
 package com.home77.kake.business.user.presenter;
 
+import com.google.gson.reflect.TypeToken;
 import com.home77.common.base.collection.Params;
 import com.home77.common.base.pattern.Instance;
 import com.home77.common.net.http.URLFetcher;
@@ -12,6 +13,7 @@ import com.home77.kake.base.MsgType;
 import com.home77.kake.base.NavigateCallback;
 import com.home77.kake.base.ParamsKey;
 import com.home77.kake.business.user.UserActivity;
+import com.home77.kake.common.api.response.Response;
 import com.home77.kake.common.api.response.UserResponse;
 import com.home77.kake.common.api.service.UserService;
 import com.home77.kake.common.event.BroadCastEvent;
@@ -44,9 +46,11 @@ public class LoginPresenter extends BaseFragmentPresenter {
     userService.login(userName, password, new URLFetcher.Delegate() {
       @Override
       public void onSuccess(URLFetcher source) {
-        final UserResponse userResponse = source.responseClass(UserResponse.class);
+        final Response<UserResponse> userResponse =
+            source.responseClass(new TypeToken<Response<UserResponse>>() {
+            });
         if (userResponse != null) {
-          userService.saveUserInfo(userResponse);
+          userService.saveUserInfo(userResponse.getData());
           baseView.onCommand(CmdType.LOGIN_SUCCESS, null, null);
           App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.EVENT_LOGIN, null));
           navigateCallback.onNavigate(UserActivity.EVENT_TO_PROFILE, null);

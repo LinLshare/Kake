@@ -22,6 +22,8 @@ import android.widget.TextView;
 import com.home77.common.base.collection.Params;
 import com.home77.common.ui.widget.CircleImageView;
 import com.home77.common.ui.widget.Toast;
+import com.home77.kake.App;
+import com.home77.kake.GlobalData;
 import com.home77.kake.R;
 import com.home77.kake.base.BaseFragment;
 import com.home77.kake.base.CmdType;
@@ -189,13 +191,16 @@ public class ProfileFragment extends BaseFragment
   }
 
   private void handleViewRefresh(Params params) {
-    String userName = params.get(ParamsKey.USER_NAME, "");
-    String imgUrl = params.get(ParamsKey.AVATAR_URL, "");
+    String userName = App.globalData().getString(GlobalData.KEY_USER_NAME, "");
+    String imgUrl = App.globalData().getString(GlobalData.KEY_USER_AVATER, "");
     if (!TextUtils.isEmpty(userName)) {
       nameTextView.setText(userName);
-      existLoginTextView.setVisibility(View.VISIBLE);
     } else {
       nameTextView.setText("请登录");
+    }
+    if (App.isLogin()) {
+      existLoginTextView.setVisibility(View.VISIBLE);
+    } else {
       existLoginTextView.setVisibility(View.GONE);
     }
     if (!TextUtils.isEmpty(imgUrl)) {

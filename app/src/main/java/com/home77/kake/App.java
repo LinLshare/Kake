@@ -33,7 +33,6 @@ import org.greenrobot.eventbus.ThreadMode;
  */
 public class App extends Application {
 
-
   private static boolean IS_LOGIN;
   private static boolean IS_LINCKED_CAMERA;
 

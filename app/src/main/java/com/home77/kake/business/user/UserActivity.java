@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.home77.common.base.collection.Params;
 import com.home77.common.base.component.BaseHandler;
+import com.home77.kake.App;
 import com.home77.kake.R;
 import com.home77.kake.base.NavigateCallback;
 import com.home77.kake.base.ParamsKey;
@@ -80,6 +81,14 @@ public class UserActivity extends AppCompatActivity implements NavigateCallback 
     //4) commit init fragment
     int intExtra = getIntent().getIntExtra(EXTRA_FIRST_EVENT, EVENT_TO_PROFILE);
     onNavigate(intExtra, null);
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    if (App.isLogin()) {
+      setResult(RESULT_OK);
+    }
   }
 
   @Override

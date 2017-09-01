@@ -18,6 +18,8 @@ import com.home77.kake.business.home.view.GLPhotoActivity;
 import com.home77.kake.common.api.ServerConfig;
 import com.home77.kake.common.event.BroadCastEvent;
 import com.home77.kake.common.event.BroadCastEventConstant;
+import com.home77.kake.common.utils.BrightnessTools;
+import com.home77.kake.common.widget.VerticalSlider;
 import com.theta360.v2.network.HttpConnector;
 import com.theta360.v2.network.HttpEventListener;
 import com.theta360.v2.view.MJpegInputStream;
@@ -33,7 +35,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class CameraActivity extends AppCompatActivity {
+public class CameraActivity extends AppCompatActivity
+    implements VerticalSlider.OnSliderListener {
 
   private static final String TAG = CameraActivity.class.getSimpleName();
   @BindView(R.id.pre_image_view)
@@ -42,6 +45,8 @@ public class CameraActivity extends AppCompatActivity {
   MJpegView liveView;
   @BindView(R.id.shoot_image_view)
   ImageView shootImageView;
+  @BindView(R.id.brightness_layout)
+  VerticalSlider brightnessLayout;
   private ShowLiveViewTask livePreviewTask;
 
   @Override
@@ -52,6 +57,8 @@ public class CameraActivity extends AppCompatActivity {
                          WindowManager.LayoutParams.FLAG_FULLSCREEN);//全屏
     setContentView(R.layout.activity_camera);
     ButterKnife.bind(this);
+    brightnessLayout.setOnSliderListener(this);
+    brightnessLayout.setPostion(BrightnessTools.getScreenBrightness(this));
     //    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
     //      Window window = getWindow();
     //      window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -97,10 +104,25 @@ public class CameraActivity extends AppCompatActivity {
         new ShootTask().execute();
         break;
       case R.id.bright_image_view:
+        toggleBrightnessLayout();
         break;
     }
   }
 
+  private void toggleBrightnessLayout() {
+    brightnessLayout.setVisibility(
+        brightnessLayout.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+  }
+
+  @Override
+  public void onPositionChanged(float position) {
+    BrightnessTools.setBrightness(this, position);
+  }
+
+  @Override
+  public void onConfirmed(float position) {
+    brightnessLayout.setVisibility(View.GONE);
+  }
 
   private class ShowLiveViewTask extends AsyncTask<String, String, MJpegInputStream> {
     @Override
