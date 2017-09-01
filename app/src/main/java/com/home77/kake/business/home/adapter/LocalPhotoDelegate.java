@@ -47,7 +47,7 @@ public class LocalPhotoDelegate implements ItemViewDelegate<LocalPhoto> {
     int width = options.outWidth;
     int winWidth = Instance.of(UiData.class).winWidth();
     options.inJustDecodeBounds = false;
-    options.inSampleSize = width > winWidth / 3 ? width / (winWidth / 3) : 1;
+    options.inSampleSize = width > winWidth / 2 ? width / (winWidth / 2) : 1;
     Bitmap bitmap = BitmapFactory.decodeFile(photo.getPath(), options);
     holder.setImageBitmap(R.id.photo_image_view, bitmap);
 

@@ -16,6 +16,7 @@ import com.home77.kake.base.MsgType;
 import com.home77.kake.base.ParamsKey;
 import com.home77.kake.business.home.adapter.LocalPhotoListAdapter;
 import com.home77.kake.business.home.model.LocalPhoto;
+import com.home77.kake.common.widget.recyclerview.PinnedHeaderItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +55,7 @@ public class LocalPhotoFragment extends BaseFragment {
           }
         });
         recyclerView.setAdapter(localPhotoListAdapter);
+        recyclerView.addItemDecoration(new PinnedHeaderItemDecoration());
         out.put(ParamsKey.VIEW, view);
         break;
       case VIEW_DESTROY:
@@ -88,12 +90,7 @@ public class LocalPhotoFragment extends BaseFragment {
         byte[] _thumbnail = in.get(ParamsKey._THUMBNAIL);
         String photoName = in.get(ParamsKey.PHOTO_NAME);
         String path = in.get(ParamsKey.FILE_PATH);
-        //        if (Instance.of(ImageDataStorage.class).bind(photo.getName()).getYaw() == 0L) {
-        //          PhotoViewActivity.start(getActivity(), photo);
-        //        } else {
-
         GLPhotoActivity.startActivityForResult(getActivity(), photoName, path, _thumbnail, true);
-        //        }
       }
       break;
     }

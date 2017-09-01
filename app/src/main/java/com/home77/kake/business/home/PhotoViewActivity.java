@@ -25,7 +25,7 @@ import java.io.File;
 public class PhotoViewActivity extends AppCompatActivity {
 
   public static final String EXTRA_PHOTO = "extra_photo";
-  private LocalPhoto mLocalPhoto;
+  private String path;
   private PhotoView photoView;
 
   @Override
@@ -40,7 +40,7 @@ public class PhotoViewActivity extends AppCompatActivity {
 
   private void initView() {
     photoView = (PhotoView) findViewById(R.id.photo_view);
-    Picasso.with(this).load(new File(mLocalPhoto.getPath())).resize(800, 0).into(new Target() {
+    Picasso.with(this).load(new File(path)).resize(800, 0).into(new Target() {
       @Override
       public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
         photoView.setImageBitmap(bitmap);
@@ -59,12 +59,12 @@ public class PhotoViewActivity extends AppCompatActivity {
   }
 
   private void initData() {
-    mLocalPhoto = (LocalPhoto) getIntent().getSerializableExtra(EXTRA_PHOTO);
+    path = getIntent().getStringExtra(EXTRA_PHOTO);
   }
 
-  public static void start(Context context, LocalPhoto localPhoto) {
+  public static void start(Context context, String path) {
     Intent intent = new Intent(context, PhotoViewActivity.class);
-    intent.putExtra(EXTRA_PHOTO, localPhoto);
+    intent.putExtra(EXTRA_PHOTO, path);
     context.startActivity(intent);
   }
 }

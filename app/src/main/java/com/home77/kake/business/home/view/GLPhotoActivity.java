@@ -22,6 +22,7 @@ import com.home77.common.base.debug.DLog;
 import com.home77.common.base.pattern.Instance;
 import com.home77.kake.R;
 import com.home77.kake.business.camera.ImageDataStorage;
+import com.home77.kake.business.home.PhotoViewActivity;
 import com.home77.kake.business.home.model.LocalPhoto;
 import com.home77.kake.business.home.view.glview.GLPhotoView;
 import com.theta360.v2.model.Photo;
@@ -100,13 +101,15 @@ public class GLPhotoActivity extends Activity implements ConfigurationDialog.Dia
   }
 
   private class LoadLocalPhotoTask extends AsyncTask<String, String, byte[]> {
+    String path = null;
 
     @Override
-    protected byte[] doInBackground(String... path) {
+    protected byte[] doInBackground(String... paths) {
       RandomAccessFile f = null;
       byte[] b = null;
+      path = paths[0];
       try {
-        f = new RandomAccessFile(path[0], "r");
+        f = new RandomAccessFile(path, "r");
         b = new byte[(int) f.length()];
         f.readFully(b);
       } catch (java.io.IOException e) {
@@ -117,13 +120,20 @@ public class GLPhotoActivity extends Activity implements ConfigurationDialog.Dia
 
     @Override
     protected void onPostExecute(byte[] b) {
-      XMP xmp = new XMP(b);
-      mTexture = new Photo(BitmapFactory.decodeByteArray(b, 0, b.length),
-                           Double.valueOf(0),
-                           xmp.getPosePitchDegrees(),
-                           xmp.getPoseRollDegrees());
-      if (null != mGLPhotoView) {
-        mGLPhotoView.setTexture(mTexture);
+      try {
+        XMP xmp = new XMP(b);
+        mTexture = new Photo(BitmapFactory.decodeByteArray(b, 0, b.length),
+                             Double.valueOf(0),
+                             xmp.getPosePitchDegrees(),
+                             xmp.getPoseRollDegrees());
+        if (null != mGLPhotoView) {
+          mGLPhotoView.setTexture(mTexture);
+        }
+      } catch (Exception e) {
+        DLog.e(TAG, e.getMessage());
+      } finally {
+        GLPhotoActivity.this.finish();
+        PhotoViewActivity.start(getApplicationContext(), path);
       }
     }
   }
