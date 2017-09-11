@@ -22,8 +22,8 @@ import com.home77.kake.base.BaseFragment;
 import com.home77.kake.base.CmdType;
 import com.home77.kake.base.MsgType;
 import com.home77.kake.base.ParamsKey;
-import com.home77.kake.business.home.adapter.LocalPhotoListAdapter;
-import com.home77.kake.business.home.model.LocalPhoto;
+import com.home77.kake.business.home.adapter.CloudPhotoListAdapter;
+import com.home77.kake.business.home.model.CloudPhoto;
 import com.home77.kake.common.api.response.Album;
 import com.home77.kake.common.event.BroadCastEvent;
 import com.home77.kake.common.event.BroadCastEventConstant;
@@ -51,8 +51,8 @@ public class CloudPhotoListFragment extends BaseFragment {
   Unbinder unbinder;
   @BindView(R.id.menu_image_view)
   ImageView menuImageView;
-  private List<LocalPhoto> photoList = new ArrayList<>();
-  private LocalPhotoListAdapter localPhotoListAdapter;
+  private List<CloudPhoto> photoList = new ArrayList<>();
+  private CloudPhotoListAdapter cloudPhotoListAdapter;
   private PopupWindow popupMenu;
 
   @Override
@@ -64,8 +64,8 @@ public class CloudPhotoListFragment extends BaseFragment {
         unbinder = ButterKnife.bind(this, view);
 
         // setup recyclerview
-        localPhotoListAdapter = new LocalPhotoListAdapter(getContext(), photoList);
-        recyclerView.setAdapter(localPhotoListAdapter);
+        cloudPhotoListAdapter = new CloudPhotoListAdapter(getContext(), photoList);
+        recyclerView.setAdapter(cloudPhotoListAdapter);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         recyclerView.addItemDecoration(new DefaultGridItemDecoration(SizeHelper.dp(12)));
         // setup refreshlayout
@@ -123,14 +123,14 @@ public class CloudPhotoListFragment extends BaseFragment {
         if (refreshLayout.isRefreshing()) {
           refreshLayout.setRefreshing(false);
         }
-        List<LocalPhoto> photoList = in.get(ParamsKey.PHOTO_LIST);
-        if (photoList.isEmpty()) {
+        List<CloudPhoto> photoList = in.get(ParamsKey.CLOUD_PHOTO_LIST);
+        if (photoList == null || photoList.isEmpty()) {
           Toast.showShort("暂无图片");
           return;
         }
         this.photoList.clear();
         this.photoList.addAll(photoList);
-        localPhotoListAdapter.notifyDataSetChanged();
+        cloudPhotoListAdapter.notifyDataSetChanged();
         break;
       case SHOW_PHOTO_SELECTOR: {
         Intent intent = new Intent(getActivity(), AlbumSelectActivity.class);

@@ -70,19 +70,6 @@ public class VerticalSlider extends FrameLayout {
 
   @Override
   public boolean onTouchEvent(MotionEvent event) {
-    float y = event.getY();
-    ObjectAnimator.ofFloat(slider,
-                           "translationY",
-                           slider.getTranslationY(),
-                           y - slider.getHeight() / 2).start();
-    if (onSliderListener != null) {
-      float position = Math.abs(getBottom() - y - getTop()) / getHeight();
-      onSliderListener.onPositionChanged(position);
-      if (event.getAction() == MotionEvent.ACTION_UP) {
-        onSliderListener.onConfirmed(position);
-      }
-    }
-
     return super.onTouchEvent(event);
   }
 

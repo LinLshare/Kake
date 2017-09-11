@@ -1,18 +1,27 @@
-package com.home77.kake.common.api.response;
-
-import com.home77.kake.base.Mapper;
-import com.home77.kake.business.home.model.LocalPhoto;
+package com.home77.kake.business.home.model;
 
 /**
  * @author CJ
  */
-public class ServerPhoto implements Mapper<LocalPhoto> {
+public class CloudPhoto {
   private int id;
   private int album_id;
   private String name;
   private String imgurl;
   private String photo_hash;
   private String updated_at;
+  private boolean isTitle;
+
+  public boolean isTitle() {
+    return isTitle;
+  }
+
+  public static CloudPhoto makeTitle(String updated_at) {
+    CloudPhoto cloudPhoto = new CloudPhoto();
+    cloudPhoto.updated_at = updated_at;
+    cloudPhoto.isTitle = true;
+    return cloudPhoto;
+  }
 
   public int getId() {
     return id;
@@ -52,11 +61,6 @@ public class ServerPhoto implements Mapper<LocalPhoto> {
 
   public void setPhoto_hash(String photo_hash) {
     this.photo_hash = photo_hash;
-  }
-
-  @Override
-  public LocalPhoto map() {
-    return new LocalPhoto(id, name, 0, 0, imgurl);
   }
 
   public String getUpdated_at() {

@@ -17,18 +17,21 @@ import com.home77.kake.base.MsgType;
 import com.home77.kake.base.NavigateCallback;
 import com.home77.kake.base.ParamsKey;
 import com.home77.kake.business.home.CloudPhotoActivity;
-import com.home77.kake.business.home.model.LocalPhoto;
+import com.home77.kake.business.home.model.CloudPhoto;
 import com.home77.kake.common.api.request.AddPhotoRequest;
 import com.home77.kake.common.api.response.Album;
 import com.home77.kake.common.api.response.PhotoListResponse;
 import com.home77.kake.common.api.response.Response;
-import com.home77.kake.common.api.response.ServerPhoto;
 import com.home77.kake.common.api.response.UploadPhotoResponse;
 import com.home77.kake.common.api.service.CloudAlbumService;
+import com.home77.kake.common.utils.DateHelper;
 
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
@@ -155,19 +158,36 @@ public class CloudPhotoListPresenter extends BaseFragmentPresenter {
           public void run() {
             if (photoListResponse != null) {
               switch (photoListResponse.getCode()) {
-                case 200:
-                  List<LocalPhoto> localPhotoList = new ArrayList<>();
-                  for (ServerPhoto serverPhoto : photoListResponse.getData()) {
-                    localPhotoList.add(serverPhoto.map());
+                case 200: {
+                  Collections.sort(photoListResponse.getData(), new Comparator<CloudPhoto>() {
+                    @Override
+                    public int compare(CloudPhoto o1, CloudPhoto o2) {
+                      return (int) (DateHelper.toMillis(o2.getUpdated_at()) -
+                                    DateHelper.toMillis(o1.getUpdated_at()));
+                    }
+                  });
+                  List<CloudPhoto> temp2 = new ArrayList<>(photoListResponse.getData());
+                  int lastDay = 0;
+                  int titleCount = 0;
+                  for (int i = 0; i < photoListResponse.getData().size(); i++) {
+                    CloudPhoto photo = photoListResponse.getData().get(i);
+                    Calendar instance = Calendar.getInstance();
+                    instance.setTimeInMillis(DateHelper.toMillis(photo.getUpdated_at()));
+                    int currentDay = instance.get(Calendar.DAY_OF_MONTH);
+                    if (lastDay != currentDay) {
+                      temp2.add(i + titleCount, CloudPhoto.makeTitle(photo.getUpdated_at()));
+                      titleCount++;
+                      lastDay = currentDay;
+                    }
                   }
-
                   baseView.onCommand(CmdType.CLOUD_PHOTO_LIST_LOAD_SUCCESS,
-                                     Params.create(ParamsKey.PHOTO_LIST, localPhotoList),
+                                     Params.create(ParamsKey.CLOUD_PHOTO_LIST, temp2),
                                      null);
-                  break;
+                }
+                break;
                 case 400:
                   baseView.onCommand(CmdType.CLOUD_PHOTO_LIST_LOAD_SUCCESS,
-                                     Params.create(ParamsKey.PHOTO_LIST, new ArrayList<>()),
+                                     Params.create(ParamsKey.CLOUD_PHOTO_LIST, new ArrayList<>()),
                                      null);
                   break;
               }
