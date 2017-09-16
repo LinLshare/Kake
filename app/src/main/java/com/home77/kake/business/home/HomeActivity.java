@@ -124,17 +124,12 @@ public class HomeActivity extends AppCompatActivity
       protected void onPostExecute(Boolean aBoolean) {
         if (aBoolean) {
           App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.CAMERA_LINKED, null));
-          if (pagerMainTab.getCurrentItem() == 1) {
-            titleTextView.setText(R.string.local_photo);
-            pagerMainTab.setCurrentItem(0, false);
-            Intent intent = new Intent(HomeActivity.this, CameraActivity.class);
-            startActivity(intent);
-          }
         } else {
           App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.CAMERA_UNLINKED, null));
         }
       }
     }.execute();
+    localPhotoPresenter.start(null);
   }
 
   @Override

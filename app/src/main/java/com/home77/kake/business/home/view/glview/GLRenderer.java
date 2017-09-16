@@ -154,10 +154,10 @@ public class GLRenderer implements Renderer {
     @Override
     public void onSurfaceChanged(final GL10 gl, final int width, final int height) {
 
-        int _height = height/2;
+        int _height = height;
         mScreenAspectRatio = (float) width / (float) (_height == 0 ? 1 : _height);
 
-        GLES20.glViewport(0, _height / 2, width, _height);
+        GLES20.glViewport(0, 0, width, _height);
 
         Matrix.setLookAtM(mViewMatrix, 0, mCameraPosX, mCameraPosY, mCameraPosZ, mCameraDirectionX, mCameraDirectionY, mCameraDirectionZ, 0.0f, 1.0f, 0.0f);
         Matrix.perspectiveM(mProjectionMatrix, 0, mCameraFovDegree, mScreenAspectRatio, Z_NEAR, Z_FAR);

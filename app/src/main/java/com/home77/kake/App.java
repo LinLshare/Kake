@@ -54,10 +54,6 @@ public class App extends Application {
     registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
       @Override
       public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-        if (loadingDialog != null && loadingDialog.isShowing()) {
-          loadingDialog.dismiss();
-        }
-        loadingDialog = new LoadingDialog(activity);
       }
 
       @Override
@@ -66,6 +62,10 @@ public class App extends Application {
 
       @Override
       public void onActivityResumed(Activity activity) {
+        if (loadingDialog != null && loadingDialog.isShowing()) {
+          loadingDialog.dismiss();
+        }
+        loadingDialog = new LoadingDialog(activity);
       }
 
       @Override

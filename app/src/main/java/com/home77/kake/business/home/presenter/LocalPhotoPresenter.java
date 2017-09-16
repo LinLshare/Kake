@@ -31,7 +31,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -44,7 +43,8 @@ import java.util.List;
 public class LocalPhotoPresenter extends BaseFragmentPresenter {
 
   private static final String TAG = LocalPhotoPresenter.class.getSimpleName();
-  private LoadLocalImageTask loadObjectListTask;
+  private LoadLocalPhotoListTask loadObjectListTask;
+  private LoadLocalPhotoTask loadLocalPhotoTask;
 
   public LocalPhotoPresenter(BaseView baseView) {
     super(baseView, null);
@@ -54,6 +54,8 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
   @Override
   public void onDestroyView() {
     super.onDestroyView();
+    loadObjectListTask.cancel(true);
+    loadLocalPhotoTask.cancel(true);
     App.eventBus().unregister(this);
   }
 
@@ -113,11 +115,11 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
     if (loadObjectListTask != null && !loadObjectListTask.isCancelled()) {
       loadObjectListTask.cancel(true);
     }
-    loadObjectListTask = new LoadLocalImageTask();
+    loadObjectListTask = new LoadLocalPhotoListTask();
     loadObjectListTask.execute();
   }
 
-  private class LoadLocalImageTask extends AsyncTask<Void, String, List<LocalPhoto>> {
+  private class LoadLocalPhotoListTask extends AsyncTask<Void, String, List<LocalPhoto>> {
     @Override
     protected List<LocalPhoto> doInBackground(Void... params) {
       baseView.onCommand(CmdType.LOCAL_PHOTO_LIST_LOADING, null, null);
@@ -186,8 +188,11 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
     switch (event.getEvent()) {
       case BroadCastEventConstant.CLICK_LOCAL_PHOTO:
         LocalPhoto localPhoto = event.getParams().get(ParamsKey.LOCAL_PHOTO);
-        new LoadLocalPhotoTask().execute(localPhoto);
-
+        if (loadLocalPhotoTask != null && !loadLocalPhotoTask.isCancelled()) {
+          loadLocalPhotoTask.cancel(true);
+        }
+        loadLocalPhotoTask = new LoadLocalPhotoTask();
+        loadLocalPhotoTask.execute(localPhoto);
         break;
     }
   }
@@ -196,6 +201,12 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
   private class LoadLocalPhotoTask extends AsyncTask<LocalPhoto, String, byte[]> {
 
     private LocalPhoto localPhoto;
+
+    @Override
+    protected void onPreExecute() {
+      super.onPreExecute();
+      App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_SHOW, null));
+    }
 
     @Override
     protected byte[] doInBackground(LocalPhoto... params) {
@@ -217,6 +228,7 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
 
     @Override
     protected void onPostExecute(byte[] b) {
+      App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_DISMISS, null));
       baseView.onCommand(CmdType.TO_PHOTO_VIEW_ACTIVITY,
                          Params.create(ParamsKey._THUMBNAIL, b)
                                .put(ParamsKey.PHOTO_NAME, localPhoto.getName())
