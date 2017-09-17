@@ -54,6 +54,9 @@ public class ProfilePresenter extends BaseFragmentPresenter {
         break;
       case VIEW_REFRESH:
         break;
+      case CLICK_KAKE:
+        baseView.onCommand(CmdType.SHOW_KAKE_ACTIVITY, null, null);
+        break;
       case CLICK_ABOUT:
         navigateCallback.onNavigate(UserActivity.EVENT_TO_ABOUT, null);
         break;

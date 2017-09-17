@@ -37,6 +37,8 @@
     <activity android:name=".business.home.PhotoViewActivity"/>
     <activity android:name=".business.home.PhotoSelectActivity">
     </activity>
+    <activity android:name=".business.user.KakeActivity">
+    </activity>
   </application>
 
 </manifest>

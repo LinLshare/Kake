@@ -1,5 +1,6 @@
 package com.home77.kake.business.home.view;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -20,6 +21,7 @@ import com.home77.common.base.collection.Params;
 import com.home77.common.base.pattern.Instance;
 import com.home77.common.ui.model.UiData;
 import com.home77.common.ui.util.SizeHelper;
+import com.home77.common.ui.widget.CommonLoadingDialog;
 import com.home77.common.ui.widget.Toast;
 import com.home77.kake.App;
 import com.home77.kake.R;
@@ -66,6 +68,7 @@ public class CloudPhotoListFragment extends BaseFragment {
   private CloudPhotoListAdapter cloudPhotoListAdapter;
   private PopupWindow popupMenu;
   private Album album;
+  private CommonLoadingDialog loadingDialog;
 
   @Override
   public void executeCommand(CmdType cmdType, Params in, Params out) {
@@ -91,7 +94,6 @@ public class CloudPhotoListFragment extends BaseFragment {
             return spanSize;
           }
         });
-        recyclerView.addItemDecoration(new DefaultGridItemDecoration(SizeHelper.dp(12)));
         // setup refreshlayout
         refreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -130,6 +132,7 @@ public class CloudPhotoListFragment extends BaseFragment {
             popupMenu.dismiss();
           }
         });
+        loadingDialog = new CommonLoadingDialog(getContext());
         out.put(ParamsKey.VIEW, view);
         presenter.onMessage(MsgType.VIEW_REFRESH, null);
         break;
@@ -175,20 +178,20 @@ public class CloudPhotoListFragment extends BaseFragment {
         cloudPhotoListAdapter.notifyDataSetChanged();
         break;
       case SHOW_PHOTO_SELECTOR: {
-        PhotoSelectActivity.start(getContext(), album);
+        Intent intent = new Intent(getContext(), PhotoSelectActivity.class);
+        startActivityForResult(intent, 1001);
       }
       break;
       case PHOTO_UPLOADING:
-        App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_SHOW, null));
+        loadingDialog.show("正在上传中...");
+        loadingDialog.setCancelable(false);
         break;
       case PHOTO_UPLOAD_ERROR:
-        App.eventBus()
-           .post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_DISMISS, null));
+        loadingDialog.dismiss();
         Toast.showShort("上传失败");
         break;
       case PHOTO_UPLOAD_SUCCESS:
-        App.eventBus()
-           .post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_DISMISS, null));
+        loadingDialog.dismiss();
         Toast.showShort("上传成功");
         break;
       case SHOW_QRCODE_DIALOG:
@@ -201,6 +204,7 @@ public class CloudPhotoListFragment extends BaseFragment {
         break;
     }
   }
+
 
   @OnClick({R.id.back_image_view, R.id.menu_image_view})
   public void onViewClicked(View view) {

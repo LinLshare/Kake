@@ -1,20 +1,13 @@
 package com.home77.kake.business.home.adapter;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
-import android.view.View;
 
-import com.home77.common.base.collection.Params;
 import com.home77.common.base.pattern.Instance;
 import com.home77.common.base.util.UnitHelper;
 import com.home77.common.ui.model.UiData;
-import com.home77.kake.App;
 import com.home77.kake.R;
-import com.home77.kake.base.ParamsKey;
 import com.home77.kake.business.home.model.CloudPhoto;
-import com.home77.kake.common.event.BroadCastEvent;
-import com.home77.kake.common.event.BroadCastEventConstant;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.zhy.adapter.recyclerview.base.ItemViewDelegate;
@@ -43,8 +36,8 @@ public class CloudPhotoDelegate implements ItemViewDelegate<CloudPhoto> {
            .load(photo.getImgurl())
            .resize(winWidth / 2, winWidth / 2)
            //           .centerCrop()
-           .error(R.drawable.image_placeholder)
-           .placeholder(R.drawable.image_placeholder)
+           .error(R.drawable.ic_img_def)
+           .placeholder(R.drawable.ic_img_def)
            .into(new Target() {
              @Override
              public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -56,20 +49,13 @@ public class CloudPhotoDelegate implements ItemViewDelegate<CloudPhoto> {
 
              @Override
              public void onBitmapFailed(Drawable errorDrawable) {
+               holder.setImageResource(R.id.photo_image_view, R.drawable.ic_img_def);
              }
 
              @Override
              public void onPrepareLoad(Drawable placeHolderDrawable) {
+               holder.setImageResource(R.id.photo_image_view, R.drawable.ic_img_def);
              }
            });
-
-    //    holder.getConvertView().setOnClickListener(new View.OnClickListener() {
-    //      @Override
-    //      public void onClick(View v) {
-    //        App.eventBus()
-    //           .post(new BroadCastEvent(BroadCastEventConstant.CLICK_LOCAL_PHOTO,
-    //                                    Params.create(ParamsKey.LOCAL_PHOTO, photo)));
-    //      }
-    //    });
   }
 }

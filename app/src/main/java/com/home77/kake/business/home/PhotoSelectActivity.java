@@ -1,6 +1,5 @@
 package com.home77.kake.business.home;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,12 +12,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.home77.common.base.debug.DLog;
-import com.home77.common.ui.util.SizeHelper;
 import com.home77.kake.R;
 import com.home77.kake.business.home.adapter.SelectPhotoListAdapter;
 import com.home77.kake.business.home.model.LocalPhoto;
-import com.home77.kake.common.api.response.Album;
-import com.home77.kake.common.widget.recyclerview.DefaultGridItemDecoration;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -33,6 +29,7 @@ import butterknife.OnClick;
 
 public class PhotoSelectActivity extends AppCompatActivity {
 
+  public static final String EXTRA_LOCAL_PHOTO = "extra_local_photo";
   private static final String TAG = PhotoSelectActivity.class.getSimpleName();
   @BindView(R.id.recycler_view)
   RecyclerView recyclerView;
@@ -40,16 +37,8 @@ public class PhotoSelectActivity extends AppCompatActivity {
   ProgressBar loadingLayout;
   @BindView(R.id.empty_layout)
   TextView emptyLayout;
-  private List<LocalPhoto> cloudPhotoList = new ArrayList<>();
+  private List<LocalPhoto> localPhotoList = new ArrayList<>();
   private SelectPhotoListAdapter selectPhotoListAdapter;
-  private static final String EXTRA_ALBUM = "extra_album";
-  private Album album;
-
-  public static void start(Context context, Album album) {
-    Intent intent = new Intent(context, PhotoSelectActivity.class);
-    intent.putExtra(EXTRA_ALBUM, album);
-    context.startActivity(intent);
-  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +50,10 @@ public class PhotoSelectActivity extends AppCompatActivity {
   }
 
   private void init() {
-    album = (Album) getIntent().getSerializableExtra(EXTRA_ALBUM);
     final GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
     recyclerView.setLayoutManager(gridLayoutManager);
 
-    selectPhotoListAdapter = new SelectPhotoListAdapter(this, cloudPhotoList);
+    selectPhotoListAdapter = new SelectPhotoListAdapter(this, localPhotoList);
     gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
       @Override
       public int getSpanSize(int position) {
@@ -78,7 +66,6 @@ public class PhotoSelectActivity extends AppCompatActivity {
       }
     });
     recyclerView.setAdapter(selectPhotoListAdapter);
-    recyclerView.addItemDecoration(new DefaultGridItemDecoration(SizeHelper.dp(12)));
   }
 
   @OnClick({R.id.back_image_view, R.id.ok_text_view})
@@ -88,6 +75,16 @@ public class PhotoSelectActivity extends AppCompatActivity {
         this.finish();
         break;
       case R.id.ok_text_view:
+        ArrayList<LocalPhoto> selectedPhotoList = new ArrayList<>();
+        for (LocalPhoto localPhoto : localPhotoList) {
+          if (localPhoto.isSelect()) {
+            selectedPhotoList.add(localPhoto);
+          }
+        }
+        Intent data = new Intent();
+        data.putParcelableArrayListExtra(EXTRA_LOCAL_PHOTO, selectedPhotoList);
+        setResult(RESULT_OK, data);
+        this.finish();
         break;
     }
   }
@@ -155,8 +152,8 @@ public class PhotoSelectActivity extends AppCompatActivity {
         loadingLayout.setVisibility(View.GONE);
         recyclerView.setVisibility(View.GONE);
       } else {
-        cloudPhotoList.clear();
-        cloudPhotoList.addAll(localPhotos);
+        localPhotoList.clear();
+        localPhotoList.addAll(localPhotos);
         selectPhotoListAdapter.notifyDataSetChanged();
         emptyLayout.setVisibility(View.GONE);
         loadingLayout.setVisibility(View.GONE);

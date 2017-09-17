@@ -29,6 +29,8 @@ import com.home77.kake.base.BaseFragment;
 import com.home77.kake.base.CmdType;
 import com.home77.kake.base.MsgType;
 import com.home77.kake.base.ParamsKey;
+import com.home77.kake.business.user.KakeActivity;
+import com.home77.kake.business.user.model.Kake;
 import com.home77.kake.common.widget.BottomDialog;
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.app.TakePhotoImpl;
@@ -142,6 +144,11 @@ public class ProfileFragment extends BaseFragment
       case AVATAR_UPDATE_ERROR:
         Toast.showShort("头像更新失败");
         break;
+      case SHOW_KAKE_ACTIVITY: {
+        Intent intent = new Intent(getContext(), KakeActivity.class);
+        startActivity(intent);
+      }
+      break;
     }
   }
 

@@ -48,10 +48,14 @@ public class SelectPhotoDelegate implements ItemViewDelegate<LocalPhoto> {
     holder.getConvertView().setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        App.eventBus()
-           .post(new BroadCastEvent(BroadCastEventConstant.CLICK_LOCAL_PHOTO,
-                                    Params.create(ParamsKey.LOCAL_PHOTO, photo)));
+        photo.setSelect(!photo.isSelect());
+        holder.setImageResource(R.id.select_status_image_view,
+                                photo.isSelect()
+                                    ? R.drawable.checkbox_sel
+                                    : R.drawable.checkbox_def);
       }
     });
+    holder.setImageResource(R.id.select_status_image_view,
+                            photo.isSelect() ? R.drawable.checkbox_sel : R.drawable.checkbox_def);
   }
 }

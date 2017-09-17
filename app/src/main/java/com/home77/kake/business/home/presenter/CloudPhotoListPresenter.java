@@ -2,8 +2,6 @@ package com.home77.kake.business.home.presenter;
 
 import android.content.Intent;
 
-import com.darsh.multipleimageselect.helpers.Constants;
-import com.darsh.multipleimageselect.models.Image;
 import com.home77.common.base.collection.Params;
 import com.home77.common.base.component.BaseHandler;
 import com.home77.common.base.debug.DLog;
@@ -17,7 +15,9 @@ import com.home77.kake.base.MsgType;
 import com.home77.kake.base.NavigateCallback;
 import com.home77.kake.base.ParamsKey;
 import com.home77.kake.business.home.CloudPhotoActivity;
+import com.home77.kake.business.home.PhotoSelectActivity;
 import com.home77.kake.business.home.model.CloudPhoto;
+import com.home77.kake.business.home.model.LocalPhoto;
 import com.home77.kake.common.api.request.AddPhotoRequest;
 import com.home77.kake.common.api.response.Album;
 import com.home77.kake.common.api.response.PhotoListResponse;
@@ -92,9 +92,10 @@ public class CloudPhotoListPresenter extends BaseFragmentPresenter {
   @Override
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
-    if (requestCode == Constants.REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-      ArrayList<Image> images = data.getParcelableArrayListExtra(Constants.INTENT_EXTRA_IMAGES);
-      File file = new File(images.get(0).path);
+    if (requestCode == 1001 && resultCode == RESULT_OK && data != null) {
+      ArrayList<LocalPhoto> images =
+          data.getParcelableArrayListExtra(PhotoSelectActivity.EXTRA_LOCAL_PHOTO);
+      File file = new File(images.get(0).getPath());
       upload(file);
     }
   }
@@ -130,6 +131,7 @@ public class CloudPhotoListPresenter extends BaseFragmentPresenter {
                                            baseView.onCommand(CmdType.PHOTO_UPLOAD_SUCCESS,
                                                               null,
                                                               null);
+                                           getPhotoList();
                                          } else {
                                            baseView.onCommand(CmdType.PHOTO_UPLOAD_ERROR,
                                                               null,
