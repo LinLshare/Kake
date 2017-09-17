@@ -143,6 +143,7 @@ public class App extends Application {
       case BroadCastEventConstant.DIALOG_LOADING_SHOW:
         if (loadingDialog != null && !loadingDialog.isShowing()) {
           loadingDialog.show();
+          loadingDialog.setCancelable(false);
         }
         break;
       case BroadCastEventConstant.DIALOG_LOADING_DISMISS:

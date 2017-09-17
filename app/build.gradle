@@ -35,6 +35,7 @@ dependencies {
   compile libraries.butterknife
   compile libraries.photo_view
   compile libraries.take_photo
+  compile libraries.zxing
   annotationProcessor annotation_processors.butterknife
   testCompile test_libraries.junit
   compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha8'

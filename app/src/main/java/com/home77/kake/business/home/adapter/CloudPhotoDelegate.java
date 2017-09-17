@@ -41,8 +41,8 @@ public class CloudPhotoDelegate implements ItemViewDelegate<CloudPhoto> {
     int winWidth = Instance.of(UiData.class).winWidth();
     Picasso.with(holder.getConvertView().getContext())
            .load(photo.getImgurl())
-           .resize(winWidth / 2, 0)
-           .centerCrop()
+           .resize(winWidth / 2, winWidth / 2)
+           //           .centerCrop()
            .error(R.drawable.image_placeholder)
            .placeholder(R.drawable.image_placeholder)
            .into(new Target() {

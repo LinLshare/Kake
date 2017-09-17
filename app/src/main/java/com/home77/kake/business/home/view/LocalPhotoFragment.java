@@ -57,6 +57,7 @@ public class LocalPhotoFragment extends BaseFragment {
         recyclerView.setAdapter(localPhotoListAdapter);
         recyclerView.addItemDecoration(new PinnedHeaderItemDecoration());
         out.put(ParamsKey.VIEW, view);
+        presenter.handleMessage(MsgType.VIEW_REFRESH, null);
         break;
       case VIEW_DESTROY:
         unbinder.unbind();

@@ -14,6 +14,7 @@ public final class ParamsKey {
   public static final int FILE = 105;
   public static final int FLAG = 106;
   public static final int FILE_PATH = 107;
+  public static final int STR = 108;
 
   // cloud album
   public static final int ALBUM_LIST = 201_1;

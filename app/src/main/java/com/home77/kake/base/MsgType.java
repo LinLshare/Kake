@@ -11,6 +11,7 @@ public enum MsgType {
   // cloud album
   CLICK_CREATE_ALBUM_DIALOG_OK,
   CLICK_IMPORT_PHOTO,
+  CLICK_GENERATE_QRCODE,
 
   //local photo
   CLICK_LINCK_CAMERA,

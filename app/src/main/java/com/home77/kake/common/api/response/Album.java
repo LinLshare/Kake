@@ -24,6 +24,8 @@ public class Album implements Serializable {
   private int status;
   private String updated_at;
   private int user_id;
+  private String img_url;
+  private String panourl;
 
   public String getCreated_at() {
     return created_at;
@@ -79,6 +81,22 @@ public class Album implements Serializable {
 
   public void setUser_id(int user_id) {
     this.user_id = user_id;
+  }
+
+  public String getImg_url() {
+    return img_url;
+  }
+
+  public void setImg_url(String img_url) {
+    this.img_url = img_url;
+  }
+
+  public String getPanourl() {
+    return panourl;
+  }
+
+  public void setPanourl(String panourl) {
+    this.panourl = panourl;
   }
 }
 

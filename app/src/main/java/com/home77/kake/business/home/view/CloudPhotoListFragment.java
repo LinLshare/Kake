@@ -1,6 +1,8 @@
 package com.home77.kake.business.home.view;
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,11 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.darsh.multipleimageselect.activities.AlbumSelectActivity;
 import com.darsh.multipleimageselect.helpers.Constants;
 import com.home77.common.base.collection.Params;
+import com.home77.common.base.pattern.Instance;
+import com.home77.common.ui.model.UiData;
 import com.home77.common.ui.util.SizeHelper;
 import com.home77.common.ui.widget.Toast;
 import com.home77.kake.App;
@@ -22,11 +27,13 @@ import com.home77.kake.base.BaseFragment;
 import com.home77.kake.base.CmdType;
 import com.home77.kake.base.MsgType;
 import com.home77.kake.base.ParamsKey;
+import com.home77.kake.business.home.PhotoSelectActivity;
 import com.home77.kake.business.home.adapter.CloudPhotoListAdapter;
 import com.home77.kake.business.home.model.CloudPhoto;
 import com.home77.kake.common.api.response.Album;
 import com.home77.kake.common.event.BroadCastEvent;
 import com.home77.kake.common.event.BroadCastEventConstant;
+import com.home77.kake.common.utils.QRCodeUtil;
 import com.home77.kake.common.widget.recyclerview.DefaultGridItemDecoration;
 
 import java.util.ArrayList;
@@ -48,12 +55,17 @@ public class CloudPhotoListFragment extends BaseFragment {
   RecyclerView recyclerView;
   @BindView(R.id.refresh_layout)
   SwipeRefreshLayout refreshLayout;
+  @BindView(R.id.loading_layout)
+  ProgressBar loadingLayout;
+  @BindView(R.id.empty_layout)
+  TextView emptyLayout;
   Unbinder unbinder;
   @BindView(R.id.menu_image_view)
   ImageView menuImageView;
   private List<CloudPhoto> photoList = new ArrayList<>();
   private CloudPhotoListAdapter cloudPhotoListAdapter;
   private PopupWindow popupMenu;
+  private Album album;
 
   @Override
   public void executeCommand(CmdType cmdType, Params in, Params out) {
@@ -66,7 +78,19 @@ public class CloudPhotoListFragment extends BaseFragment {
         // setup recyclerview
         cloudPhotoListAdapter = new CloudPhotoListAdapter(getContext(), photoList);
         recyclerView.setAdapter(cloudPhotoListAdapter);
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        final GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
+        recyclerView.setLayoutManager(gridLayoutManager);
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+          @Override
+          public int getSpanSize(int position) {
+            int spanSize = 1;
+            CloudPhoto cloudPhoto = cloudPhotoListAdapter.getDatas().get(position);
+            if (cloudPhoto != null && cloudPhoto.isTitle()) {
+              spanSize = 3;
+            }
+            return spanSize;
+          }
+        });
         recyclerView.addItemDecoration(new DefaultGridItemDecoration(SizeHelper.dp(12)));
         // setup refreshlayout
         refreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent);
@@ -84,11 +108,19 @@ public class CloudPhotoListFragment extends BaseFragment {
                                     ViewGroup.LayoutParams.WRAP_CONTENT);
         popupMenu.setOutsideTouchable(false);
         popupMenu.setFocusable(true);
-        menulayout.findViewById(R.id.add_photo_layout)
+        menulayout.findViewById(R.id.menu_item_add_photo)
                   .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                       presenter.onMessage(MsgType.CLICK_IMPORT_PHOTO, null);
+                      popupMenu.dismiss();
+                    }
+                  });
+        menulayout.findViewById(R.id.menu_item_generate_qrcode)
+                  .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                      presenter.onMessage(MsgType.CLICK_GENERATE_QRCODE, null);
                       popupMenu.dismiss();
                     }
                   });
@@ -108,11 +140,18 @@ public class CloudPhotoListFragment extends BaseFragment {
         popupMenu.showAsDropDown(menuImageView);
         break;
       case SHOW_ALBUM_INFO:
-        Album album = in.get(ParamsKey.ALBUM);
+        album = in.get(ParamsKey.ALBUM);
         titleTextView.setText(album.getName() + "");
-      case CLOUD_PHOTO_LIST_LOADING:
-        break;
+      case CLOUD_PHOTO_LIST_LOADING: {
+        loadingLayout.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+        emptyLayout.setVisibility(View.GONE);
+      }
+      break;
       case CLOUD_PHOTO_LIST_LOAD_ERROR:
+        loadingLayout.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.GONE);
+        emptyLayout.setVisibility(View.VISIBLE);
         if (refreshLayout.isRefreshing()) {
           refreshLayout.setRefreshing(false);
         }
@@ -120,6 +159,9 @@ public class CloudPhotoListFragment extends BaseFragment {
         Toast.showShort(msg);
         break;
       case CLOUD_PHOTO_LIST_LOAD_SUCCESS:
+        loadingLayout.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
+        emptyLayout.setVisibility(View.GONE);
         if (refreshLayout.isRefreshing()) {
           refreshLayout.setRefreshing(false);
         }
@@ -133,9 +175,7 @@ public class CloudPhotoListFragment extends BaseFragment {
         cloudPhotoListAdapter.notifyDataSetChanged();
         break;
       case SHOW_PHOTO_SELECTOR: {
-        Intent intent = new Intent(getActivity(), AlbumSelectActivity.class);
-        intent.putExtra(Constants.INTENT_EXTRA_LIMIT, 9);
-        startActivityForResult(intent, Constants.REQUEST_CODE);
+        PhotoSelectActivity.start(getContext(), album);
       }
       break;
       case PHOTO_UPLOADING:
@@ -150,6 +190,14 @@ public class CloudPhotoListFragment extends BaseFragment {
         App.eventBus()
            .post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_DISMISS, null));
         Toast.showShort("上传成功");
+        break;
+      case SHOW_QRCODE_DIALOG:
+        String content = in.get(ParamsKey.STR);
+        int width = Instance.of(UiData.class).winWidth() / 2;
+        Bitmap qrCodeBitmap = QRCodeUtil.createQRCodeBitmap(content, width, width);
+        ImageView imageView = new ImageView(getContext());
+        imageView.setImageBitmap(qrCodeBitmap);
+        new AlertDialog.Builder(getContext()).setView(imageView).create().show();
         break;
     }
   }

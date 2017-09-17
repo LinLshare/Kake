@@ -129,7 +129,6 @@ public class HomeActivity extends AppCompatActivity
         }
       }
     }.execute();
-    localPhotoPresenter.start(null);
   }
 
   @Override

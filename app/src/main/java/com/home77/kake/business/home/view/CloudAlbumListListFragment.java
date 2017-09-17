@@ -1,13 +1,17 @@
 package com.home77.kake.business.home.view;
 
 import android.app.AlertDialog;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.home77.common.base.collection.Params;
 import com.home77.common.base.pattern.Instance;
@@ -16,11 +20,11 @@ import com.home77.common.ui.util.SizeHelper;
 import com.home77.common.ui.widget.Toast;
 import com.home77.kake.App;
 import com.home77.kake.R;
-import com.home77.kake.business.home.adapter.CloudAlbumListAdapter;
 import com.home77.kake.base.BaseFragment;
 import com.home77.kake.base.CmdType;
 import com.home77.kake.base.MsgType;
 import com.home77.kake.base.ParamsKey;
+import com.home77.kake.business.home.adapter.CloudAlbumListAdapter;
 import com.home77.kake.common.api.response.Album;
 import com.home77.kake.common.event.BroadCastEvent;
 import com.home77.kake.common.event.BroadCastEventConstant;
@@ -46,6 +50,10 @@ public class CloudAlbumListListFragment extends BaseFragment {
   @BindView(R.id.refresh_layout)
   SwipeRefreshLayout refreshLayout;
   Unbinder unbinder;
+  @BindView(R.id.loading_layout)
+  ProgressBar loadingLayout;
+  @BindView(R.id.empty_layout)
+  TextView emptyLayout;
   private List<Album> albumList = new ArrayList<>();
   private CloudAlbumListAdapter cloudAlbumListAdapter;
   private AlertDialog alertDialog;
@@ -89,13 +97,17 @@ public class CloudAlbumListListFragment extends BaseFragment {
         break;
       case CLOUD_ALBUM_CREATING:
         alertDialog.dismiss();
-      case CLOUD_ALBUM_LOADING:
-        App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_SHOW, null));
-        break;
+      case CLOUD_ALBUM_LOADING: {
+        loadingLayout.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+        emptyLayout.setVisibility(View.GONE);
+      }
+      break;
       case CLOUD_ALBUM_CREATE_ERROR:
       case CLOUD_ALBUM_LOAD_ERROR:
-        App.eventBus()
-           .post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_DISMISS, null));
+        loadingLayout.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.GONE);
+        emptyLayout.setVisibility(View.VISIBLE);
         if (refreshLayout.isRefreshing()) {
           refreshLayout.setRefreshing(false);
         }
@@ -105,13 +117,17 @@ public class CloudAlbumListListFragment extends BaseFragment {
         }
         break;
       case CLOUD_ALBUM_CREATE_SUCCESS:
-        App.eventBus()
-           .post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_DISMISS, null));
+        loadingLayout.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
+        emptyLayout.setVisibility(View.GONE);
         if (refreshLayout.isRefreshing()) {
           refreshLayout.setRefreshing(false);
         }
         break;
       case CLOUD_ALBUM_LOAD_SUCCESS:
+        loadingLayout.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
+        emptyLayout.setVisibility(View.GONE);
         List<Album> albumList = in.get(ParamsKey.ALBUM_LIST, null);
         this.albumList.clear();
         this.albumList.add(new Album());

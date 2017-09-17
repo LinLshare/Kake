@@ -35,6 +35,8 @@
     <activity android:name=".business.camera.CameraActivity">
     </activity>
     <activity android:name=".business.home.PhotoViewActivity"/>
+    <activity android:name=".business.home.PhotoSelectActivity">
+    </activity>
   </application>
 
 </manifest>

@@ -72,7 +72,14 @@ public class CloudPhotoListPresenter extends BaseFragmentPresenter {
         // upload to cloud
         // add to album
         break;
+      case CLICK_GENERATE_QRCODE:
+        loadQRCode("xxxxxyyyyy");
+        break;
     }
+  }
+
+  private void loadQRCode(String content) {
+    baseView.onCommand(CmdType.SHOW_QRCODE_DIALOG, Params.create(ParamsKey.STR, content), null);
   }
 
   @Override
@@ -159,18 +166,20 @@ public class CloudPhotoListPresenter extends BaseFragmentPresenter {
             if (photoListResponse != null) {
               switch (photoListResponse.getCode()) {
                 case 200: {
-                  Collections.sort(photoListResponse.getData(), new Comparator<CloudPhoto>() {
-                    @Override
-                    public int compare(CloudPhoto o1, CloudPhoto o2) {
-                      return (int) (DateHelper.toMillis(o2.getUpdated_at()) -
-                                    DateHelper.toMillis(o1.getUpdated_at()));
-                    }
-                  });
-                  List<CloudPhoto> temp2 = new ArrayList<>(photoListResponse.getData());
+                  Collections.sort(photoListResponse.getData().getShip_photos(),
+                                   new Comparator<CloudPhoto>() {
+                                     @Override
+                                     public int compare(CloudPhoto o1, CloudPhoto o2) {
+                                       return (int) (DateHelper.toMillis(o2.getUpdated_at()) -
+                                                     DateHelper.toMillis(o1.getUpdated_at()));
+                                     }
+                                   });
+                  List<CloudPhoto> temp2 =
+                      new ArrayList<>(photoListResponse.getData().getShip_photos());
                   int lastDay = 0;
                   int titleCount = 0;
-                  for (int i = 0; i < photoListResponse.getData().size(); i++) {
-                    CloudPhoto photo = photoListResponse.getData().get(i);
+                  for (int i = 0; i < photoListResponse.getData().getShip_photos().size(); i++) {
+                    CloudPhoto photo = photoListResponse.getData().getShip_photos().get(i);
                     Calendar instance = Calendar.getInstance();
                     instance.setTimeInMillis(DateHelper.toMillis(photo.getUpdated_at()));
                     int currentDay = instance.get(Calendar.DAY_OF_MONTH);
