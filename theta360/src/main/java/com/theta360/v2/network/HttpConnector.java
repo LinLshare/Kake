@@ -3,6 +3,7 @@ package com.theta360.v2.network;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.home77.common.base.debug.DLog;
 import com.theta360.v2.model.ImageSize;
 
 import org.json.JSONArray;
@@ -39,6 +40,9 @@ public class HttpConnector {
   public enum ShootResult {
     SUCCESS, FAIL_CAMERA_DISCONNECTED, FAIL_STORE_FULL, FAIL_DEVICE_BUSY
   }
+
+  private static final float[] EXPOSURE_COMPENSATION_SUPPORT_ARRAY =
+      {-2.0f, -1.7f, -1.3f, -1.0f, -0.7f, -0.3f, 0.0f, 0.3f, 0.7f, 1.0f, 1.3f, 1.7f, 2.0f};
 
   /**
    * Constructor
@@ -175,10 +179,45 @@ public class HttpConnector {
   }
 
   /**
+   * @param value
+   *     -6~6
+   *
+   * @throws JSONException
+   */
+  public void setExposureCompensation(int value) throws JSONException {
+    if (value < -6) {
+      value = -6;
+    } else if (value > 6) {
+      value = 6;
+    }
+    mSessionId = connect();
+    HttpURLConnection postConnection = createHttpConnection("POST", "/osc/commands/execute");
+    JSONObject input = new JSONObject();
+    input.put("name", "camera.setOptions");
+    JSONObject parameters = new JSONObject();
+    input.put("parameters", parameters);
+    parameters.put("sessionId", mSessionId);
+    JSONObject option = new JSONObject();
+    option.put("exposureCompensation", EXPOSURE_COMPENSATION_SUPPORT_ARRAY[value + 6]);
+    parameters.put("options", option);
+
+    try {
+      OutputStream os = postConnection.getOutputStream();
+      os.write(input.toString().getBytes());
+      postConnection.connect();
+      os.flush();
+      os.close();
+    } catch (Exception e) {
+      DLog.e("set exposure", e.getMessage() + "");
+    }
+  }
+
+  /**
    * Acquire device information
    *
    * @return Device information
    */
+
   public DeviceInfo getDeviceInfo() {
     HttpURLConnection getConnection = createHttpConnection("GET", "/osc/info");
     String responseData;

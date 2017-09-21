@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:context="com.home77.kake.business.camera.TestSlider">
+
+  <com.home77.kake.common.widget.VerticalSlider
+    android:id="@+id/brightness_layout"
+    android:layout_width="32dp"
+    android:layout_height="180dp"
+    android:layout_gravity="right|bottom"
+    android:layout_marginBottom="88dp"
+    android:layout_marginRight="32dp"/>
+</android.support.constraint.ConstraintLayout>

@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
@@ -18,7 +19,6 @@ import com.home77.kake.business.home.view.GLPhotoActivity;
 import com.home77.kake.common.api.ServerConfig;
 import com.home77.kake.common.event.BroadCastEvent;
 import com.home77.kake.common.event.BroadCastEventConstant;
-import com.home77.kake.common.utils.BrightnessTools;
 import com.home77.kake.common.widget.VerticalSlider;
 import com.theta360.v2.network.HttpConnector;
 import com.theta360.v2.network.HttpEventListener;
@@ -35,8 +35,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class CameraActivity extends AppCompatActivity
-    implements VerticalSlider.OnSliderListener {
+public class CameraActivity extends AppCompatActivity implements VerticalSlider.OnSliderListener {
 
   private static final String TAG = CameraActivity.class.getSimpleName();
   @BindView(R.id.pre_image_view)
@@ -46,7 +45,7 @@ public class CameraActivity extends AppCompatActivity
   @BindView(R.id.shoot_image_view)
   ImageView shootImageView;
   @BindView(R.id.brightness_layout)
-  VerticalSlider brightnessLayout;
+  VerticalSlider sliderLayout;
   private ShowLiveViewTask livePreviewTask;
 
   @Override
@@ -57,8 +56,7 @@ public class CameraActivity extends AppCompatActivity
                          WindowManager.LayoutParams.FLAG_FULLSCREEN);//全屏
     setContentView(R.layout.activity_camera);
     ButterKnife.bind(this);
-    brightnessLayout.setOnSliderListener(this);
-    brightnessLayout.setPostion(BrightnessTools.getScreenBrightness(this));
+    sliderLayout.setOnSliderListener(this);
   }
 
   @Override
@@ -104,19 +102,43 @@ public class CameraActivity extends AppCompatActivity
     }
   }
 
+  private CountDownTimer countDownTimer;
+
   private void toggleBrightnessLayout() {
-    brightnessLayout.setVisibility(
-        brightnessLayout.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+    sliderLayout.setVisibility(
+        sliderLayout.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
   }
 
   @Override
-  public void onPositionChanged(float position) {
-    BrightnessTools.setBrightness(this, position);
-  }
+  public void onSliderChanged(float position) {
+    int value = Math.round(position * 13 - 6);
+    new AsyncTask<Integer, Void, Void>() {
+      @Override
+      protected Void doInBackground(Integer... params) {
+        HttpConnector camera = new HttpConnector(ServerConfig.CAMERA_HOST);
+        try {
+          camera.setExposureCompensation(params[0]);
+        } catch (JSONException e) {
+          e.printStackTrace();
+        }
+        return null;
+      }
+    }.execute(value);
 
-  @Override
-  public void onConfirmed(float position) {
-    brightnessLayout.setVisibility(View.GONE);
+    if (countDownTimer != null) {
+      countDownTimer.cancel();
+    }
+    countDownTimer = new CountDownTimer(2000, 1000) {
+      @Override
+      public void onTick(long millisUntilFinished) {
+      }
+
+      @Override
+      public void onFinish() {
+        sliderLayout.setVisibility(View.GONE);
+      }
+    };
+    countDownTimer.start();
   }
 
   private class ShowLiveViewTask extends AsyncTask<String, String, MJpegInputStream> {

@@ -1,7 +1,7 @@
 package com.home77.kake.common.widget;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.graphics.Rect;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,7 +14,6 @@ import android.widget.ImageView;
 
 import com.home77.common.ui.util.SizeHelper;
 import com.home77.kake.R;
-import com.home77.kake.common.utils.BrightnessTools;
 
 /**
  * @author CJ
@@ -40,12 +39,12 @@ public class VerticalSlider extends FrameLayout {
     init();
   }
 
-  public void setPostion(float position) {
-    float y = Math.abs(getTop() - getBottom() - position * getHeight());
-    ObjectAnimator.ofFloat(slider,
-                           "translationY",
-                           slider.getTranslationY(),
-                           y - slider.getHeight() / 2).start();
+  private void setPosition(float position) {
+    if (position < slider.getHeight() / 2 || position > getHeight() - slider.getHeight() / 2) {
+      return;
+    }
+    int sliderY = slider.getTop() + slider.getHeight() / 2;
+    slider.setTranslationY(position - sliderY);
   }
 
   private void init() {
@@ -63,13 +62,24 @@ public class VerticalSlider extends FrameLayout {
       slider.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
       int widthAndHeight = SizeHelper.dp(24);
       LayoutParams layoutParams = new LayoutParams(widthAndHeight, widthAndHeight);
-      layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
+      layoutParams.gravity = Gravity.CENTER;
       addView(slider, layoutParams);
     }
   }
 
   @Override
   public boolean onTouchEvent(MotionEvent event) {
+    switch (event.getAction()) {
+      case MotionEvent.ACTION_DOWN:
+        Rect r = new Rect();
+        slider.getGlobalVisibleRect(r);
+        return r.contains((int) event.getRawX(), (int) event.getRawY());
+      case MotionEvent.ACTION_MOVE:
+        float position = event.getY();
+        setPosition(position);
+        onSliderListener.onSliderChanged(position / getHeight());
+        return super.onTouchEvent(event);
+    }
     return super.onTouchEvent(event);
   }
 
@@ -80,9 +90,6 @@ public class VerticalSlider extends FrameLayout {
   }
 
   public interface OnSliderListener {
-    //[0,1]
-    void onPositionChanged(float position);
-
-    void onConfirmed(float position);
+    void onSliderChanged(float position);
   }
 }
