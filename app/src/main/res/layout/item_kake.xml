@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
+  android:layout_height="wrap_content"
   android:orientation="vertical">
 
   <RelativeLayout
@@ -15,7 +15,8 @@
       android:id="@+id/photo_image_view"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:scaleType="centerCrop"/>
+      android:scaleType="centerCrop"
+      android:src="@color/colorC2"/>
 
     <TextView
       android:id="@+id/name_text_view"
@@ -27,6 +28,18 @@
       android:textColor="@color/colorC1"
       android:textSize="@dimen/fontSizeF2"
       tools:text="Camera 20182839"/>
+
+    <TextView
+      android:id="@+id/date_text_view"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+      android:layout_alignParentRight="true"
+      android:layout_marginBottom="16dp"
+      android:layout_marginRight="16dp"
+      android:textColor="@color/colorC1"
+      android:textSize="@dimen/fontSizeF2"
+      tools:text="2017 08 10"/>
   </RelativeLayout>
 
   <RelativeLayout
@@ -35,7 +48,7 @@
     android:background="@color/colorC1">
 
     <com.home77.common.ui.widget.CircleImageView
-      android:id="@+id/avatar_image_view"
+      android:id="@+id/user_image_view"
       android:layout_width="36dp"
       android:layout_height="36dp"
       android:layout_centerVertical="true"
@@ -50,11 +63,36 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_centerVertical="true"
-      android:layout_marginLeft="16dp"
-      android:layout_toRightOf="@id/avatar_image_view"
+      android:layout_marginLeft="8dp"
+      android:layout_toRightOf="@id/user_image_view"
       android:textColor="@color/colorC5"
       android:textSize="@dimen/fontSizeF4"
       tools:text="jljadslfjdsl"/>
+
+    <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentRight="true"
+      android:layout_centerVertical="true"
+      android:layout_marginRight="16dp"
+      android:orientation="horizontal">
+
+      <ImageView
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_gravity="center_vertical"
+        android:scaleType="centerInside"
+        android:src="@drawable/icon_hot"/>
+
+      <TextView
+        android:id="@+id/read_count_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="4dp"
+        tools:text="500"/>
+
+    </LinearLayout>
 
   </RelativeLayout>
 

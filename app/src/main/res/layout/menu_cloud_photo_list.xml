@@ -10,7 +10,7 @@
     android:id="@+id/menu_item_add_photo"
     android:layout_width="match_parent"
     android:layout_height="48dp"
-    android:background="@color/colorC3"
+    android:background="@drawable/bg_menu_item"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingLeft="16dp"
@@ -35,7 +35,7 @@
     android:layout_width="match_parent"
     android:layout_height="48dp"
     android:layout_marginTop="1dp"
-    android:background="@color/colorC1"
+    android:background="@drawable/bg_menu_item"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingLeft="16dp"
@@ -44,14 +44,14 @@
     <ImageView
       android:layout_width="24dp"
       android:layout_height="24dp"
-      android:src="@drawable/menu_share_dis"/>
+      android:src="@drawable/menu_share"/>
 
     <TextView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginLeft="8dp"
       android:text="分享"
-      android:textColor="@color/colorC4"
+      android:textColor="@color/colorC6"
       android:textSize="@dimen/fontSizeF2"/>
   </LinearLayout>
 
@@ -60,7 +60,7 @@
     android:layout_width="match_parent"
     android:layout_height="48dp"
     android:layout_marginTop="1dp"
-    android:background="@color/colorC1"
+    android:background="@drawable/bg_menu_item"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingLeft="16dp"
@@ -69,14 +69,14 @@
     <ImageView
       android:layout_width="24dp"
       android:layout_height="24dp"
-      android:src="@drawable/menu_kake_dis"/>
+      android:src="@drawable/menu_kake"/>
 
     <TextView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginLeft="8dp"
       android:text="咔客"
-      android:textColor="@color/colorC4"
+      android:textColor="@color/colorC6"
       android:textSize="@dimen/fontSizeF2"/>
   </LinearLayout>
 
@@ -85,7 +85,7 @@
     android:layout_width="match_parent"
     android:layout_height="48dp"
     android:layout_marginTop="1dp"
-    android:background="@color/colorC1"
+    android:background="@drawable/bg_menu_item"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingLeft="16dp"
@@ -94,14 +94,14 @@
     <ImageView
       android:layout_width="24dp"
       android:layout_height="24dp"
-      android:src="@drawable/menu_code_dis"/>
+      android:src="@drawable/menu_code"/>
 
     <TextView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginLeft="8dp"
       android:text="生成二维码"
-      android:textColor="@color/colorC4"
+      android:textColor="@color/colorC6"
       android:textSize="@dimen/fontSizeF2"/>
   </LinearLayout>
 

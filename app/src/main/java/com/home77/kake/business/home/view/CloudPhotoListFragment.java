@@ -1,12 +1,12 @@
 package com.home77.kake.business.home.view;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,15 +15,12 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.darsh.multipleimageselect.activities.AlbumSelectActivity;
-import com.darsh.multipleimageselect.helpers.Constants;
 import com.home77.common.base.collection.Params;
+import com.home77.common.base.component.ContextManager;
 import com.home77.common.base.pattern.Instance;
 import com.home77.common.ui.model.UiData;
-import com.home77.common.ui.util.SizeHelper;
 import com.home77.common.ui.widget.CommonLoadingDialog;
 import com.home77.common.ui.widget.Toast;
-import com.home77.kake.App;
 import com.home77.kake.R;
 import com.home77.kake.base.BaseFragment;
 import com.home77.kake.base.CmdType;
@@ -33,10 +30,7 @@ import com.home77.kake.business.home.PhotoSelectActivity;
 import com.home77.kake.business.home.adapter.CloudPhotoListAdapter;
 import com.home77.kake.business.home.model.CloudPhoto;
 import com.home77.kake.common.api.response.Album;
-import com.home77.kake.common.event.BroadCastEvent;
-import com.home77.kake.common.event.BroadCastEventConstant;
 import com.home77.kake.common.utils.QRCodeUtil;
-import com.home77.kake.common.widget.recyclerview.DefaultGridItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +55,8 @@ public class CloudPhotoListFragment extends BaseFragment {
   ProgressBar loadingLayout;
   @BindView(R.id.empty_layout)
   TextView emptyLayout;
+  @BindView(R.id.bottom_text_view)
+  TextView bottomTextView;
   Unbinder unbinder;
   @BindView(R.id.menu_image_view)
   ImageView menuImageView;
@@ -126,10 +122,17 @@ public class CloudPhotoListFragment extends BaseFragment {
                       popupMenu.dismiss();
                     }
                   });
-        menulayout.findViewById(R.id.menu_layout).setOnClickListener(new View.OnClickListener() {
+        menulayout.findViewById(R.id.menu_item_share)
+                  .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                  });
+        menulayout.findViewById(R.id.menu_item_kake).setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {
-            popupMenu.dismiss();
+
           }
         });
         loadingDialog = new CommonLoadingDialog(getContext());
@@ -145,6 +148,16 @@ public class CloudPhotoListFragment extends BaseFragment {
       case SHOW_ALBUM_INFO:
         album = in.get(ParamsKey.ALBUM);
         titleTextView.setText(album.getName() + "");
+        if (!TextUtils.isEmpty(album.getPanourl())) {
+          bottomTextView.setText("观看户型全景");
+          bottomTextView.setBackgroundColor(ContextManager.resources().getColor(R.color.colorC7));
+          bottomTextView.setTextColor(ContextManager.resources().getColor(R.color.colorC2));
+        } else {
+          bottomTextView.setText("合成户型全景");
+          bottomTextView.setBackgroundColor(ContextManager.resources().getColor(R.color.colorC2));
+          bottomTextView.setTextColor(ContextManager.resources().getColor(R.color.colorC7));
+        }
+        break;
       case CLOUD_PHOTO_LIST_LOADING: {
         loadingLayout.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE);
@@ -202,11 +215,26 @@ public class CloudPhotoListFragment extends BaseFragment {
         imageView.setImageBitmap(qrCodeBitmap);
         new AlertDialog.Builder(getContext()).setView(imageView).create().show();
         break;
+      case MAKE_PANO_POSTING:
+        Toast.showShort("正在请求后台服务器进行合成...");
+        bottomTextView.setEnabled(false);
+        break;
+      case MAKE_PANO_POST_ERROR:
+        Toast.showShort("合成请求失败");
+        bottomTextView.setEnabled(true);
+        break;
+      case MAKE_PANO_POST_SUCCESS:
+        Toast.showShort("服务器已经受理图片合成请求，稍后会通知合成结果");
+        bottomTextView.setEnabled(false);
+        break;
+      case SHOW_PANO_PHOTO:
+
+        break;
     }
   }
 
 
-  @OnClick({R.id.back_image_view, R.id.menu_image_view})
+  @OnClick({R.id.back_image_view, R.id.menu_image_view, R.id.bottom_text_view})
   public void onViewClicked(View view) {
     switch (view.getId()) {
       case R.id.back_image_view:
@@ -214,6 +242,9 @@ public class CloudPhotoListFragment extends BaseFragment {
         break;
       case R.id.menu_image_view:
         presenter.onMessage(MsgType.CLICK_MENU, null);
+        break;
+      case R.id.bottom_text_view:
+        presenter.onMessage(MsgType.CLICK_BOTTOM_BUTTON, null);
         break;
     }
   }

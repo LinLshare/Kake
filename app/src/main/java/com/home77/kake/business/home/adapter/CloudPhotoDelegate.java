@@ -19,7 +19,7 @@ import com.zhy.adapter.recyclerview.base.ViewHolder;
 public class CloudPhotoDelegate implements ItemViewDelegate<CloudPhoto> {
   @Override
   public int getItemViewLayoutId() {
-    return R.layout.layout_item_photo;
+    return R.layout.layout_item_cloud_photo;
   }
 
   @Override
@@ -32,18 +32,16 @@ public class CloudPhotoDelegate implements ItemViewDelegate<CloudPhoto> {
     holder.setText(R.id.name_text_view, photo.getName());
 
     int winWidth = Instance.of(UiData.class).winWidth();
+    holder.getConvertView().getLayoutParams().height = winWidth / 3;
+    holder.getConvertView().requestLayout();
     Picasso.with(holder.getConvertView().getContext())
            .load(photo.getImgurl())
-           .resize(winWidth / 2, winWidth / 2)
-           //           .centerCrop()
+           .resize(winWidth / 3, winWidth / 3)
            .error(R.drawable.ic_img_def)
            .placeholder(R.drawable.ic_img_def)
            .into(new Target() {
              @Override
              public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-               holder.setText(R.id.size_image_view,
-                              UnitHelper.formatBytesInByte(
-                                  bitmap.getRowBytes() * bitmap.getHeight(), true) + "");
                holder.setImageBitmap(R.id.photo_image_view, bitmap);
              }
 

@@ -8,6 +8,7 @@ import com.home77.kake.App;
 import com.home77.kake.GlobalData;
 import com.home77.kake.common.api.request.AddPhotoRequest;
 import com.home77.kake.common.api.request.CreateAlbumRequest;
+import com.home77.kake.common.api.request.MakePanoRequest;
 
 import java.io.File;
 import java.io.RandomAccessFile;
@@ -28,6 +29,8 @@ public class CloudAlbumService {
   private final static String UPLOAD_PHOTO_URL;
   private final static String PHOTO_LIST_URL_FORMAT;
   private final static String ADD_PHOTO_URL;
+  private static final String MAKE_PANO_URL;
+
   private static final String TAG = CloudAlbumService.class.getSimpleName();
 
   static {
@@ -36,6 +39,7 @@ public class CloudAlbumService {
     UPLOAD_PHOTO_URL = String.format("http://%s/api/v1/album/uploadphoto", HOST);
     ADD_PHOTO_URL = String.format("http://%s/api/v1/album/addphoto", HOST);
     PHOTO_LIST_URL_FORMAT = "http://" + HOST + "/api/v1/album/%s/photolist";
+    MAKE_PANO_URL = String.format("http://%s/api/v1/album/makepano", HOST);
   }
 
   private String getPhotoListUrl(String path) {
@@ -68,7 +72,7 @@ public class CloudAlbumService {
     urlFetcher.start();
   }
 
-  public void uploadPhoto(String fileHash,File file, URLFetcher.Delegate callback) {
+  public void uploadPhoto(String fileHash, File file, URLFetcher.Delegate callback) {
 
     RequestBody fileBody = RequestBody.create(MediaType.parse("image/*"), file);
     RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
@@ -78,6 +82,12 @@ public class CloudAlbumService {
                                                          .addFormDataPart("photo_hash", fileHash)
                                                          .build();
     urlFetcher = createUrlFetcher(callback).url(UPLOAD_PHOTO_URL).postRequestBody(requestBody);
+    urlFetcher.start();
+  }
+
+  public void makePano(int albumId, URLFetcher.Delegate callback) {
+    urlFetcher =
+        createUrlFetcher(callback).url(MAKE_PANO_URL).postJson(new MakePanoRequest(albumId));
     urlFetcher.start();
   }
 

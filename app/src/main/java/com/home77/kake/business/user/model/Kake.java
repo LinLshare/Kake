@@ -6,42 +6,22 @@ package com.home77.kake.business.user.model;
 public class Kake {
 
   /**
-   * checked_status : 1
-   * created_at : 2017-09-01 01:04:03
-   * id : 66
-   * is_public : 1
-   * name : 11
-   * status : 1
-   * updated_at : 2017-09-13 00:55:16
-   * url : http://control.home77.com/vr/66
-   * user_id : 186
+   * id : 7
+   * name : 33
+   * view : 0
+   * user_id : 1
+   * created_at : 2017-07-31 02:17:44
+   * ship_user : {"id":1,"name":"glg","avatar":"http://home77.oss-cn-shenzhen.aliyuncs.com/2017/08/18105758AYOY.png"}
+   * url : http://a.dev/vr/7
    */
 
-  private int checked_status;
-  private String created_at;
   private int id;
-  private int is_public;
   private String name;
-  private int status;
-  private String updated_at;
-  private String url;
+  private int view;
   private int user_id;
-
-  public int getChecked_status() {
-    return checked_status;
-  }
-
-  public void setChecked_status(int checked_status) {
-    this.checked_status = checked_status;
-  }
-
-  public String getCreated_at() {
-    return created_at;
-  }
-
-  public void setCreated_at(String created_at) {
-    this.created_at = created_at;
-  }
+  private String created_at;
+  private ShipUserBean ship_user;
+  private String url;
 
   public int getId() {
     return id;
@@ -49,14 +29,6 @@ public class Kake {
 
   public void setId(int id) {
     this.id = id;
-  }
-
-  public int getIs_public() {
-    return is_public;
-  }
-
-  public void setIs_public(int is_public) {
-    this.is_public = is_public;
   }
 
   public String getName() {
@@ -67,20 +39,36 @@ public class Kake {
     this.name = name;
   }
 
-  public int getStatus() {
-    return status;
+  public int getView() {
+    return view;
   }
 
-  public void setStatus(int status) {
-    this.status = status;
+  public void setView(int view) {
+    this.view = view;
   }
 
-  public String getUpdated_at() {
-    return updated_at;
+  public int getUser_id() {
+    return user_id;
   }
 
-  public void setUpdated_at(String updated_at) {
-    this.updated_at = updated_at;
+  public void setUser_id(int user_id) {
+    this.user_id = user_id;
+  }
+
+  public String getCreated_at() {
+    return created_at;
+  }
+
+  public void setCreated_at(String created_at) {
+    this.created_at = created_at;
+  }
+
+  public ShipUserBean getShip_user() {
+    return ship_user;
+  }
+
+  public void setShip_user(ShipUserBean ship_user) {
+    this.ship_user = ship_user;
   }
 
   public String getUrl() {
@@ -91,11 +79,39 @@ public class Kake {
     this.url = url;
   }
 
-  public int getUser_id() {
-    return user_id;
-  }
+  public static class ShipUserBean {
+    /**
+     * id : 1
+     * name : glg
+     * avatar : http://home77.oss-cn-shenzhen.aliyuncs.com/2017/08/18105758AYOY.png
+     */
 
-  public void setUser_id(int user_id) {
-    this.user_id = user_id;
+    private int id;
+    private String name;
+    private String avatar;
+
+    public int getId() {
+      return id;
+    }
+
+    public void setId(int id) {
+      this.id = id;
+    }
+
+    public String getName() {
+      return name;
+    }
+
+    public void setName(String name) {
+      this.name = name;
+    }
+
+    public String getAvatar() {
+      return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+      this.avatar = avatar;
+    }
   }
 }

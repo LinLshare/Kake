@@ -1,6 +1,7 @@
 package com.home77.kake.business.home.presenter;
 
 import android.content.Intent;
+import android.text.TextUtils;
 
 import com.home77.common.base.collection.Params;
 import com.home77.common.base.component.BaseHandler;
@@ -73,9 +74,43 @@ public class CloudPhotoListPresenter extends BaseFragmentPresenter {
         // add to album
         break;
       case CLICK_GENERATE_QRCODE:
-        loadQRCode("xxxxxyyyyy");
+        loadQRCode(album.getPanourl());
+        break;
+      case CLICK_BOTTOM_BUTTON:
+        handleClickBottomButton();
         break;
     }
+  }
+
+  private void handleClickBottomButton() {
+    if (album == null) {
+      return;
+    }
+    if (TextUtils.isEmpty(album.getPanourl())) {
+      // 合成户型全景
+      makePano();
+    } else {
+      // 观看户型全景
+      baseView.onCommand(CmdType.SHOW_PANO_PHOTO, null, null);
+    }
+  }
+
+  private void makePano() {
+    baseView.onCommand(CmdType.MAKE_PANO_POSTING, null, null);
+    cloudAlbumService.makePano(album.getId(), new URLFetcher.Delegate() {
+      @Override
+      public void onSuccess(URLFetcher source) {
+        Response response = source.responseClass(Response.class);
+        if (response != null && response.getCode() == 200) {
+          baseView.onCommand(CmdType.MAKE_PANO_POST_SUCCESS, null, null);
+        }
+      }
+
+      @Override
+      public void onError(String msg) {
+        baseView.onCommand(CmdType.MAKE_PANO_POST_ERROR, null, null);
+      }
+    });
   }
 
   private void loadQRCode(String content) {

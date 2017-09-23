@@ -1,16 +1,9 @@
 package com.home77.kake.business.home;
 
-import android.Manifest;
-import android.annotation.TargetApi;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.widget.TextView;
@@ -32,7 +25,6 @@ import com.home77.kake.business.user.UserActivity;
 import com.home77.kake.common.adapter.FragmentPagerAdapter;
 import com.home77.kake.common.api.ServerConfig;
 import com.home77.kake.common.api.response.Album;
-import com.home77.kake.common.api.service.UserService;
 import com.home77.kake.common.event.BroadCastEvent;
 import com.home77.kake.common.event.BroadCastEventConstant;
 import com.home77.kake.common.widget.ScrollConfigurableViewPager;

@@ -34,7 +34,7 @@ public class CloudAlbumNormalDelegate implements ItemViewDelegate<Album> {
   @Override
   public void convert(ViewHolder holder, final Album album, int position) {
     holder.setText(R.id.album_name_text_view, album.getName());
-    String imgUrl = album.getImg_url();
+    String imgUrl = album.getCover();
     if (!TextUtils.isEmpty(imgUrl)) {
       ImageView coverImageView = holder.getView(R.id.album_cover_image_view);
       Picasso.with(holder.getConvertView().getContext())
