@@ -8,10 +8,13 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -21,6 +24,8 @@ import com.home77.common.base.component.BaseHandler;
 import com.home77.common.base.component.ContextManager;
 import com.home77.common.base.pattern.Instance;
 import com.home77.common.ui.model.UiData;
+import com.home77.common.ui.util.LayoutHelper;
+import com.home77.common.ui.util.SizeHelper;
 import com.home77.common.ui.widget.CommonLoadingDialog;
 import com.home77.common.ui.widget.Toast;
 import com.home77.kake.R;
@@ -219,14 +224,33 @@ public class CloudPhotoListFragment extends BaseFragment {
         loadingDialog.dismiss();
         Toast.showShort("上传成功");
         break;
-      case SHOW_QRCODE_DIALOG:
+      case SHOW_QRCODE_DIALOG: {
         String content = in.get(ParamsKey.STR);
         int width = Instance.of(UiData.class).winWidth() / 2;
         Bitmap qrCodeBitmap = QRCodeUtil.createQRCodeBitmap(content, width, width);
+        LinearLayout linearLayout = new LinearLayout(getContext());
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        TextView textView = new TextView(getContext());
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        textView.setTextColor(ContextManager.resources().getColor(R.color.colorC6));
+        textView.setText(album.getName() + "");
+        linearLayout.addView(textView,
+                             LayoutHelper.createLL(LayoutHelper.WRAP,
+                                                   LayoutHelper.WRAP,
+                                                   Gravity.CENTER_HORIZONTAL,
+                                                   0,
+                                                   SizeHelper.dp(16),
+                                                   0,
+                                                   0));
         ImageView imageView = new ImageView(getContext());
         imageView.setImageBitmap(qrCodeBitmap);
-        new AlertDialog.Builder(getContext()).setView(imageView).create().show();
-        break;
+        linearLayout.addView(imageView,
+                             LayoutHelper.createLL(LayoutHelper.WRAP,
+                                                   LayoutHelper.WRAP,
+                                                   Gravity.CENTER_HORIZONTAL));
+        new AlertDialog.Builder(getContext()).setView(linearLayout).create().show();
+      }
+      break;
       case MAKE_PANO_POSTING:
         loadingDialog.show("正在请求合成");
         loadingDialog.setCancelable(false);
