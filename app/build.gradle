@@ -5,7 +5,8 @@ android {
   compileSdkVersion android_versions.compileSdkVersion
   buildToolsVersion android_versions.buildToolsVersion
   defaultConfig {
-    applicationId "com.home77.kake"
+//    applicationId "com.home77.kake"
+    applicationId "net.sourceforge.simcpux"
     minSdkVersion android_versions.minSdkVersion
     targetSdkVersion android_versions.targetSdkVersion
     versionCode propVersionCode as int
@@ -16,6 +17,14 @@ android {
     release {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+    debug{
+
+    }
+  }
+  signingConfigs {
+    debug {
+      storeFile file("../debug.keystore")
     }
   }
 }
@@ -38,6 +47,6 @@ dependencies {
   compile libraries.zxing
   annotationProcessor annotation_processors.butterknife
   testCompile test_libraries.junit
-  compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
+  compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:1.1.6'
   compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha8'
 }

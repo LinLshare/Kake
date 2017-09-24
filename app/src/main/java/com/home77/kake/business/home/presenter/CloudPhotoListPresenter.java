@@ -30,6 +30,7 @@ import com.home77.kake.common.utils.DateHelper;
 
 import java.io.File;
 import java.io.RandomAccessFile;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -92,6 +93,7 @@ public class CloudPhotoListPresenter extends BaseFragmentPresenter {
         }
         break;
       case CLICK_MENU_SHARE:
+        baseView.onCommand(CmdType.SHOW_SHARE_DIALOG, null, null);
         break;
       case CLICK_OK_MAKE_PUBLIC_DIALOG:
         makePublic();
@@ -242,31 +244,31 @@ public class CloudPhotoListPresenter extends BaseFragmentPresenter {
             if (photoListResponse != null) {
               switch (photoListResponse.getCode()) {
                 case 200: {
-                  Collections.sort(photoListResponse.getData().getShip_photos(),
-                                   new Comparator<CloudPhoto>() {
-                                     @Override
-                                     public int compare(CloudPhoto o1, CloudPhoto o2) {
-                                       return (int) (DateHelper.toMillis(o2.getUpdated_at()) -
-                                                     DateHelper.toMillis(o1.getUpdated_at()));
-                                     }
-                                   });
-                  List<CloudPhoto> temp2 =
-                      new ArrayList<>(photoListResponse.getData().getShip_photos());
-                  int lastDay = 0;
-                  int titleCount = 0;
-                  for (int i = 0; i < photoListResponse.getData().getShip_photos().size(); i++) {
-                    CloudPhoto photo = photoListResponse.getData().getShip_photos().get(i);
-                    Calendar instance = Calendar.getInstance();
-                    instance.setTimeInMillis(DateHelper.toMillis(photo.getUpdated_at()));
-                    int currentDay = instance.get(Calendar.DAY_OF_MONTH);
-                    if (lastDay != currentDay) {
-                      temp2.add(i + titleCount, CloudPhoto.makeTitle(photo.getUpdated_at()));
-                      titleCount++;
-                      lastDay = currentDay;
-                    }
-                  }
+//                  Collections.sort(photoListResponse.getData().getShip_photos(),
+//                                   new Comparator<CloudPhoto>() {
+//                                     @Override
+//                                     public int compare(CloudPhoto o1, CloudPhoto o2) {
+//                                       return (int) (DateHelper.toMillis(o2.getUpdated_at()) -
+//                                                     DateHelper.toMillis(o1.getUpdated_at()));
+//                                     }
+//                                   });
+//                  List<CloudPhoto> temp2 =
+//                      new ArrayList<>(photoListResponse.getData().getShip_photos());
+//                  int lastDay = 0;
+//                  int titleCount = 0;
+//                  for (int i = 0; i < photoListResponse.getData().getShip_photos().size(); i++) {
+//                    CloudPhoto photo = photoListResponse.getData().getShip_photos().get(i);
+//                    Calendar instance = Calendar.getInstance();
+//                    instance.setTimeInMillis(DateHelper.toMillis(photo.getUpdated_at()));
+//                    int currentDay = instance.get(Calendar.DAY_OF_MONTH);
+//                    if (lastDay != currentDay) {
+//                      temp2.add(i + titleCount, CloudPhoto.makeTitle(photo.getUpdated_at()));
+//                      titleCount++;
+//                      lastDay = currentDay;
+//                    }
+//                  }
                   baseView.onCommand(CmdType.CLOUD_PHOTO_LIST_LOAD_SUCCESS,
-                                     Params.create(ParamsKey.CLOUD_PHOTO_LIST, temp2),
+                                     Params.create(ParamsKey.CLOUD_PHOTO_LIST, new ArrayList<>()),
                                      null);
                 }
                 break;

@@ -30,7 +30,6 @@ public class CloudPhotoDelegate implements ItemViewDelegate<CloudPhoto> {
   @Override
   public void convert(final ViewHolder holder, final CloudPhoto photo, int position) {
     holder.setText(R.id.name_text_view, photo.getName());
-
     int winWidth = Instance.of(UiData.class).winWidth();
     holder.getConvertView().getLayoutParams().height = winWidth / 3;
     holder.getConvertView().requestLayout();

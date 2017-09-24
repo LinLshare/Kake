@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   >
@@ -8,7 +9,8 @@
     android:id="@+id/album_cover_image_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scaleType="centerCrop"/>
+    android:scaleType="centerCrop"
+    tools:src="@drawable/ic_img_def"/>
 
   <TextView
     android:id="@+id/album_name_text_view"

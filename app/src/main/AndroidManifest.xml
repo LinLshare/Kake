@@ -39,6 +39,8 @@
     </activity>
     <activity android:name=".business.user.KakeActivity">
     </activity>
+    <activity android:name=".business.home.WebPageActivity">
+    </activity>
   </application>
 
 </manifest>

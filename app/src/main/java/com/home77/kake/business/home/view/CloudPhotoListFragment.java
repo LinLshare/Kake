@@ -1,6 +1,10 @@
 package com.home77.kake.business.home.view;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -34,12 +38,20 @@ import com.home77.kake.base.CmdType;
 import com.home77.kake.base.MsgType;
 import com.home77.kake.base.ParamsKey;
 import com.home77.kake.business.home.PhotoSelectActivity;
+import com.home77.kake.business.home.WebPageActivity;
 import com.home77.kake.business.home.adapter.CloudPhotoListAdapter;
 import com.home77.kake.business.home.model.CloudPhoto;
 import com.home77.kake.common.api.response.Album;
 import com.home77.kake.common.utils.QRCodeUtil;
+import com.home77.kake.common.utils.Util;
+import com.home77.kake.common.widget.CustomBottomDialog;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -75,6 +87,11 @@ public class CloudPhotoListFragment extends BaseFragment {
   private PopupWindow popupMenu;
   private Album album;
   private CommonLoadingDialog loadingDialog;
+  private IWXAPI api;
+
+  public CloudPhotoListFragment() {
+    api = WXAPIFactory.createWXAPI(getContext(), "wxd930ea5d5a258f4f");
+  }
 
   @Override
   public void executeCommand(CmdType cmdType, Params in, Params out) {
@@ -188,7 +205,7 @@ public class CloudPhotoListFragment extends BaseFragment {
         if (refreshLayout.isRefreshing()) {
           refreshLayout.setRefreshing(false);
         }
-        String msg = in.get(ParamsKey.MSG);
+        final String msg = in.get(ParamsKey.MSG);
         Toast.showShort(msg);
         break;
       case CLOUD_PHOTO_LIST_LOAD_SUCCESS:
@@ -269,39 +286,8 @@ public class CloudPhotoListFragment extends BaseFragment {
         bottomTextView.setEnabled(false);
         break;
       case SHOW_PANO_PHOTO:
-        Picasso.with(getContext()).load(album.getCover()).into(new Target() {
-          @Override
-          public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
-            new Thread() {
-              @Override
-              public void run() {
-                final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                final byte[] dt = baos.toByteArray();
-                BaseHandler.runOnMainThread(new Runnable() {
-                  @Override
-                  public void run() {
-                    GLPhotoActivity.startActivityForResult(getActivity(),
-                                                           dt,
-                                                           album.getPanourl(),
-                                                           album.getName(),
-                                                           false);
-                  }
-                });
-              }
-            }.start();
-          }
-
-          @Override
-          public void onBitmapFailed(Drawable errorDrawable) {
-
-          }
-
-          @Override
-          public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-          }
-        });
+        // show webview
+        WebPageActivity.start(getContext(), album.getName(), album.getPanourl());
         break;
       case SHOW_MAKE_PUBLIC_DIALOG:
         showMakePublicDialog();
@@ -320,10 +306,19 @@ public class CloudPhotoListFragment extends BaseFragment {
         loadingDialog.setCancelable(true);
         Toast.showShort("发布失败");
         break;
+      case SHOW_SHARE_DIALOG: {
+        showShareDialog();
+      }
+      break;
     }
 
   }
 
+  private String buildTransaction(final String type) {
+    return (type == null)
+        ? String.valueOf(System.currentTimeMillis())
+        : type + System.currentTimeMillis();
+  }
 
   @OnClick({R.id.back_image_view, R.id.menu_image_view, R.id.bottom_text_view})
   public void onViewClicked(View view) {
@@ -346,6 +341,74 @@ public class CloudPhotoListFragment extends BaseFragment {
       popupMenu.dismiss();
     }
     super.onPause();
+  }
+
+  private void showShareDialog() {
+    View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_share, null);
+    final Dialog alertDialog = new CustomBottomDialog(getContext());
+    alertDialog.setContentView(dialogView);
+    dialogView.findViewById(R.id.cancel_text_view).setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        alertDialog.dismiss();
+      }
+    });
+    dialogView.findViewById(R.id.friend_layout).setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        shareWetChat(SendMessageToWX.Req.WXSceneTimeline);
+        alertDialog.dismiss();
+      }
+    });
+    dialogView.findViewById(R.id.moment_layout).setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        shareWetChat(SendMessageToWX.Req.WXSceneSession);
+        alertDialog.dismiss();
+      }
+    });
+    dialogView.findViewById(R.id.copy_layout).setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        ClipboardManager clipboardManager =
+            (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+        clipboardManager.setText(album.getPanourl() + "");
+        Toast.showShort("已经复制到剪贴板");
+        alertDialog.dismiss();
+      }
+    });
+    alertDialog.show();
+  }
+
+  private void shareWetChat(final int scene) {
+    Picasso.with(getContext()).load(album.getCover()).into(new Target() {
+      @Override
+      public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+        WXWebpageObject webpageObject = new WXWebpageObject();
+        webpageObject.webpageUrl = album.getPanourl();
+
+        WXMediaMessage wxMsg = new WXMediaMessage(webpageObject);
+        wxMsg.title = album.getName();
+        wxMsg.description = "";
+        wxMsg.thumbData = Util.bmpToByteArray(bitmap, true);
+
+        SendMessageToWX.Req req = new SendMessageToWX.Req();
+        req.transaction = buildTransaction("webpage");
+
+        req.message = wxMsg;
+        req.scene = scene;
+
+        api.sendReq(req);
+      }
+
+      @Override
+      public void onBitmapFailed(Drawable errorDrawable) {
+      }
+
+      @Override
+      public void onPrepareLoad(Drawable placeHolderDrawable) {
+      }
+    });
   }
 
   private void showMakePublicDialog() {

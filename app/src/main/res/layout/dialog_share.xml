@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:background="@color/colorC2"
+  android:orientation="vertical"
+  android:padding="16dp"
+  android:textSize="@dimen/fontSizeF2">
+
+  <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:text="分享到"
+    android:textSize="@dimen/fontSizeF1"/>
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="4dp"
+    android:gravity="center_horizontal"
+    android:orientation="horizontal">
+
+    <LinearLayout
+      android:id="@+id/friend_layout"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:background="@drawable/bg_share_item"
+      android:gravity="center_horizontal"
+      android:orientation="vertical"
+      android:padding="8dp">
+
+      <ImageView
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/icon_friends"/>
+
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="微信好友"/>
+    </LinearLayout>
+
+    <LinearLayout
+      android:id="@+id/moment_layout"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="16dp"
+      android:background="@drawable/bg_share_item"
+      android:gravity="center_horizontal"
+      android:orientation="vertical"
+      android:padding="8dp">
+
+      <ImageView
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/icon_moment"/>
+
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="朋友圈"/>
+    </LinearLayout>
+
+    <LinearLayout
+      android:id="@+id/copy_layout"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="16dp"
+      android:background="@drawable/bg_share_item"
+      android:gravity="center_horizontal"
+      android:orientation="vertical"
+      android:padding="8dp">
+
+      <ImageView
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/icon_link"/>
+
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="复制链接"/>
+    </LinearLayout>
+  </LinearLayout>
+
+  <TextView
+    android:id="@+id/cancel_text_view"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:layout_alignParentBottom="true"
+    android:layout_marginBottom="16dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginTop="16dp"
+    android:background="@drawable/bg_share_cancel"
+    android:gravity="center"
+    android:text="取消"
+    android:textColor="@color/colorC6"
+    android:textSize="@dimen/fontSizeF2"/>
+
+</LinearLayout>
