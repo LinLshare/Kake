@@ -9,14 +9,14 @@ public class CloudPhoto {
   private String name;
   private String imgurl;
   private String photo_hash;
-  private String updated_at;
+  private long updated_at;
   private boolean isTitle;
 
   public boolean isTitle() {
     return isTitle;
   }
 
-  public static CloudPhoto makeTitle(String updated_at) {
+  public static CloudPhoto makeTitle(long updated_at) {
     CloudPhoto cloudPhoto = new CloudPhoto();
     cloudPhoto.updated_at = updated_at;
     cloudPhoto.isTitle = true;
@@ -63,11 +63,11 @@ public class CloudPhoto {
     this.photo_hash = photo_hash;
   }
 
-  public String getUpdated_at() {
+  public long getUpdated_at() {
     return updated_at;
   }
 
-  public void setUpdated_at(String updated_at) {
+  public void setUpdated_at(long updated_at) {
     this.updated_at = updated_at;
   }
 }

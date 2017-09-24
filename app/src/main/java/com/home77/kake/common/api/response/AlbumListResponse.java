@@ -6,5 +6,4 @@ import java.util.List;
  * @author CJ
  */
 public class AlbumListResponse extends Response<List<Album>> {
-
 }

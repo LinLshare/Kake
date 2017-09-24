@@ -7,11 +7,19 @@ import com.zhy.adapter.recyclerview.base.ItemViewDelegate;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 /**
  * @author CJ
  */
 public class CloudPhotoGroupDelegate implements ItemViewDelegate<CloudPhoto> {
+
+  private SimpleDateFormat simpleDateFormat;
+
+  public CloudPhotoGroupDelegate() {
+    simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+  }
+
   @Override
   public int getItemViewLayoutId() {
     return R.layout.layout_item_photo_group;
@@ -24,8 +32,6 @@ public class CloudPhotoGroupDelegate implements ItemViewDelegate<CloudPhoto> {
 
   @Override
   public void convert(ViewHolder holder, CloudPhoto photo, int position) {
-    long millis = DateHelper.toMillis(photo.getUpdated_at());
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    holder.setText(R.id.group_name_text_view, simpleDateFormat.format(millis));
+    holder.setText(R.id.group_name_text_view, simpleDateFormat.format(photo.getUpdated_at()));
   }
 }
