@@ -3,6 +3,7 @@ package com.home77.kake.business.home.view;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.home77.common.base.collection.Params;
+import com.home77.common.base.component.BaseHandler;
 import com.home77.common.base.component.ContextManager;
 import com.home77.common.base.pattern.Instance;
 import com.home77.common.ui.model.UiData;
@@ -31,7 +33,10 @@ import com.home77.kake.business.home.adapter.CloudPhotoListAdapter;
 import com.home77.kake.business.home.model.CloudPhoto;
 import com.home77.kake.common.api.response.Album;
 import com.home77.kake.common.utils.QRCodeUtil;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,7 +115,7 @@ public class CloudPhotoListFragment extends BaseFragment {
                   .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                      presenter.onMessage(MsgType.CLICK_IMPORT_PHOTO, null);
+                      presenter.onMessage(MsgType.CLICK_MENU_IMPORT_PHOTO, null);
                       popupMenu.dismiss();
                     }
                   });
@@ -118,7 +123,7 @@ public class CloudPhotoListFragment extends BaseFragment {
                   .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                      presenter.onMessage(MsgType.CLICK_GENERATE_QRCODE, null);
+                      presenter.onMessage(MsgType.CLICK_MENU_GENERATE_QRCODE, null);
                       popupMenu.dismiss();
                     }
                   });
@@ -126,13 +131,15 @@ public class CloudPhotoListFragment extends BaseFragment {
                   .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                      presenter.onMessage(MsgType.CLICK_MENU_SHARE, null);
+                      popupMenu.dismiss();
                     }
                   });
         menulayout.findViewById(R.id.menu_item_kake).setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {
-
+            presenter.onMessage(MsgType.CLICK_MENU_KAKE, null);
+            popupMenu.dismiss();
           }
         });
         loadingDialog = new CommonLoadingDialog(getContext());
@@ -153,7 +160,12 @@ public class CloudPhotoListFragment extends BaseFragment {
           bottomTextView.setBackgroundColor(ContextManager.resources().getColor(R.color.colorC7));
           bottomTextView.setTextColor(ContextManager.resources().getColor(R.color.colorC2));
         } else {
-          bottomTextView.setText("合成户型全景");
+          if (album.getStatus() == Album.STATUS_GENERATING) {
+            bottomTextView.setText("正在合成中");
+            bottomTextView.setEnabled(false);
+          } else {
+            bottomTextView.setText("合成户型全景");
+          }
           bottomTextView.setBackgroundColor(ContextManager.resources().getColor(R.color.colorC2));
           bottomTextView.setTextColor(ContextManager.resources().getColor(R.color.colorC7));
         }
@@ -216,21 +228,76 @@ public class CloudPhotoListFragment extends BaseFragment {
         new AlertDialog.Builder(getContext()).setView(imageView).create().show();
         break;
       case MAKE_PANO_POSTING:
-        Toast.showShort("正在请求后台服务器进行合成...");
+        loadingDialog.show("正在请求合成");
+        loadingDialog.setCancelable(false);
         bottomTextView.setEnabled(false);
         break;
       case MAKE_PANO_POST_ERROR:
+        loadingDialog.dismiss();
+        loadingDialog.setCancelable(true);
         Toast.showShort("合成请求失败");
         bottomTextView.setEnabled(true);
         break;
       case MAKE_PANO_POST_SUCCESS:
+        loadingDialog.dismiss();
+        loadingDialog.setCancelable(true);
         Toast.showShort("服务器已经受理图片合成请求，稍后会通知合成结果");
         bottomTextView.setEnabled(false);
         break;
       case SHOW_PANO_PHOTO:
+        Picasso.with(getContext()).load(album.getCover()).into(new Target() {
+          @Override
+          public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
+            new Thread() {
+              @Override
+              public void run() {
+                final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                final byte[] dt = baos.toByteArray();
+                BaseHandler.runOnMainThread(new Runnable() {
+                  @Override
+                  public void run() {
+                    GLPhotoActivity.startActivityForResult(getActivity(),
+                                                           dt,
+                                                           album.getPanourl(),
+                                                           album.getName(),
+                                                           false);
+                  }
+                });
+              }
+            }.start();
+          }
 
+          @Override
+          public void onBitmapFailed(Drawable errorDrawable) {
+
+          }
+
+          @Override
+          public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+          }
+        });
+        break;
+      case SHOW_MAKE_PUBLIC_DIALOG:
+        showMakePublicDialog();
+        break;
+      case MAKE_PUBLIC_POSTING:
+        loadingDialog.show("正在发布");
+        loadingDialog.setCancelable(false);
+        break;
+      case MAKE_PUBLIC_SUCCESS:
+        loadingDialog.dismiss();
+        loadingDialog.setCancelable(true);
+        Toast.showShort("发布成功");
+        break;
+      case MAKE_PUBLIC_ERROR:
+        loadingDialog.dismiss();
+        loadingDialog.setCancelable(true);
+        Toast.showShort("发布失败");
         break;
     }
+
   }
 
 
@@ -255,5 +322,25 @@ public class CloudPhotoListFragment extends BaseFragment {
       popupMenu.dismiss();
     }
     super.onPause();
+  }
+
+  private void showMakePublicDialog() {
+    View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_make_public, null);
+    final AlertDialog alertDialog =
+        new AlertDialog.Builder(getContext()).setView(dialogView).create();
+    dialogView.findViewById(R.id.ok_text_view).setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        presenter.onMessage(MsgType.CLICK_OK_MAKE_PUBLIC_DIALOG, null);
+        alertDialog.dismiss();
+      }
+    });
+    dialogView.findViewById(R.id.cancel_text_view).setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        alertDialog.dismiss();
+      }
+    });
+    alertDialog.show();
   }
 }

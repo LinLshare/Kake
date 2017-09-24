@@ -94,14 +94,13 @@ public class GLPhotoActivity extends Activity implements ConfigurationDialog.Dia
     name = intent.getStringExtra(NAME);
 
     byte[] byteThumbnail = intent.getByteArrayExtra(THUMBNAIL);
-    if (byteThumbnail != null) {
+    if (byteThumbnail != null && byteThumbnail.length > 0) {
       ByteArrayInputStream inputStreamThumbnail = new ByteArrayInputStream(byteThumbnail);
       Drawable thumbnail = BitmapDrawable.createFromStream(inputStreamThumbnail, null);
       Photo _thumbnail = new Photo(((BitmapDrawable) thumbnail).getBitmap());
       mGLPhotoView.setTexture(_thumbnail);
+      mGLPhotoView.setmRotateInertia(mRotateInertia);
     }
-
-    mGLPhotoView.setmRotateInertia(mRotateInertia);
 
     if (source == SOURCE_CAMERA) { // load camera
       String cameraIpAddress = intent.getStringExtra(CAMERA_IP_ADDRESS);
@@ -140,6 +139,10 @@ public class GLPhotoActivity extends Activity implements ConfigurationDialog.Dia
 
     @Override
     protected void onPostExecute(byte[] b) {
+      if (b == null) {
+        GLPhotoActivity.this.finish();
+        return;
+      }
       try {
         XMP xmp = new XMP(b);
         mTexture = new Photo(BitmapFactory.decodeByteArray(b, 0, b.length),
@@ -449,6 +452,7 @@ public class GLPhotoActivity extends Activity implements ConfigurationDialog.Dia
   }
 
   public static void startActivityForResult(Activity activity,
+                                            byte[] thumbnail,
                                             String panourl,
                                             String name,
                                             boolean refreshAfterClose) {
@@ -461,6 +465,7 @@ public class GLPhotoActivity extends Activity implements ConfigurationDialog.Dia
 
     Intent intent = new Intent(activity, GLPhotoActivity.class);
     intent.putExtra(NAME, name);
+    intent.putExtra(THUMBNAIL, thumbnail);
     intent.putExtra(PATH, panourl);
     intent.putExtra(SOURCE, SOURCE_SERVER);
     activity.startActivityForResult(intent, requestCode);

@@ -3,10 +3,10 @@ package com.home77.kake.common.api.request;
 /**
  * @author CJ
  */
-public class MakePanoRequest {
+public class AlbumRequest {
   private int album_id;
 
-  public MakePanoRequest(int album_id) {
+  public AlbumRequest(int album_id) {
     this.album_id = album_id;
   }
 

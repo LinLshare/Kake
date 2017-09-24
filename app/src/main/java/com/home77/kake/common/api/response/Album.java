@@ -7,6 +7,10 @@ import java.io.Serializable;
  */
 public class Album implements Serializable {
 
+  public static final int STATUS_GENERATED = 1;
+  public static final int STATUS_GENERATING = 2;
+  public static final int STATUS_NONE = 3;
+
   /**
    * id : 2
    * name : 相册B

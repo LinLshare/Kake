@@ -14,6 +14,7 @@ import com.home77.common.base.component.BaseHandler;
 import com.home77.common.base.pattern.Instance;
 import com.home77.common.net.http.URLFetcher;
 import com.home77.common.ui.util.SizeHelper;
+import com.home77.common.ui.widget.Toast;
 import com.home77.kake.R;
 import com.home77.kake.business.user.adapter.KakeListAdapter;
 import com.home77.kake.business.user.model.Kake;
@@ -52,9 +53,11 @@ public class KakeActivity extends AppCompatActivity {
   }
 
   private void loadKakeList() {
-    recyclerView.setVisibility(View.GONE);
+    if (page == 0) {
+      recyclerView.setVisibility(View.GONE);
+      loadingLayout.setVisibility(View.VISIBLE);
+    }
     emptyLayout.setVisibility(View.GONE);
-    loadingLayout.setVisibility(View.VISIBLE);
     Instance.of(KakeFetcher.class).getKakeList(page, new URLFetcher.Delegate() {
       @Override
       public void onSuccess(URLFetcher source) {
@@ -66,12 +69,12 @@ public class KakeActivity extends AppCompatActivity {
             public void run() {
               if (page == 0) {
                 kakeList.clear();
+                recyclerView.setVisibility(View.VISIBLE);
+                emptyLayout.setVisibility(View.GONE);
+                loadingLayout.setVisibility(View.GONE);
               }
               kakeList.addAll(data);
               kakeListAdapter.notifyDataSetChanged();
-              recyclerView.setVisibility(View.VISIBLE);
-              emptyLayout.setVisibility(View.GONE);
-              loadingLayout.setVisibility(View.GONE);
               refreshLayout.setRefreshing(false);
               page++;
             }
@@ -81,9 +84,13 @@ public class KakeActivity extends AppCompatActivity {
             @Override
             public void run() {
               refreshLayout.setRefreshing(false);
-              recyclerView.setVisibility(View.GONE);
-              emptyLayout.setVisibility(View.VISIBLE);
-              loadingLayout.setVisibility(View.GONE);
+              if (page == 0) {
+                recyclerView.setVisibility(View.GONE);
+                emptyLayout.setVisibility(View.VISIBLE);
+                loadingLayout.setVisibility(View.GONE);
+              } else {
+                Toast.showShort("已经到底了~");
+              }
             }
           });
         }

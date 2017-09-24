@@ -9,6 +9,7 @@ import com.home77.common.base.debug.DLog;
 import com.home77.common.base.pattern.Instance;
 import com.home77.common.base.util.HashHelper;
 import com.home77.common.net.http.URLFetcher;
+import com.home77.common.ui.widget.Toast;
 import com.home77.kake.base.BaseFragmentPresenter;
 import com.home77.kake.base.BaseView;
 import com.home77.kake.base.CmdType;
@@ -67,17 +68,33 @@ public class CloudPhotoListPresenter extends BaseFragmentPresenter {
         baseView.onCommand(CmdType.SHOW_ALBUM_INFO, Params.create(ParamsKey.ALBUM, album), null);
         getPhotoList();
         break;
-      case CLICK_IMPORT_PHOTO:
+      case CLICK_MENU_IMPORT_PHOTO:
         // show local image selector
         baseView.onCommand(CmdType.SHOW_PHOTO_SELECTOR, null, null);
         // upload to cloud
         // add to album
         break;
-      case CLICK_GENERATE_QRCODE:
-        loadQRCode(album.getPanourl());
+      case CLICK_MENU_GENERATE_QRCODE:
+        if (TextUtils.isEmpty(album.getPanourl())) {
+          Toast.showShort("全景图片尚未合成");
+        } else {
+          loadQRCode(album.getPanourl());
+        }
         break;
       case CLICK_BOTTOM_BUTTON:
         handleClickBottomButton();
+        break;
+      case CLICK_MENU_KAKE:
+        if (TextUtils.isEmpty(album.getPanourl())) {
+          Toast.showShort("全景图片尚未合成");
+        } else {
+          baseView.onCommand(CmdType.SHOW_MAKE_PUBLIC_DIALOG, null, null);
+        }
+        break;
+      case CLICK_MENU_SHARE:
+        break;
+      case CLICK_OK_MAKE_PUBLIC_DIALOG:
+        makePublic();
         break;
     }
   }
@@ -103,12 +120,34 @@ public class CloudPhotoListPresenter extends BaseFragmentPresenter {
         Response response = source.responseClass(Response.class);
         if (response != null && response.getCode() == 200) {
           baseView.onCommand(CmdType.MAKE_PANO_POST_SUCCESS, null, null);
+        } else {
+          baseView.onCommand(CmdType.MAKE_PANO_POST_ERROR, null, null);
         }
       }
 
       @Override
       public void onError(String msg) {
         baseView.onCommand(CmdType.MAKE_PANO_POST_ERROR, null, null);
+      }
+    });
+  }
+
+  private void makePublic() {
+    baseView.onCommand(CmdType.MAKE_PUBLIC_POSTING, null, null);
+    cloudAlbumService.makePublic(album.getId(), new URLFetcher.Delegate() {
+      @Override
+      public void onSuccess(URLFetcher source) {
+        Response response = source.responseClass(Response.class);
+        if (response != null && response.getCode() == 200) {
+          baseView.onCommand(CmdType.MAKE_PUBLIC_SUCCESS, null, null);
+        } else {
+          baseView.onCommand(CmdType.MAKE_PUBLIC_ERROR, null, null);
+        }
+      }
+
+      @Override
+      public void onError(String msg) {
+        baseView.onCommand(CmdType.MAKE_PUBLIC_ERROR, null, null);
       }
     });
   }
