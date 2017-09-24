@@ -21,6 +21,7 @@ public final class ParamsKey {
   public static final int ALBUM_NAME = 201_2;
   public static final int ALBUM = 201_3;
   public static final int CLOUD_PHOTO_LIST = 201_4;
+  public static final int CLOUD_PHOTO = 201_5;
 
   // local photo
   public static final int PHOTO_LIST = 301;

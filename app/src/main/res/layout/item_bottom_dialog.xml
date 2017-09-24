@@ -10,6 +10,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
+    android:background="@drawable/bg_share_item"
     android:gravity="center"
     android:textColor="@color/colorC6"
     android:textSize="@dimen/fontSizeF2"/>

@@ -28,6 +28,7 @@ public class CloudAlbumService {
   private final static String ADD_PHOTO_URL;
   private static final String MAKE_PANO_URL;
   private static final String MAKE_PUBLIC_URL;
+  private static final String DELETE_PHOTO_URL_FORMAT;
 
   private static final String TAG = CloudAlbumService.class.getSimpleName();
 
@@ -39,10 +40,15 @@ public class CloudAlbumService {
     PHOTO_LIST_URL_FORMAT = "http://" + HOST + "/api/v1/album/%s/photolist";
     MAKE_PANO_URL = String.format("http://%s/api/v1/album/makepano", HOST);
     MAKE_PUBLIC_URL = String.format("http://%s/api/v1/album/setpublic", HOST);
+    DELETE_PHOTO_URL_FORMAT = "http://" + HOST + "/api/v1.1/spherical/%d";
   }
 
   private String getPhotoListUrl(String path) {
     return String.format(PHOTO_LIST_URL_FORMAT, path);
+  }
+
+  private String getDeletePhotoUrl(int photoId) {
+    return String.format(DELETE_PHOTO_URL_FORMAT, photoId);
   }
 
   private URLFetcher urlFetcher;
@@ -91,7 +97,13 @@ public class CloudAlbumService {
 
 
   public void makePublic(int albumId, URLFetcher.Delegate callback) {
-    urlFetcher = createUrlFetcher(callback).url(MAKE_PUBLIC_URL).postJson(new AlbumRequest(albumId));
+    urlFetcher =
+        createUrlFetcher(callback).url(MAKE_PUBLIC_URL).postJson(new AlbumRequest(albumId));
+    urlFetcher.start();
+  }
+
+  public void deletePhoto(int photoId, URLFetcher.Delegate callback) {
+    urlFetcher = createUrlFetcher(callback).url(getDeletePhotoUrl(photoId));
     urlFetcher.start();
   }
 

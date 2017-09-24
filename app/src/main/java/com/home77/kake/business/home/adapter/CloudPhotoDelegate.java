@@ -2,12 +2,17 @@ package com.home77.kake.business.home.adapter;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.view.View;
 
+import com.home77.common.base.collection.Params;
 import com.home77.common.base.pattern.Instance;
-import com.home77.common.base.util.UnitHelper;
 import com.home77.common.ui.model.UiData;
+import com.home77.kake.App;
 import com.home77.kake.R;
+import com.home77.kake.base.ParamsKey;
 import com.home77.kake.business.home.model.CloudPhoto;
+import com.home77.kake.common.event.BroadCastEvent;
+import com.home77.kake.common.event.BroadCastEventConstant;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.zhy.adapter.recyclerview.base.ItemViewDelegate;
@@ -54,5 +59,13 @@ public class CloudPhotoDelegate implements ItemViewDelegate<CloudPhoto> {
                holder.setImageResource(R.id.photo_image_view, R.drawable.ic_img_def);
              }
            });
+    holder.getConvertView().setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        App.eventBus()
+           .post(new BroadCastEvent(BroadCastEventConstant.CLICK_CLOUD_PHOTO,
+                                    Params.create(ParamsKey.CLOUD_PHOTO, photo)));
+      }
+    });
   }
 }

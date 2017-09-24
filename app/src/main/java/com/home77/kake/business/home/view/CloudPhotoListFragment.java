@@ -2,7 +2,6 @@ package com.home77.kake.business.home.view;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
@@ -24,7 +23,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.home77.common.base.collection.Params;
-import com.home77.common.base.component.BaseHandler;
 import com.home77.common.base.component.ContextManager;
 import com.home77.common.base.pattern.Instance;
 import com.home77.common.ui.model.UiData;
@@ -44,7 +42,9 @@ import com.home77.kake.business.home.model.CloudPhoto;
 import com.home77.kake.common.api.response.Album;
 import com.home77.kake.common.utils.QRCodeUtil;
 import com.home77.kake.common.utils.Util;
+import com.home77.kake.common.widget.BottomDialog;
 import com.home77.kake.common.widget.CustomBottomDialog;
+import com.home77.kake.common.widget.TipDialog;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
@@ -53,7 +53,6 @@ import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,6 +87,9 @@ public class CloudPhotoListFragment extends BaseFragment {
   private Album album;
   private CommonLoadingDialog loadingDialog;
   private IWXAPI api;
+  private Dialog editPhotoDialog;
+  private TipDialog tipDialog;
+  private TipDialog makePublicDialog;
 
   public CloudPhotoListFragment() {
     api = WXAPIFactory.createWXAPI(getContext(), "wxd930ea5d5a258f4f");
@@ -207,6 +209,7 @@ public class CloudPhotoListFragment extends BaseFragment {
         }
         final String msg = in.get(ParamsKey.MSG);
         Toast.showShort(msg);
+        bottomTextView.setVisibility(View.GONE);
         break;
       case CLOUD_PHOTO_LIST_LOAD_SUCCESS:
         loadingLayout.setVisibility(View.GONE);
@@ -218,8 +221,10 @@ public class CloudPhotoListFragment extends BaseFragment {
         List<CloudPhoto> photoList = in.get(ParamsKey.CLOUD_PHOTO_LIST);
         if (photoList == null || photoList.isEmpty()) {
           Toast.showShort("暂无图片");
+          bottomTextView.setVisibility(View.GONE);
           return;
         }
+        bottomTextView.setVisibility(View.VISIBLE);
         this.photoList.clear();
         this.photoList.addAll(photoList);
         cloudPhotoListAdapter.notifyDataSetChanged();
@@ -310,6 +315,14 @@ public class CloudPhotoListFragment extends BaseFragment {
         showShareDialog();
       }
       break;
+      case SHOW_EDIT_PHOTO_DIALOG:
+        showEditPhotoDialog(in);
+        break;
+      case SHOW_DELETE_PHOTO_CONFIRM_DIALOG:
+        showDeletePhotoConfirmDialog(in);
+        break;
+      case SHOW_RENAME_PHOTO_DIALOG:
+        break;
     }
 
   }
@@ -380,6 +393,34 @@ public class CloudPhotoListFragment extends BaseFragment {
     alertDialog.show();
   }
 
+  private void showEditPhotoDialog(final Params in) {
+    editPhotoDialog = new BottomDialog(getContext(),
+                                       new String[] {"删除", "重命名", "取消"},
+                                       new BottomDialog.OnItemClickListener() {
+                                         @Override
+                                         public void onItemClick(int position, String data) {
+                                           switch (position) {
+                                             case 0:
+                                               presenter.onMessage(MsgType.CLICK_DELETE_PHOTO_EDIT_DIALOG,
+                                                                   in);
+                                               editPhotoDialog.dismiss();
+                                               break;
+                                             case 1:
+                                               presenter.onMessage(MsgType.CLICK_RENAME_PHOTO_EDIT_DIALOG,
+                                                                   in);
+                                               editPhotoDialog.dismiss();
+                                               break;
+                                             case 2:
+                                               presenter.onMessage(MsgType.CLICK_CANCEL_PHOTO_EDIT_DIALOG,
+                                                                   in);
+                                               editPhotoDialog.dismiss();
+                                               break;
+                                           }
+                                         }
+                                       });
+    editPhotoDialog.show();
+  }
+
   private void shareWetChat(final int scene) {
     Picasso.with(getContext()).load(album.getCover()).into(new Target() {
       @Override
@@ -411,23 +452,40 @@ public class CloudPhotoListFragment extends BaseFragment {
     });
   }
 
+  private void showDeletePhotoConfirmDialog(final Params params) {
+    CloudPhoto cloudPhoto = params.get(ParamsKey.CLOUD_PHOTO);
+    tipDialog = new TipDialog(getContext(),
+                              "确认删除照片: " + cloudPhoto.getName() + " ?",
+                              new TipDialog.OnButtonClickListener() {
+                                @Override
+                                public void onClickOk() {
+                                  presenter.onMessage(MsgType.CLICK_OK_DELETE_PHOTO_CONFIRM_DIALOG,
+                                                      params);
+                                  tipDialog.dismiss();
+                                }
+
+                                @Override
+                                public void onClickCancel() {
+                                  tipDialog.dismiss();
+                                }
+                              });
+    tipDialog.show();
+  }
+
   private void showMakePublicDialog() {
-    View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_make_public, null);
-    final AlertDialog alertDialog =
-        new AlertDialog.Builder(getContext()).setView(dialogView).create();
-    dialogView.findViewById(R.id.ok_text_view).setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        presenter.onMessage(MsgType.CLICK_OK_MAKE_PUBLIC_DIALOG, null);
-        alertDialog.dismiss();
-      }
-    });
-    dialogView.findViewById(R.id.cancel_text_view).setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        alertDialog.dismiss();
-      }
-    });
-    alertDialog.show();
+    makePublicDialog =
+        new TipDialog(getContext(), "确认发布到咔客圈?", new TipDialog.OnButtonClickListener() {
+          @Override
+          public void onClickOk() {
+            presenter.onMessage(MsgType.CLICK_OK_MAKE_PUBLIC_DIALOG, null);
+            makePublicDialog.dismiss();
+          }
+
+          @Override
+          public void onClickCancel() {
+            makePublicDialog.dismiss();
+          }
+        });
+    makePublicDialog.show();
   }
 }

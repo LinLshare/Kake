@@ -10,6 +10,7 @@ import com.home77.common.base.pattern.Instance;
 import com.home77.common.base.util.HashHelper;
 import com.home77.common.net.http.URLFetcher;
 import com.home77.common.ui.widget.Toast;
+import com.home77.kake.App;
 import com.home77.kake.base.BaseFragmentPresenter;
 import com.home77.kake.base.BaseView;
 import com.home77.kake.base.CmdType;
@@ -26,6 +27,11 @@ import com.home77.kake.common.api.response.PhotoListResponse;
 import com.home77.kake.common.api.response.Response;
 import com.home77.kake.common.api.response.UploadPhotoResponse;
 import com.home77.kake.common.api.service.CloudAlbumService;
+import com.home77.kake.common.event.BroadCastEvent;
+import com.home77.kake.common.event.BroadCastEventConstant;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.RandomAccessFile;
@@ -48,6 +54,7 @@ public class CloudPhotoListPresenter extends BaseFragmentPresenter {
   public CloudPhotoListPresenter(BaseView baseView, NavigateCallback navigateCallback) {
     super(baseView, navigateCallback);
     cloudAlbumService = Instance.of(CloudAlbumService.class);
+    App.eventBus().register(this);
   }
 
   public void setParam(Album album) {
@@ -96,7 +103,43 @@ public class CloudPhotoListPresenter extends BaseFragmentPresenter {
       case CLICK_OK_MAKE_PUBLIC_DIALOG:
         makePublic();
         break;
+      case CLICK_DELETE_PHOTO_EDIT_DIALOG: {
+        handleDeletePhoto(params);
+      }
+      break;
+      case CLICK_RENAME_PHOTO_EDIT_DIALOG: {
+        handleRenamePhoto(params);
+      }
+      break;
+      case CLICK_CANCEL_PHOTO_EDIT_DIALOG:
+        // do nothing
+        break;
+      case CLICK_OK_DELETE_PHOTO_CONFIRM_DIALOG:
+        // delete photo
+      {
+        CloudPhoto cloudPhoto = params.get(ParamsKey.CLOUD_PHOTO);
+        cloudAlbumService.deletePhoto(cloudPhoto.getId(), new URLFetcher.Delegate() {
+          @Override
+          public void onSuccess(URLFetcher source) {
+
+          }
+
+          @Override
+          public void onError(String msg) {
+
+          }
+        });
+      }
+      break;
     }
+  }
+
+  private void handleRenamePhoto(Params params) {
+    baseView.onCommand(CmdType.SHOW_RENAME_PHOTO_DIALOG, params, null);
+  }
+
+  private void handleDeletePhoto(Params params) {
+    baseView.onCommand(CmdType.SHOW_DELETE_PHOTO_CONFIRM_DIALOG, params, null);
   }
 
   private void handleClickBottomButton() {
@@ -290,4 +333,14 @@ public class CloudPhotoListPresenter extends BaseFragmentPresenter {
       }
     });
   }
+
+  @Subscribe(threadMode = ThreadMode.MAIN)
+  public void onEvent(BroadCastEvent event) {
+    switch (event.getEvent()) {
+      case BroadCastEventConstant.CLICK_CLOUD_PHOTO:
+        baseView.onCommand(CmdType.SHOW_EDIT_PHOTO_DIALOG, event.getParams(), null);
+        break;
+    }
+  }
+
 }
