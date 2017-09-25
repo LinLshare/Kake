@@ -5,8 +5,11 @@ import com.home77.common.net.http.URLFetcher;
 import com.home77.kake.App;
 import com.home77.kake.GlobalData;
 import com.home77.kake.common.api.request.AddPhotoRequest;
-import com.home77.kake.common.api.request.CreateAlbumRequest;
 import com.home77.kake.common.api.request.AlbumRequest;
+import com.home77.kake.common.api.request.CreateAlbumRequest;
+import com.home77.kake.common.api.request.DeletePhotoRequest;
+import com.home77.kake.common.api.request.RenameAlbumRequest;
+import com.home77.kake.common.api.request.RenamePhotoRequest;
 
 import java.io.File;
 
@@ -28,7 +31,9 @@ public class CloudAlbumService {
   private final static String ADD_PHOTO_URL;
   private static final String MAKE_PANO_URL;
   private static final String MAKE_PUBLIC_URL;
-  private static final String DELETE_PHOTO_URL_FORMAT;
+  private static final String DELETE_PHOTO_URL;
+  private static final String RENAME_PHOTO_URL;
+  private static final String RENAME_ALBUM_URL;
 
   private static final String TAG = CloudAlbumService.class.getSimpleName();
 
@@ -40,15 +45,13 @@ public class CloudAlbumService {
     PHOTO_LIST_URL_FORMAT = "http://" + HOST + "/api/v1/album/%s/photolist";
     MAKE_PANO_URL = String.format("http://%s/api/v1/album/makepano", HOST);
     MAKE_PUBLIC_URL = String.format("http://%s/api/v1/album/setpublic", HOST);
-    DELETE_PHOTO_URL_FORMAT = "http://" + HOST + "/api/v1.1/spherical/%d";
+    DELETE_PHOTO_URL = String.format("http://%s/api/v1/album/deletephoto", HOST);
+    RENAME_PHOTO_URL = String.format("http://%s/api/v1/album/renamephoto", HOST);
+    RENAME_ALBUM_URL = String.format("http://%s/api/v1/album/renamealbum", HOST);
   }
 
   private String getPhotoListUrl(String path) {
     return String.format(PHOTO_LIST_URL_FORMAT, path);
-  }
-
-  private String getDeletePhotoUrl(int photoId) {
-    return String.format(DELETE_PHOTO_URL_FORMAT, photoId);
   }
 
   private URLFetcher urlFetcher;
@@ -102,8 +105,21 @@ public class CloudAlbumService {
     urlFetcher.start();
   }
 
+  public void renamePhoto(int photoId, String name, URLFetcher.Delegate callback) {
+    urlFetcher = createUrlFetcher(callback).url(RENAME_PHOTO_URL)
+                                           .postJson(new RenamePhotoRequest(photoId, name));
+    urlFetcher.start();
+  }
+
+  public void renameAlbum(int albumId, String name, URLFetcher.Delegate callback) {
+    urlFetcher = createUrlFetcher(callback).url(RENAME_ALBUM_URL)
+                                           .postJson(new RenameAlbumRequest(albumId, name));
+    urlFetcher.start();
+  }
+
   public void deletePhoto(int photoId, URLFetcher.Delegate callback) {
-    urlFetcher = createUrlFetcher(callback).url(getDeletePhotoUrl(photoId));
+    urlFetcher =
+        createUrlFetcher(callback).url(DELETE_PHOTO_URL).postJson(new DeletePhotoRequest(photoId));
     urlFetcher.start();
   }
 

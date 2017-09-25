@@ -44,6 +44,7 @@ import com.home77.kake.common.utils.QRCodeUtil;
 import com.home77.kake.common.utils.Util;
 import com.home77.kake.common.widget.BottomDialog;
 import com.home77.kake.common.widget.CustomBottomDialog;
+import com.home77.kake.common.widget.InputDialog;
 import com.home77.kake.common.widget.TipDialog;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -81,6 +82,8 @@ public class CloudPhotoListFragment extends BaseFragment {
   Unbinder unbinder;
   @BindView(R.id.menu_image_view)
   ImageView menuImageView;
+  @BindView(R.id.edit_image_view)
+  ImageView editImageView;
   private List<CloudPhoto> photoList = new ArrayList<>();
   private CloudPhotoListAdapter cloudPhotoListAdapter;
   private PopupWindow popupMenu;
@@ -90,9 +93,13 @@ public class CloudPhotoListFragment extends BaseFragment {
   private Dialog editPhotoDialog;
   private TipDialog tipDialog;
   private TipDialog makePublicDialog;
+  private InputDialog inputDialog;
+  private InputDialog inputDialog1;
+  private InputDialog albumNameInputDialog;
 
   public CloudPhotoListFragment() {
-    api = WXAPIFactory.createWXAPI(getContext(), "wxd930ea5d5a258f4f");
+    String appId = "wx0dfd1d91a80a49b1";
+    api = WXAPIFactory.createWXAPI(getActivity(), appId, true);
   }
 
   @Override
@@ -200,7 +207,7 @@ public class CloudPhotoListFragment extends BaseFragment {
         emptyLayout.setVisibility(View.GONE);
       }
       break;
-      case CLOUD_PHOTO_LIST_LOAD_ERROR:
+      case CLOUD_PHOTO_LIST_LOAD_ERROR: {
         loadingLayout.setVisibility(View.GONE);
         recyclerView.setVisibility(View.GONE);
         emptyLayout.setVisibility(View.VISIBLE);
@@ -210,7 +217,8 @@ public class CloudPhotoListFragment extends BaseFragment {
         final String msg = in.get(ParamsKey.MSG);
         Toast.showShort(msg);
         bottomTextView.setVisibility(View.GONE);
-        break;
+      }
+      break;
       case CLOUD_PHOTO_LIST_LOAD_SUCCESS:
         loadingLayout.setVisibility(View.GONE);
         recyclerView.setVisibility(View.VISIBLE);
@@ -322,9 +330,55 @@ public class CloudPhotoListFragment extends BaseFragment {
         showDeletePhotoConfirmDialog(in);
         break;
       case SHOW_RENAME_PHOTO_DIALOG:
+        showRenameDialog(in);
+        break;
+      case LOADING: {
+        String msg = in.get(ParamsKey.MSG);
+        loadingDialog.show(msg);
+        loadingDialog.setCancelable(false);
+      }
+      break;
+      case PHOTO_DELETE_ERROR:
+        loadingDialog.dismiss();
+        Toast.showShort("删除失败");
+        break;
+      case PHOTO_DELETE_SUCCESS:
+        loadingDialog.dismiss();
+        Toast.showShort("删除成功");
+        break;
+      case PHOTO_RENAME_ERROR:
+        loadingDialog.dismiss();
+        Toast.showShort("重命名失败，请稍后重试");
+        break;
+      case PHOTO_RENAME_SUCCESS:
+        loadingDialog.dismiss();
+        Toast.showShort("重命名成功");
+        break;
+      case ALBUM_RENAME_ERROR:
+        Toast.showShort("重命名失败");
+        break;
+      case ALBUM_RENAME_SUCCESS:
+        Toast.showShort("重命名成功");
+        String str = in.get(ParamsKey.STR);
+        titleTextView.setText(str);
         break;
     }
+  }
 
+  private void showRenameDialog(final Params in) {
+    inputDialog = new InputDialog(getContext(), "重命名图片", new InputDialog.InputDialogListener() {
+      @Override
+      public void onClickOk(String input) {
+        presenter.onMessage(MsgType.CLICK_OK_RENAME_PHOTO_DIALOG, in.put(ParamsKey.STR, input));
+        inputDialog.dismiss();
+      }
+
+      @Override
+      public void onClickCancel() {
+        inputDialog.dismiss();
+      }
+    });
+    inputDialog.show();
   }
 
   private String buildTransaction(final String type) {
@@ -333,7 +387,9 @@ public class CloudPhotoListFragment extends BaseFragment {
         : type + System.currentTimeMillis();
   }
 
-  @OnClick({R.id.back_image_view, R.id.menu_image_view, R.id.bottom_text_view})
+  @OnClick({
+      R.id.back_image_view, R.id.menu_image_view, R.id.bottom_text_view, R.id.edit_image_view
+  })
   public void onViewClicked(View view) {
     switch (view.getId()) {
       case R.id.back_image_view:
@@ -345,6 +401,29 @@ public class CloudPhotoListFragment extends BaseFragment {
       case R.id.bottom_text_view:
         presenter.onMessage(MsgType.CLICK_BOTTOM_BUTTON, null);
         break;
+      case R.id.edit_image_view: {
+        albumNameInputDialog =
+            new InputDialog(getContext(), "相册的新名称", new InputDialog.InputDialogListener() {
+              @Override
+              public void onClickOk(String input) {
+                if (TextUtils.isEmpty(input)) {
+                  Toast.showShort("输入不合法，请重新输入");
+                  return;
+                }
+                presenter.onMessage(MsgType.CLICK_OK_RENAME_ALBUM_DIALOG,
+                                    Params.create(ParamsKey.STR, input)
+                                          .put(ParamsKey.ALBUM, album));
+                albumNameInputDialog.dismiss();
+              }
+
+              @Override
+              public void onClickCancel() {
+                albumNameInputDialog.dismiss();
+              }
+            });
+        albumNameInputDialog.show();
+      }
+      break;
     }
   }
 

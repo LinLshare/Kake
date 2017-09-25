@@ -109,6 +109,7 @@ public class ProfilePresenter extends BaseFragmentPresenter {
                                        case 200:
                                          App.globalData().putString(GlobalData.KEY_USER_NAME, name);
                                          baseView.onCommand(CmdType.RENAME_SUCCESS, null, null);
+                                         loadUserInfo();
                                          break;
                                        default:
                                          baseView.onCommand(CmdType.TOAST,
@@ -142,6 +143,10 @@ public class ProfilePresenter extends BaseFragmentPresenter {
   @Override
   public void onResume() {
     super.onResume();
+    loadUserInfo();
+  }
+
+  private void loadUserInfo() {
     userService.getUserInfo(new URLFetcher.Delegate() {
       @Override
       public void onSuccess(URLFetcher source) {
@@ -159,7 +164,6 @@ public class ProfilePresenter extends BaseFragmentPresenter {
         //        baseView.onCommand(CmdType.VIEW_REFRESH, null, null);
       }
     });
-
   }
 
   private void handleClickLogout() {

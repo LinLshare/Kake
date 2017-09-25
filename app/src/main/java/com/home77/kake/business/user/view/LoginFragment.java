@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.home77.common.base.collection.Params;
+import com.home77.common.ui.widget.Toast;
 import com.home77.kake.App;
 import com.home77.kake.R;
 import com.home77.kake.base.BaseFragment;
@@ -42,7 +43,9 @@ public class LoginFragment extends BaseFragment {
         unbinder.unbind();
         break;
       case LOGINING:
-        App.eventBus().post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_SHOW, null));
+        App.eventBus()
+           .post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_SHOW,
+                                    Params.create(ParamsKey.MSG, "正在登录")));
         break;
       case LOGIN_SUCCESS:
         App.eventBus()
@@ -51,6 +54,7 @@ public class LoginFragment extends BaseFragment {
       case LOGIN_ERROR:
         App.eventBus()
            .post(new BroadCastEvent(BroadCastEventConstant.DIALOG_LOADING_DISMISS, null));
+        Toast.showShort("用户名或密码有误，请重新输入");
         break;
     }
   }

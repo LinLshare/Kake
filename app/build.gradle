@@ -5,8 +5,7 @@ android {
   compileSdkVersion android_versions.compileSdkVersion
   buildToolsVersion android_versions.buildToolsVersion
   defaultConfig {
-//    applicationId "com.home77.kake"
-    applicationId "net.sourceforge.simcpux"
+    applicationId "com.home77.kake"
     minSdkVersion android_versions.minSdkVersion
     targetSdkVersion android_versions.targetSdkVersion
     versionCode propVersionCode as int
@@ -18,7 +17,7 @@ android {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
-    debug{
+    debug {
 
     }
   }

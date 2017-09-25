@@ -10,13 +10,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.text.method.KeyListener;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.home77.common.base.collection.Params;
@@ -30,8 +26,8 @@ import com.home77.kake.base.CmdType;
 import com.home77.kake.base.MsgType;
 import com.home77.kake.base.ParamsKey;
 import com.home77.kake.business.user.KakeActivity;
-import com.home77.kake.business.user.model.Kake;
 import com.home77.kake.common.widget.BottomDialog;
+import com.home77.kake.common.widget.InputDialog;
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.app.TakePhotoImpl;
 import com.jph.takephoto.compress.CompressConfig;
@@ -61,16 +57,16 @@ public class ProfileFragment extends BaseFragment
   @BindView(R.id.avatar_image_view)
   CircleImageView avatarImageView;
   @BindView(R.id.name_text_view)
-  EditText nameTextView;
+  TextView nameTextView;
   Unbinder unbinder;
   @BindView(R.id.exist_login_text_view)
   TextView existLoginTextView;
   private TakePhoto takePhoto;
   private InvokeParam invokeParam;
 
-  private KeyListener keyListener;
-  private Dialog dialog;
+  private Dialog bottomDialog;
   private File file;
+  private InputDialog inputDialog;
 
   @Override
   public void executeCommand(CmdType cmdType, Params in, Params out) {
@@ -79,21 +75,6 @@ public class ProfileFragment extends BaseFragment
         View contentView =
             LayoutInflater.from(getContext()).inflate(R.layout.fragment_profile, null, false);
         unbinder = ButterKnife.bind(this, contentView);
-        keyListener = nameTextView.getKeyListener();
-        nameTextView.setKeyListener(null);
-        nameTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-          @Override
-          public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-              keyListener = nameTextView.getKeyListener();
-              nameTextView.setKeyListener(null);
-              presenter.onMessage(MsgType.EDIT_USER_NAME_DONE,
-                                  Params.create(ParamsKey.USER_NAME, v.getText().toString()));
-              return true;
-            }
-            return false;
-          }
-        });
         out.put(ParamsKey.VIEW, contentView);
         break;
       case VIEW_DESTROY:
@@ -115,26 +96,26 @@ public class ProfileFragment extends BaseFragment
         final Uri imageUri = Uri.fromFile(file);
         configCompress();
         configTakePhotoOpthion();
-        dialog = new BottomDialog(getContext(),
-                                  new String[] {"拍照", "相册"},
-                                  new BottomDialog.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(int position, String data) {
-                                      switch (position) {
-                                        case 0:
-                                          takePhoto.onPickFromCaptureWithCrop(imageUri,
-                                                                              getCropOptions());
-                                          dialog.dismiss();
-                                          break;
-                                        case 1:
-                                          takePhoto.onPickFromGalleryWithCrop(imageUri,
-                                                                              getCropOptions());
-                                          dialog.dismiss();
-                                          break;
-                                      }
-                                    }
-                                  });
-        dialog.show();
+        bottomDialog = new BottomDialog(getContext(),
+                                        new String[] {"拍照", "相册"},
+                                        new BottomDialog.OnItemClickListener() {
+                                          @Override
+                                          public void onItemClick(int position, String data) {
+                                            switch (position) {
+                                              case 0:
+                                                takePhoto.onPickFromCaptureWithCrop(imageUri,
+                                                                                    getCropOptions());
+                                                bottomDialog.dismiss();
+                                                break;
+                                              case 1:
+                                                takePhoto.onPickFromGalleryWithCrop(imageUri,
+                                                                                    getCropOptions());
+                                                bottomDialog.dismiss();
+                                                break;
+                                            }
+                                          }
+                                        });
+        bottomDialog.show();
       }
       break;
       case AVATAR_UPDATE_SUCCESS:
@@ -173,9 +154,26 @@ public class ProfileFragment extends BaseFragment
       case R.id.avatar_image_view:
         presenter.onMessage(MsgType.CLICK_AVATAR, null);
         break;
-      case R.id.edit_image_view:
-        nameTextView.setKeyListener(keyListener);
-        break;
+      case R.id.edit_image_view: {
+        if (!App.isLogin()) {
+          return;
+        }
+        inputDialog = new InputDialog(getContext(), "新昵称", new InputDialog.InputDialogListener() {
+          @Override
+          public void onClickOk(String input) {
+            presenter.onMessage(MsgType.EDIT_USER_NAME_DONE,
+                                Params.create(ParamsKey.USER_NAME, input));
+            inputDialog.dismiss();
+          }
+
+          @Override
+          public void onClickCancel() {
+            inputDialog.dismiss();
+          }
+        });
+        inputDialog.show();
+      }
+      break;
       case R.id.list_item_kake:
         presenter.onMessage(MsgType.CLICK_KAKE, null);
         break;

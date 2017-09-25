@@ -62,7 +62,7 @@ public class CloudPhotoListPresenter extends BaseFragmentPresenter {
   }
 
   @Override
-  public void handleMessage(MsgType msgType, Params params) {
+  public void handleMessage(MsgType msgType, final Params params) {
     switch (msgType) {
       case CLICK_BACK:
         navigateCallback.onNavigate(CloudPhotoActivity.EVENT_EXIST, null);
@@ -114,19 +114,69 @@ public class CloudPhotoListPresenter extends BaseFragmentPresenter {
       case CLICK_CANCEL_PHOTO_EDIT_DIALOG:
         // do nothing
         break;
-      case CLICK_OK_DELETE_PHOTO_CONFIRM_DIALOG:
-        // delete photo
-      {
+      case CLICK_OK_DELETE_PHOTO_CONFIRM_DIALOG: {
+        //delete photo
+        baseView.onCommand(CmdType.LOADING, Params.create(ParamsKey.MSG, "正在删除"), null);
         CloudPhoto cloudPhoto = params.get(ParamsKey.CLOUD_PHOTO);
         cloudAlbumService.deletePhoto(cloudPhoto.getId(), new URLFetcher.Delegate() {
           @Override
           public void onSuccess(URLFetcher source) {
-
+            Response response = source.responseClass(Response.class);
+            if (response != null && response.getCode() == 200) {
+              baseView.onCommand(CmdType.PHOTO_DELETE_SUCCESS, null, null);
+              getPhotoList();
+            } else {
+              baseView.onCommand(CmdType.PHOTO_DELETE_ERROR, null, null);
+            }
           }
 
           @Override
           public void onError(String msg) {
+            baseView.onCommand(CmdType.PHOTO_DELETE_ERROR, null, null);
+          }
+        });
+      }
+      break;
+      case CLICK_OK_RENAME_PHOTO_DIALOG: {
+        baseView.onCommand(CmdType.LOADING, Params.create(ParamsKey.MSG, "正在重命名"), null);
+        CloudPhoto cloudPhoto = params.get(ParamsKey.CLOUD_PHOTO);
+        String rename = params.get(ParamsKey.STR);
+        cloudAlbumService.renamePhoto(cloudPhoto.getId(), rename, new URLFetcher.Delegate() {
+          @Override
+          public void onSuccess(URLFetcher source) {
+            Response response = source.responseClass(Response.class);
+            if (response != null && response.getCode() == 200) {
+              baseView.onCommand(CmdType.PHOTO_RENAME_SUCCESS, null, null);
+              getPhotoList();
+            } else {
+              baseView.onCommand(CmdType.PHOTO_RENAME_ERROR, null, null);
+            }
+          }
 
+          @Override
+          public void onError(String msg) {
+            baseView.onCommand(CmdType.PHOTO_RENAME_ERROR, null, null);
+          }
+        });
+      }
+      break;
+      case CLICK_OK_RENAME_ALBUM_DIALOG: {
+        Album album = params.get(ParamsKey.ALBUM);
+        String name = params.get(ParamsKey.STR);
+        cloudAlbumService.renameAlbum(album.getId(), name, new URLFetcher.Delegate() {
+          @Override
+          public void onSuccess(URLFetcher source) {
+            Response response = source.responseClass(Response.class);
+            if (response != null && response.getCode() == 200) {
+              baseView.onCommand(CmdType.ALBUM_RENAME_SUCCESS, params, null);
+            } else {
+              baseView.onCommand(CmdType.ALBUM_RENAME_ERROR, params, null);
+            }
+          }
+
+          @Override
+          public void onError(String msg) {
+            baseView.onCommand(CmdType.ALBUM_RENAME_ERROR, params, null);
           }
         });
       }

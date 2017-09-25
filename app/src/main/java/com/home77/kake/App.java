@@ -16,11 +16,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 
+import com.home77.common.base.collection.Params;
 import com.home77.common.base.component.BaseHandler;
 import com.home77.common.base.component.ContextManager;
 import com.home77.common.net.util.NetHelper;
-import com.home77.common.ui.widget.LoadingDialog;
+import com.home77.common.ui.widget.CommonLoadingDialog;
 import com.home77.common.ui.widget.Toast;
+import com.home77.kake.base.ParamsKey;
 import com.home77.kake.common.event.BroadCastEvent;
 import com.home77.kake.common.event.BroadCastEventConstant;
 
@@ -65,7 +67,7 @@ public class App extends Application {
         if (loadingDialog != null && loadingDialog.isShowing()) {
           loadingDialog.dismiss();
         }
-        loadingDialog = new LoadingDialog(activity);
+        loadingDialog = new CommonLoadingDialog(activity);
       }
 
       @Override
@@ -112,7 +114,7 @@ public class App extends Application {
 
   // setup eventbus
   private static EventBus EVENTBUS;
-  private LoadingDialog loadingDialog;
+  private CommonLoadingDialog loadingDialog;
   private static boolean hasConnectedToWifi = false;
 
   static {
@@ -142,7 +144,16 @@ public class App extends Application {
     switch (event.getEvent()) {
       case BroadCastEventConstant.DIALOG_LOADING_SHOW:
         if (loadingDialog != null && !loadingDialog.isShowing()) {
-          loadingDialog.show();
+          Params params = event.getParams();
+          String msg = "";
+          if (params != null) {
+            msg = params.get(ParamsKey.MSG);
+          }
+          if (TextUtils.isEmpty(msg)) {
+            loadingDialog.show();
+          } else {
+            loadingDialog.show(msg);
+          }
           loadingDialog.setCancelable(false);
         }
         break;

@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.view.Gravity;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -38,13 +40,17 @@ public class CommonLoadingDialog extends Dialog {
   @Override
   public void show() {
     super.show();
+    tipTextView.setVisibility(View.GONE);
     WindowManager.LayoutParams attributes = dialogWindow.getAttributes();
     attributes.width = widthAndHeight;
+    attributes.height = widthAndHeight;
+    attributes.gravity = Gravity.CENTER;
     dialogWindow.setAttributes(attributes);
   }
 
   public void show(String tip) {
     tipTextView.setText(tip);
+    tipTextView.setVisibility(View.VISIBLE);
     show();
   }
 

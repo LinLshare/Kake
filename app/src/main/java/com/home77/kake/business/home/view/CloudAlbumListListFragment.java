@@ -1,15 +1,11 @@
 package com.home77.kake.business.home.view;
 
-import android.app.AlertDialog;
-import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -28,6 +24,7 @@ import com.home77.kake.business.home.adapter.CloudAlbumListAdapter;
 import com.home77.kake.common.api.response.Album;
 import com.home77.kake.common.event.BroadCastEvent;
 import com.home77.kake.common.event.BroadCastEventConstant;
+import com.home77.kake.common.widget.InputDialog;
 import com.home77.kake.common.widget.recyclerview.CloudAlbumGridItemDecoration;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -56,7 +53,7 @@ public class CloudAlbumListListFragment extends BaseFragment {
   TextView emptyLayout;
   private List<Album> albumList = new ArrayList<>();
   private CloudAlbumListAdapter cloudAlbumListAdapter;
-  private AlertDialog alertDialog;
+  private InputDialog inputDialog;
 
   public CloudAlbumListListFragment() {
     albumList.add(new Album());
@@ -96,7 +93,7 @@ public class CloudAlbumListListFragment extends BaseFragment {
         out.put(ParamsKey.VIEW, view);
         break;
       case CLOUD_ALBUM_CREATING:
-        alertDialog.dismiss();
+        break;
       case CLOUD_ALBUM_LOADING: {
         loadingLayout.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE);
@@ -150,23 +147,20 @@ public class CloudAlbumListListFragment extends BaseFragment {
   }
 
   private void showUploadAlbumDialog() {
-    View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_add_album, null);
-    alertDialog = new AlertDialog.Builder(getContext()).setView(dialogView).create();
-    final EditText editText = (EditText) dialogView.findViewById(R.id.album_name_edit_text);
-    dialogView.findViewById(R.id.ok_text_view).setOnClickListener(new View.OnClickListener() {
+    inputDialog = new InputDialog(getContext(), "新建相册", new InputDialog.InputDialogListener() {
+
       @Override
-      public void onClick(View v) {
-        String name = editText.getText().toString();
+      public void onClickOk(String input) {
         presenter.onMessage(MsgType.CLICK_CREATE_ALBUM_DIALOG_OK,
-                            Params.create(ParamsKey.ALBUM_NAME, name));
+                            Params.create(ParamsKey.ALBUM_NAME, input));
+        inputDialog.dismiss();
       }
-    });
-    dialogView.findViewById(R.id.cancel_text_view).setOnClickListener(new View.OnClickListener() {
+
       @Override
-      public void onClick(View v) {
-        alertDialog.dismiss();
+      public void onClickCancel() {
+        inputDialog.dismiss();
       }
     });
-    alertDialog.show();
+    inputDialog.show();
   }
 }

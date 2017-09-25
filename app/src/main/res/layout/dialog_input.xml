@@ -11,15 +11,15 @@
   android:paddingTop="16dp">
 
   <TextView
+    android:id="@+id/title_text_view"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
-    android:text="新建相册"
     android:textColor="@color/colorC6"
     android:textSize="@dimen/fontSizeF1"/>
 
   <EditText
-    android:id="@+id/album_name_edit_text"
+    android:id="@+id/edit_text"
     android:layout_width="match_parent"
     android:layout_height="48dp"
     android:layout_marginLeft="16dp"
