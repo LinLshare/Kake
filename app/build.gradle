@@ -12,18 +12,30 @@ android {
     versionName propVersionName
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
   }
+
+  signingConfigs {
+    debug {
+      storeFile file("kake_key.jks")
+      storePassword "12345678"
+      keyAlias "kake_key"
+      keyPassword "12345678"
+    }
+    release {
+      storeFile file("kake_key.jks")
+      storePassword "12345678"
+      keyAlias "kake_key"
+      keyPassword "12345678"
+    }
+  }
+
   buildTypes {
     release {
       minifyEnabled false
-      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard.cfg'
+      signingConfig signingConfigs.release
     }
     debug {
-
-    }
-  }
-  signingConfigs {
-    debug {
-      storeFile file("../debug.keystore")
+      signingConfig signingConfigs.debug
     }
   }
 }

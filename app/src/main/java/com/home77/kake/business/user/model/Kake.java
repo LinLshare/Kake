@@ -22,6 +22,7 @@ public class Kake {
   private String created_at;
   private ShipUserBean ship_user;
   private String url;
+  private String cover;
 
   public int getId() {
     return id;
@@ -77,6 +78,14 @@ public class Kake {
 
   public void setUrl(String url) {
     this.url = url;
+  }
+
+  public String getCover() {
+    return cover;
+  }
+
+  public void setCover(String cover) {
+    this.cover = cover;
   }
 
   public static class ShipUserBean {

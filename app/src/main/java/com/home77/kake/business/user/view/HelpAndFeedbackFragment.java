@@ -5,10 +5,8 @@ import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.EditText;
 
 import com.home77.common.base.collection.Params;
-import com.home77.common.ui.widget.Toast;
 import com.home77.kake.R;
 import com.home77.kake.base.BaseFragment;
 import com.home77.kake.base.CmdType;
@@ -66,12 +64,7 @@ public class HelpAndFeedbackFragment extends BaseFragment {
             return true;
           }
         });
-
-        webView.loadDataWithBaseURL("http://" + ServerConfig.HOST + "/help.html",
-                                    "",
-                                    "text/html",
-                                    "utf-8",
-                                    null);
+        webView.loadUrl("http://" + ServerConfig.HOST + "/help.html");
         break;
       case VIEW_DESTROY:
         unbinder.unbind();

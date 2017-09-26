@@ -32,6 +32,7 @@ public class CloudPhotoGroupDelegate implements ItemViewDelegate<CloudPhoto> {
 
   @Override
   public void convert(ViewHolder holder, CloudPhoto photo, int position) {
-    holder.setText(R.id.group_name_text_view, simpleDateFormat.format(photo.getUpdated_at()));
+    holder.setText(R.id.group_name_text_view,
+                   simpleDateFormat.format(photo.getUpdated_at() * 1000));
   }
 }
