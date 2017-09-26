@@ -19,4 +19,5 @@ public final class BroadCastEventConstant {
 
   public static final int CLICK_LOCAL_PHOTO = 106_1;
   public static final int CLICK_CLOUD_PHOTO = 107_1;
+  public static final int LONG_CLICK_CLOUD_ALBUM = 108_1;
 }

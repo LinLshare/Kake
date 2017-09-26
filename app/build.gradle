@@ -14,12 +14,6 @@ android {
   }
 
   signingConfigs {
-    debug {
-      storeFile file("kake_key.jks")
-      storePassword "12345678"
-      keyAlias "kake_key"
-      keyPassword "12345678"
-    }
     release {
       storeFile file("kake_key.jks")
       storePassword "12345678"
@@ -33,9 +27,6 @@ android {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard.cfg'
       signingConfig signingConfigs.release
-    }
-    debug {
-      signingConfig signingConfigs.debug
     }
   }
 }

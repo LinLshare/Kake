@@ -139,13 +139,13 @@ public class HomeActivity extends AppCompatActivity
         localPhotoPresenter.start(null);
         break;
       case 1: {
-        //        if (App.isIsLinckedCamera()) {
-        Intent intent = new Intent(this, CameraActivity.class);
-        startActivity(intent);
-        //        } else {
-        //          titleTextView.setText("咔客全景相机");
-        //          pagerMainTab.setCurrentItem(index, false);
-        //        }
+        if (App.isIsLinckedCamera()) {
+          Intent intent = new Intent(this, CameraActivity.class);
+          startActivity(intent);
+        } else {
+          titleTextView.setText("咔客全景相机");
+          pagerMainTab.setCurrentItem(index, false);
+        }
       }
       break;
       case 2:

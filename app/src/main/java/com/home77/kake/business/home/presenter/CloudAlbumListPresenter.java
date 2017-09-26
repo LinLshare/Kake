@@ -15,6 +15,7 @@ import com.home77.kake.base.MsgType;
 import com.home77.kake.base.NavigateCallback;
 import com.home77.kake.base.ParamsKey;
 import com.home77.kake.business.home.HomeActivity;
+import com.home77.kake.common.api.response.Album;
 import com.home77.kake.common.api.response.AlbumListResponse;
 import com.home77.kake.common.api.response.Response;
 import com.home77.kake.common.api.service.CloudAlbumService;
@@ -45,6 +46,27 @@ public class CloudAlbumListPresenter extends BaseFragmentPresenter {
       case VIEW_REFRESH:
         getAlbumList();
         break;
+      case CLICK_OK_DELETE_ALBUM_DIALOG: {
+        Album album = params.get(ParamsKey.ALBUM);
+        cloudAlbumService.deleteAlbum(album.getId(), new URLFetcher.Delegate() {
+          @Override
+          public void onSuccess(URLFetcher source) {
+            Response response = source.responseClass(Response.class);
+            if (response != null && response.getCode() == 200) {
+              baseView.onCommand(CmdType.TOAST, Params.create(ParamsKey.MSG, "删除成功"), null);
+              getAlbumList();
+            } else {
+              baseView.onCommand(CmdType.TOAST, Params.create(ParamsKey.MSG, "删除失败"), null);
+            }
+          }
+
+          @Override
+          public void onError(String msg) {
+            baseView.onCommand(CmdType.TOAST, Params.create(ParamsKey.MSG, "删除失败"), null);
+          }
+        });
+      }
+      break;
     }
   }
 

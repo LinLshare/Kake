@@ -72,6 +72,7 @@
       android:src="@drawable/menu_kake"/>
 
     <TextView
+      android:id="@+id/kake_text_view"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginLeft="8dp"

@@ -34,7 +34,7 @@ public class CloudAlbumNormalDelegate implements ItemViewDelegate<Album> {
   @Override
   public void convert(ViewHolder holder, final Album album, int position) {
     holder.setText(R.id.album_name_text_view, album.getName());
-//    holder.setText(R.id.photo_count_text_view,album.get);
+    //    holder.setText(R.id.photo_count_text_view,album.get);
     String imgUrl = album.getCover();
     if (!TextUtils.isEmpty(imgUrl)) {
       ImageView coverImageView = holder.getView(R.id.album_cover_image_view);
@@ -54,6 +54,15 @@ public class CloudAlbumNormalDelegate implements ItemViewDelegate<Album> {
         App.eventBus()
            .post(new BroadCastEvent(BroadCastEventConstant.ACTIVITY_CLOUD_PHOTO_LIST,
                                     Params.create(ParamsKey.ALBUM, album)));
+      }
+    });
+    holder.getConvertView().setOnLongClickListener(new View.OnLongClickListener() {
+      @Override
+      public boolean onLongClick(View v) {
+        App.eventBus()
+           .post(new BroadCastEvent(BroadCastEventConstant.LONG_CLICK_CLOUD_ALBUM,
+                                    Params.create(ParamsKey.ALBUM, album)));
+        return true;
       }
     });
   }

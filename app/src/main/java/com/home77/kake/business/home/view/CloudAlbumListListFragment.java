@@ -24,6 +24,7 @@ import com.home77.kake.business.home.adapter.CloudAlbumListAdapter;
 import com.home77.kake.common.api.response.Album;
 import com.home77.kake.common.event.BroadCastEvent;
 import com.home77.kake.common.event.BroadCastEventConstant;
+import com.home77.kake.common.widget.BottomDialog;
 import com.home77.kake.common.widget.InputDialog;
 import com.home77.kake.common.widget.recyclerview.CloudAlbumGridItemDecoration;
 
@@ -54,6 +55,7 @@ public class CloudAlbumListListFragment extends BaseFragment {
   private List<Album> albumList = new ArrayList<>();
   private CloudAlbumListAdapter cloudAlbumListAdapter;
   private InputDialog inputDialog;
+  private BottomDialog bottomDialog;
 
   public CloudAlbumListListFragment() {
     albumList.add(new Album());
@@ -138,13 +140,33 @@ public class CloudAlbumListListFragment extends BaseFragment {
   }
 
   @Subscribe(threadMode = ThreadMode.MAIN)
-  public void onEvent(BroadCastEvent event) {
+  public void onEvent(final BroadCastEvent event) {
     switch (event.getEvent()) {
       case BroadCastEventConstant.DIALOG_UPLOAD_ALBUM:
         showUploadAlbumDialog();
         break;
+      case BroadCastEventConstant.LONG_CLICK_CLOUD_ALBUM:
+        bottomDialog = new BottomDialog(getContext(),
+                                        new String[] {"删除", "取消"},
+                                        new BottomDialog.OnItemClickListener() {
+                                          @Override
+                                          public void onItemClick(int position, String data) {
+                                            switch (position) {
+                                              case 0:
+                                                presenter.onMessage(MsgType.CLICK_OK_DELETE_ALBUM_DIALOG,
+                                                                    event.getParams());
+                                                break;
+                                              case 1:
+                                                break;
+                                            }
+                                            bottomDialog.dismiss();
+                                          }
+                                        });
+        bottomDialog.show();
+        break;
     }
   }
+
 
   private void showUploadAlbumDialog() {
     inputDialog = new InputDialog(getContext(), "新建相册", new InputDialog.InputDialogListener() {

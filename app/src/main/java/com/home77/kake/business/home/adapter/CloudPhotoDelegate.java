@@ -39,7 +39,7 @@ public class CloudPhotoDelegate implements ItemViewDelegate<CloudPhoto> {
     holder.getConvertView().getLayoutParams().height = winWidth / 3;
     holder.getConvertView().requestLayout();
     Picasso.with(holder.getConvertView().getContext())
-           .load(photo.getImgurl())
+           .load(photo.getImgurl() + "?x-oss-process=style/750_376")
            .resize(winWidth / 3, winWidth / 3)
            .error(R.drawable.ic_img_def)
            .placeholder(R.drawable.ic_img_def)

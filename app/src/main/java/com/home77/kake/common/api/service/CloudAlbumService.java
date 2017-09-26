@@ -34,6 +34,7 @@ public class CloudAlbumService {
   private static final String DELETE_PHOTO_URL;
   private static final String RENAME_PHOTO_URL;
   private static final String RENAME_ALBUM_URL;
+  private static final String DELETE_ALBUM_URL;
 
   private static final String TAG = CloudAlbumService.class.getSimpleName();
 
@@ -48,6 +49,7 @@ public class CloudAlbumService {
     DELETE_PHOTO_URL = String.format("http://%s/api/v1/album/deletephoto", HOST);
     RENAME_PHOTO_URL = String.format("http://%s/api/v1/album/renamephoto", HOST);
     RENAME_ALBUM_URL = String.format("http://%s/api/v1/album/renamealbum", HOST);
+    DELETE_ALBUM_URL = String.format("http://%s/api/v1/album/deletealbum", HOST);
   }
 
   private String getPhotoListUrl(String path) {
@@ -116,6 +118,13 @@ public class CloudAlbumService {
                                            .postJson(new RenameAlbumRequest(albumId, name));
     urlFetcher.start();
   }
+
+  public void deleteAlbum(int albumId, URLFetcher.Delegate callback) {
+    urlFetcher =
+        createUrlFetcher(callback).url(DELETE_ALBUM_URL).postJson(new AlbumRequest(albumId));
+    urlFetcher.start();
+  }
+
 
   public void deletePhoto(int photoId, URLFetcher.Delegate callback) {
     urlFetcher =

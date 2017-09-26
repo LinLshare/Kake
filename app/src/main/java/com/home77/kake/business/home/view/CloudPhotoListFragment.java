@@ -94,7 +94,6 @@ public class CloudPhotoListFragment extends BaseFragment {
   private TipDialog tipDialog;
   private TipDialog makePublicDialog;
   private InputDialog inputDialog;
-  private InputDialog inputDialog1;
   private InputDialog albumNameInputDialog;
 
   public CloudPhotoListFragment() {
@@ -134,6 +133,14 @@ public class CloudPhotoListFragment extends BaseFragment {
             presenter.onMessage(MsgType.VIEW_REFRESH, null);
           }
         });
+        loadingDialog = new CommonLoadingDialog(getContext());
+        out.put(ParamsKey.VIEW, view);
+        presenter.onMessage(MsgType.VIEW_REFRESH, null);
+        break;
+      case VIEW_DESTROY:
+        unbinder.unbind();
+        break;
+      case SHOW_MENU:
         //popupMenu
         View menulayout =
             LayoutInflater.from(getContext()).inflate(R.layout.menu_cloud_photo_list, null);
@@ -173,14 +180,8 @@ public class CloudPhotoListFragment extends BaseFragment {
             popupMenu.dismiss();
           }
         });
-        loadingDialog = new CommonLoadingDialog(getContext());
-        out.put(ParamsKey.VIEW, view);
-        presenter.onMessage(MsgType.VIEW_REFRESH, null);
-        break;
-      case VIEW_DESTROY:
-        unbinder.unbind();
-        break;
-      case SHOW_MENU:
+        TextView kakeTextView = (TextView) menulayout.findViewById(R.id.kake_text_view);
+        kakeTextView.setText(album.getIs_public() == 1 ? "取消发布" : "发布");
         popupMenu.showAsDropDown(menuImageView);
         break;
       case SHOW_ALBUM_INFO:
@@ -309,16 +310,32 @@ public class CloudPhotoListFragment extends BaseFragment {
         loadingDialog.show("正在发布");
         loadingDialog.setCancelable(false);
         break;
-      case MAKE_PUBLIC_SUCCESS:
+      case MAKE_PUBLIC_SUCCESS: {
+        String toast;
+        if (album.getIs_public() == 1) {
+          album.setIs_public(0);
+          toast = "取消发布成功";
+        } else {
+          toast = "发布成功";
+        }
         loadingDialog.dismiss();
         loadingDialog.setCancelable(true);
-        Toast.showShort("发布成功");
-        break;
-      case MAKE_PUBLIC_ERROR:
+        Toast.showShort(toast);
+      }
+      break;
+      case MAKE_PUBLIC_ERROR: {
+        String toast;
+        if (album.getIs_public() == 1) {
+          album.setIs_public(0);
+          toast = "取消发布失败";
+        } else {
+          toast = "发布失败";
+        }
         loadingDialog.dismiss();
         loadingDialog.setCancelable(true);
-        Toast.showShort("发布失败");
-        break;
+        Toast.showShort(toast);
+      }
+      break;
       case SHOW_SHARE_DIALOG: {
         showShareDialog();
       }
@@ -429,7 +446,7 @@ public class CloudPhotoListFragment extends BaseFragment {
 
   @Override
   public void onPause() {
-    if (popupMenu.isShowing()) {
+    if (popupMenu != null && popupMenu.isShowing()) {
       popupMenu.dismiss();
     }
     super.onPause();
@@ -552,19 +569,28 @@ public class CloudPhotoListFragment extends BaseFragment {
   }
 
   private void showMakePublicDialog() {
-    makePublicDialog =
-        new TipDialog(getContext(), "确认发布到咔客圈?", new TipDialog.OnButtonClickListener() {
-          @Override
-          public void onClickOk() {
-            presenter.onMessage(MsgType.CLICK_OK_MAKE_PUBLIC_DIALOG, null);
-            makePublicDialog.dismiss();
-          }
+    String title;
+    switch (album.getIs_public()) {
+      case 1:
+        title = "确认取消发布到咔客圈?";
+        break;
+      case 0:
+      default:
+        title = "确认发布到咔客圈?";
+        break;
+    }
+    makePublicDialog = new TipDialog(getContext(), title, new TipDialog.OnButtonClickListener() {
+      @Override
+      public void onClickOk() {
+        presenter.onMessage(MsgType.CLICK_OK_MAKE_PUBLIC_DIALOG, null);
+        makePublicDialog.dismiss();
+      }
 
-          @Override
-          public void onClickCancel() {
-            makePublicDialog.dismiss();
-          }
-        });
+      @Override
+      public void onClickCancel() {
+        makePublicDialog.dismiss();
+      }
+    });
     makePublicDialog.show();
   }
 }

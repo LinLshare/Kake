@@ -38,7 +38,7 @@ public class KakeListAdapter extends CommonAdapter<Kake> {
     int winWidth = Instance.of(UiData.class).winWidth();
     if (!TextUtils.isEmpty(kake.getCover())) {
       Picasso.with(holder.getConvertView().getContext())
-             .load(kake.getCover())
+             .load(kake.getCover() + "?x-oss-process=style/750_376")
              .resize(winWidth / 2, winWidth / 2)
              .placeholder(R.drawable.ic_img_def)
              .error(R.drawable.ic_img_def)
@@ -58,7 +58,7 @@ public class KakeListAdapter extends CommonAdapter<Kake> {
              });
     }
     Picasso.with(holder.getConvertView().getContext())
-           .load(kake.getShip_user().getAvatar())
+           .load(kake.getShip_user().getAvatar() + "?x-oss-process=style/224_224")
            .into((ImageView) holder.getView(R.id.user_image_view));
     holder.getConvertView().setOnClickListener(new View.OnClickListener() {
       @Override
