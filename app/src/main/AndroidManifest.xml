@@ -12,7 +12,7 @@
     android:name="com.home77.kake.permission.JPUSH_MESSAGE"
     android:protectionLevel="signature"/>
 
-  <!-- Required  一些系统要求的权限，如访问网络等-->
+  <!-- Required  一些系统要求的权限，如访问网络等 -->
   <uses-permission android:name="com.home77.kake.permission.JPUSH_MESSAGE"/>
   <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT"/>
   <uses-permission android:name="android.permission.INTERNET"/>
@@ -48,11 +48,6 @@
     <activity android:name=".business.user.UserActivity">
     </activity>
     <activity android:name=".business.home.HomeActivity">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN"/>
-
-        <category android:name="android.intent.category.LAUNCHER"/>
-      </intent-filter>
     </activity>
     <activity android:name=".business.home.view.GLPhotoActivity"/>
     <activity android:name=".business.home.CloudPhotoActivity">
@@ -66,9 +61,11 @@
     </activity>
     <activity android:name=".business.home.WebPageActivity">
     </activity>
-    <!--JPUSH-->
+    <!-- JPUSH -->
 
-    <!-- Required SDK核心功能-->
+
+    <!-- Required SDK核心功能 -->
+
 
     <!-- 可配置android:process参数将PushService放在其他进程中 -->
     <service
@@ -82,14 +79,14 @@
         <action android:name="cn.jpush.android.intent.PUSH_TIME"/>
       </intent-filter>
     </service>
-    <!-- Rich push 核心功能 since 2.0.6-->
+    <!-- Rich push 核心功能 since 2.0.6 -->
     <activity
       android:name="cn.jpush.android.ui.PopWinActivity"
       android:exported="false"
       android:theme="@style/AlertDialog.AppCompat.Light">
     </activity>
 
-    <!-- Required SDK核心功能-->
+    <!-- Required SDK核心功能 -->
     <activity
       android:name="cn.jpush.android.ui.PushActivity"
       android:configChanges="orientation|keyboardHidden"
@@ -103,12 +100,11 @@
       </intent-filter>
     </activity>
 
-    <!-- since 3.0.9 Required SDK 核心功能-->
+    <!-- since 3.0.9 Required SDK 核心功能 -->
     <provider
       android:name="cn.jpush.android.service.DataProvider"
       android:authorities="com.home77.kake.DataProvider"
-      android:exported="true"
-      />
+      android:exported="true"/>
 
     <receiver
       android:name="cn.jpush.android.service.AlarmReceiver"
@@ -118,7 +114,7 @@
       android:enabled="true"
       android:exported="false">
       <intent-filter android:priority="1000">
-        <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY"/>   <!--Required  显示通知栏 -->
+        <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY"/> <!-- Required  显示通知栏 -->
         <category android:name="com.home77.kake"/>
       </intent-filter>
       <intent-filter>
@@ -134,11 +130,18 @@
       </intent-filter>
     </receiver>
 
-    <!-- Required SDK核心功能-->
+    <!-- Required SDK核心功能 -->
     <receiver
       android:name="cn.jpush.android.service.AlarmReceiver"
       android:exported="false"/>
 
+    <activity android:name=".business.home.SplashActivity">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
+
+        <category android:name="android.intent.category.LAUNCHER"/>
+      </intent-filter>
+    </activity>
   </application>
 
 </manifest>

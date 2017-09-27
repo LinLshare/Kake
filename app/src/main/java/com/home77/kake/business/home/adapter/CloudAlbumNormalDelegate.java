@@ -48,6 +48,9 @@ public class CloudAlbumNormalDelegate implements ItemViewDelegate<Album> {
     } else {
       holder.setImageResource(R.id.album_cover_image_view, R.drawable.ic_img_def);
     }
+
+    holder.setVisible(R.id.corner_image_view, !TextUtils.isEmpty(album.getPanourl()));
+
     holder.getConvertView().setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {

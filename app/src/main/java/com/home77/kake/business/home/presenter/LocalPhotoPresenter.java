@@ -54,8 +54,12 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
   @Override
   public void onDestroyView() {
     super.onDestroyView();
-    loadObjectListTask.cancel(true);
-    loadLocalPhotoTask.cancel(true);
+    if (navigateCallback != null) {
+      loadObjectListTask.cancel(true);
+    }
+    if (loadLocalPhotoTask != null) {
+      loadLocalPhotoTask.cancel(true);
+    }
     App.eventBus().unregister(this);
   }
 

@@ -30,4 +30,13 @@
     android:textColor="@color/colorC1"
     android:textSize="@dimen/fontSizeF3"/>
 
+  <ImageView
+    android:id="@+id/corner_image_view"
+    android:layout_width="32dp"
+    android:layout_height="32dp"
+    android:layout_alignParentRight="true"
+    android:layout_marginRight="8dp"
+    android:layout_marginTop="8dp"
+    android:src="@drawable/icon_720"
+    android:visibility="gone"/>
 </RelativeLayout>
