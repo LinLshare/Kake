@@ -102,8 +102,7 @@ public class CloudAlbumListListFragment extends BaseFragment {
         emptyLayout.setVisibility(View.GONE);
       }
       break;
-      case CLOUD_ALBUM_CREATE_ERROR:
-      case CLOUD_ALBUM_LOAD_ERROR:
+      case CLOUD_ALBUM_CREATE_ERROR: {
         loadingLayout.setVisibility(View.GONE);
         recyclerView.setVisibility(View.GONE);
         emptyLayout.setVisibility(View.VISIBLE);
@@ -114,7 +113,23 @@ public class CloudAlbumListListFragment extends BaseFragment {
         if (!TextUtils.isEmpty(msg)) {
           Toast.showShort(msg);
         }
-        break;
+      }
+      break;
+      case CLOUD_ALBUM_LOAD_ERROR: {
+        loadingLayout.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.GONE);
+        emptyLayout.setVisibility(View.VISIBLE);
+        if (refreshLayout.isRefreshing()) {
+          refreshLayout.setRefreshing(false);
+        }
+        String msg = in.get(ParamsKey.MSG, "");
+        if (!TextUtils.isEmpty(msg)) {
+          Toast.showShort(msg);
+        }
+        this.albumList.clear();
+        cloudAlbumListAdapter.notifyDataSetChanged();
+      }
+      break;
       case CLOUD_ALBUM_CREATE_SUCCESS:
         loadingLayout.setVisibility(View.GONE);
         recyclerView.setVisibility(View.VISIBLE);

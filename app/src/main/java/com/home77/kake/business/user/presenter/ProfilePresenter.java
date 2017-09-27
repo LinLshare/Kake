@@ -41,7 +41,9 @@ public class ProfilePresenter extends BaseFragmentPresenter {
         handleClickBack();
         break;
       case CLICK_AVATAR:
-        baseView.onCommand(CmdType.SHOW_AVATAR_SELECT_DIALOG, null, null);
+        if (App.isLogin()) {
+          baseView.onCommand(CmdType.SHOW_AVATAR_SELECT_DIALOG, null, null);
+        }
         break;
       case CLICK_USER_NAME:
         handleClickUserName();

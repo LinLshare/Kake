@@ -218,6 +218,8 @@ public class CloudPhotoListFragment extends BaseFragment {
         final String msg = in.get(ParamsKey.MSG);
         Toast.showShort(msg);
         bottomTextView.setVisibility(View.GONE);
+        this.photoList.clear();
+        cloudPhotoListAdapter.notifyDataSetChanged();
       }
       break;
       case CLOUD_PHOTO_LIST_LOAD_SUCCESS:

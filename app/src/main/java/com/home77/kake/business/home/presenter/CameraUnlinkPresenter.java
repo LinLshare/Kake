@@ -1,12 +1,14 @@
 package com.home77.kake.business.home.presenter;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+
 import com.home77.common.base.collection.Params;
-import com.home77.kake.App;
 import com.home77.kake.base.BaseFragmentPresenter;
 import com.home77.kake.base.BaseView;
 import com.home77.kake.base.CmdType;
 import com.home77.kake.base.MsgType;
-import com.home77.kake.base.NavigateCallback;
 
 /**
  * @author CJ

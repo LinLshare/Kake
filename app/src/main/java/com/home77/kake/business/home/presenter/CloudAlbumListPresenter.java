@@ -153,7 +153,7 @@ public class CloudAlbumListPresenter extends BaseFragmentPresenter {
                                      @Override
                                      public void onError(final String msg) {
                                        baseView.onCommand(CmdType.CLOUD_ALBUM_LOAD_ERROR,
-                                                          Params.create(ParamsKey.MSG, msg),
+                                                          Params.create(ParamsKey.MSG, "网络异常"),
                                                           null);
 
                                      }

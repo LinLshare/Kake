@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 import android.widget.TextView;
 
 import com.home77.common.base.collection.Params;
+import com.home77.common.base.debug.DLog;
 import com.home77.common.ui.widget.Toast;
 import com.home77.kake.App;
 import com.home77.kake.R;
@@ -48,6 +49,7 @@ public class HomeActivity extends AppCompatActivity
     implements MainBottomBar.OnTabItemClickListener, NavigateCallback {
 
   public static final int NAVIGATE_TO_USER = 101;
+  private static final String TAG = HomeActivity.class.getSimpleName();
   @BindView(R.id.main_pager)
   ScrollConfigurableViewPager pagerMainTab;
   @BindView(R.id.main_bottom_bar)
@@ -103,6 +105,7 @@ public class HomeActivity extends AppCompatActivity
   protected void onResume() {
     super.onResume();
 
+    DLog.d(TAG, "check device link");
     // check device
     new AsyncTask<Void, String, Boolean>() {
       @Override
@@ -141,7 +144,7 @@ public class HomeActivity extends AppCompatActivity
       case 1: {
         if (App.isIsLinckedCamera()) {
           Intent intent = new Intent(this, CameraActivity.class);
-          startActivity(intent);
+          startActivityForResult(intent, REQUEST_CODE_CAMERA);
         } else {
           titleTextView.setText("咔客全景相机");
           pagerMainTab.setCurrentItem(index, false);
@@ -172,9 +175,10 @@ public class HomeActivity extends AppCompatActivity
     return super.onKeyDown(keyCode, event);
   }
 
-  private static final int REQUEST_CODE_USER = 101;
-  private static final int REQUEST_CODE_USER_LOGIN = 101_1;
-  public static final int RESULT_CODE_CLOUD_ALBUM = 201;
+  private static final int REQUEST_CODE_USER = 101_1;
+  private static final int REQUEST_CODE_USER_LOGIN = 101_2;
+  public static final int RESULT_CODE_CLOUD_ALBUM = 201_1;
+  public static final int REQUEST_CODE_CAMERA = 301_1;
 
   @OnClick(R.id.user_image_view)
   public void onViewClicked() {

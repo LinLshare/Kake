@@ -262,6 +262,9 @@ public class CloudPhotoListPresenter extends BaseFragmentPresenter {
     if (requestCode == 1001 && resultCode == RESULT_OK && data != null) {
       ArrayList<LocalPhoto> images =
           data.getParcelableArrayListExtra(PhotoSelectActivity.EXTRA_LOCAL_PHOTO);
+      if (images == null || images.isEmpty()) {
+        return;
+      }
       File file = new File(images.get(0).getPath());
       upload(file);
     }
@@ -368,7 +371,7 @@ public class CloudPhotoListPresenter extends BaseFragmentPresenter {
               }
             } else {
               baseView.onCommand(CmdType.CLOUD_PHOTO_LIST_LOAD_ERROR,
-                                 Params.create(ParamsKey.MSG, "加载图片失败[-1]"),
+                                 Params.create(ParamsKey.MSG, "加载图片失败"),
                                  null);
             }
           }
@@ -378,7 +381,7 @@ public class CloudPhotoListPresenter extends BaseFragmentPresenter {
       @Override
       public void onError(final String msg) {
         baseView.onCommand(CmdType.CLOUD_PHOTO_LIST_LOAD_ERROR,
-                           Params.create(ParamsKey.MSG, "加载图片失败[0]"),
+                           Params.create(ParamsKey.MSG, "网络异常"),
                            null);
       }
     });
