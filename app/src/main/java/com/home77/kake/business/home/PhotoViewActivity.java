@@ -40,22 +40,41 @@ public class PhotoViewActivity extends AppCompatActivity {
 
   private void initView() {
     photoView = (PhotoView) findViewById(R.id.photo_view);
-    Picasso.with(this).load(new File(path)).resize(800, 0).into(new Target() {
-      @Override
-      public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-        photoView.setImageBitmap(bitmap);
-      }
+    if (path.contains("http")) {
+      Picasso.with(this).load(path).resize(800, 0).into(new Target() {
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+          photoView.setImageBitmap(bitmap);
+        }
 
-      @Override
-      public void onBitmapFailed(Drawable errorDrawable) {
-        photoView.setImageResource(R.drawable.image_placeholder);
-      }
+        @Override
+        public void onBitmapFailed(Drawable errorDrawable) {
+          photoView.setImageResource(R.drawable.image_placeholder);
+        }
 
-      @Override
-      public void onPrepareLoad(Drawable placeHolderDrawable) {
-        photoView.setImageResource(R.drawable.image_placeholder);
-      }
-    });
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+          photoView.setImageResource(R.drawable.image_placeholder);
+        }
+      });
+    } else {
+      Picasso.with(this).load(new File(path)).resize(800, 0).into(new Target() {
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+          photoView.setImageBitmap(bitmap);
+        }
+
+        @Override
+        public void onBitmapFailed(Drawable errorDrawable) {
+          photoView.setImageResource(R.drawable.image_placeholder);
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+          photoView.setImageResource(R.drawable.image_placeholder);
+        }
+      });
+    }
   }
 
   private void initData() {

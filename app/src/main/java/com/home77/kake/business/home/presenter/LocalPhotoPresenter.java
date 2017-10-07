@@ -112,6 +112,23 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
       case VIEW_REFRESH:
         loadImageAndVideoList();
         break;
+      case CLICK_DELETE_PHOTO_EDIT_DIALOG: {
+        LocalPhoto localPhoto = params.get(ParamsKey.LOCAL_PHOTO);
+        File file = new File(localPhoto.getPath());
+        if (file.exists()) {
+          boolean delete = file.delete();
+          if (delete) {
+            baseView.onCommand(CmdType.TOAST, Params.create(ParamsKey.MSG, "删除成功"), null);
+            loadImageAndVideoList();
+          }
+        } else {
+          baseView.onCommand(CmdType.TOAST, Params.create(ParamsKey.MSG, "删除失败"), null);
+        }
+      }
+      break;
+      case CLICK_CANCEL_PHOTO_EDIT_DIALOG:
+        //do nothing
+        break;
     }
   }
 
@@ -135,7 +152,7 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
       }
       ArrayList<LocalPhoto> temp = new ArrayList<>();
       File[] files = pictureDir.listFiles();
-      if (files == null) {
+      if (files == null || files.length == 0) {
         return null;
       }
       for (File f : files) {
@@ -190,14 +207,19 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
   @Subscribe(threadMode = ThreadMode.MAIN)
   public void onEvent(BroadCastEvent event) {
     switch (event.getEvent()) {
-      case BroadCastEventConstant.CLICK_LOCAL_PHOTO:
+      case BroadCastEventConstant.CLICK_LOCAL_PHOTO: {
         LocalPhoto localPhoto = event.getParams().get(ParamsKey.LOCAL_PHOTO);
         if (loadLocalPhotoTask != null && !loadLocalPhotoTask.isCancelled()) {
           loadLocalPhotoTask.cancel(true);
         }
         loadLocalPhotoTask = new LoadLocalPhotoTask();
         loadLocalPhotoTask.execute(localPhoto);
-        break;
+      }
+      break;
+      case BroadCastEventConstant.LONG_CLICK_LOCAL_PHOTO: {
+        baseView.onCommand(CmdType.SHOW_EDIT_PHOTO_DIALOG, event.getParams(), null);
+      }
+      break;
     }
   }
 

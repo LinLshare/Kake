@@ -29,6 +29,13 @@ import com.home77.kake.common.event.BroadCastEventConstant;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.data.JPushLocalNotification;
 
 /**
  * @author CJ
@@ -89,6 +96,12 @@ public class App extends Application {
     // 7) check and connect to wifi
     checkAndConnectToWifi();
     registerReceiver(wifiChangedReceiver, new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
+    // 8) init jpush
+    JPushInterface.setDebugMode(true);
+    JPushInterface.setAlias(getApplicationContext(),
+                            0,
+                            globalData().getString(GlobalData.KEY_USER_ID, "-1"));
+    JPushInterface.init(this);
   }
 
   private BroadcastReceiver wifiChangedReceiver = new BroadcastReceiver() {

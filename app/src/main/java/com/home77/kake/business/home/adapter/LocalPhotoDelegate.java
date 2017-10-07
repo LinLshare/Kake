@@ -59,5 +59,14 @@ public class LocalPhotoDelegate implements ItemViewDelegate<LocalPhoto> {
                                     Params.create(ParamsKey.LOCAL_PHOTO, photo)));
       }
     });
+    holder.getConvertView().setOnLongClickListener(new View.OnLongClickListener() {
+      @Override
+      public boolean onLongClick(View v) {
+        App.eventBus()
+           .post(new BroadCastEvent(BroadCastEventConstant.LONG_CLICK_LOCAL_PHOTO,
+                                    Params.create(ParamsKey.LOCAL_PHOTO, photo)));
+        return false;
+      }
+    });
   }
 }

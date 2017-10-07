@@ -1,6 +1,8 @@
 package com.home77.kake.business.home.presenter;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 
 import com.home77.common.base.collection.Params;
@@ -19,8 +21,10 @@ import com.home77.kake.base.NavigateCallback;
 import com.home77.kake.base.ParamsKey;
 import com.home77.kake.business.home.CloudPhotoActivity;
 import com.home77.kake.business.home.PhotoSelectActivity;
+import com.home77.kake.business.home.PhotoViewActivity;
 import com.home77.kake.business.home.model.CloudPhoto;
 import com.home77.kake.business.home.model.LocalPhoto;
+import com.home77.kake.business.home.view.GLPhotoActivity;
 import com.home77.kake.common.api.request.AddPhotoRequest;
 import com.home77.kake.common.api.response.Album;
 import com.home77.kake.common.api.response.PhotoListResponse;
@@ -29,10 +33,13 @@ import com.home77.kake.common.api.response.UploadPhotoResponse;
 import com.home77.kake.common.api.service.CloudAlbumService;
 import com.home77.kake.common.event.BroadCastEvent;
 import com.home77.kake.common.event.BroadCastEventConstant;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
@@ -390,9 +397,40 @@ public class CloudPhotoListPresenter extends BaseFragmentPresenter {
   @Subscribe(threadMode = ThreadMode.MAIN)
   public void onEvent(BroadCastEvent event) {
     switch (event.getEvent()) {
-      case BroadCastEventConstant.CLICK_CLOUD_PHOTO:
+      case BroadCastEventConstant.LONG_CLICK_CLOUD_PHOTO:
         baseView.onCommand(CmdType.SHOW_EDIT_PHOTO_DIALOG, event.getParams(), null);
         break;
+      case BroadCastEventConstant.CLICK_CLOUD_PHOTO: {
+        final CloudPhoto cloudPhoto = event.getParams().get(ParamsKey.CLOUD_PHOTO);
+        Picasso.with(baseView.context())
+               .load(cloudPhoto.getImgurl())
+               .resize(100, 100)
+               .centerCrop()
+               .into(new Target() {
+                 @Override
+                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                   ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                   bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                   byte[] byteArray = stream.toByteArray();
+                   GLPhotoActivity.startActivityForResult(baseView.activity(),
+                                                          byteArray,
+                                                          cloudPhoto.getImgurl(),
+                                                          cloudPhoto.getName(),
+                                                          false);
+                 }
+
+                 @Override
+                 public void onBitmapFailed(Drawable errorDrawable) {
+
+                 }
+
+                 @Override
+                 public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                 }
+               });
+      }
+      break;
     }
   }
 

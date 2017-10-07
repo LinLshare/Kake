@@ -23,11 +23,7 @@ import com.home77.common.base.pattern.Instance;
 import com.home77.kake.R;
 import com.home77.kake.business.camera.ImageDataStorage;
 import com.home77.kake.business.home.PhotoViewActivity;
-import com.home77.kake.business.home.model.LocalPhoto;
 import com.home77.kake.business.home.view.glview.GLPhotoView;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 import com.theta360.v2.model.Photo;
 import com.theta360.v2.model.RotateInertia;
 import com.theta360.v2.network.HttpConnector;
@@ -122,7 +118,8 @@ public class GLPhotoActivity extends Activity implements ConfigurationDialog.Dia
     protected byte[] doInBackground(String... paths) {
       byte[] bytes = null;
       try {
-        URL url = new URL(paths[0]);
+        path = paths[0];
+        URL url = new URL(path);
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         InputStream inputStream = url.openStream();
         int n = 0;

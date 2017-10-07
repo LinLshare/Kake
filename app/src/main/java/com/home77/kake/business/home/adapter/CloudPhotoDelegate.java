@@ -67,5 +67,14 @@ public class CloudPhotoDelegate implements ItemViewDelegate<CloudPhoto> {
                                     Params.create(ParamsKey.CLOUD_PHOTO, photo)));
       }
     });
+    holder.getConvertView().setOnLongClickListener(new View.OnLongClickListener() {
+      @Override
+      public boolean onLongClick(View v) {
+        App.eventBus()
+           .post(new BroadCastEvent(BroadCastEventConstant.LONG_CLICK_CLOUD_PHOTO,
+                                    Params.create(ParamsKey.CLOUD_PHOTO, photo)));
+        return false;
+      }
+    });
   }
 }

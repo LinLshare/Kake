@@ -64,7 +64,7 @@ public class HelpAndFeedbackFragment extends BaseFragment {
             return true;
           }
         });
-        webView.loadUrl("http://" + ServerConfig.HOST + "/help.html");
+        webView.loadUrl("http://" + ServerConfig.HOST + "/kake/help");
         break;
       case VIEW_DESTROY:
         unbinder.unbind();
