@@ -191,10 +191,13 @@ public class HomeActivity extends AppCompatActivity
       case 1: {
         if (App.isIsLinckedCamera()) {
           Intent intent = new Intent(this, CameraActivity.class);
+          intent.putExtra(CameraActivity.EXTRA_LAST_PHOTO_PATH,
+                          localPhotoPresenter.getRecentPhotoPath());
           startActivityForResult(intent, REQUEST_CODE_CAMERA);
         } else {
           titleTextView.setText("咔客全景相机");
           pagerMainTab.setCurrentItem(index, false);
+          mainBottomBar.selectBottomBarItem(1);
         }
       }
       break;
@@ -226,6 +229,7 @@ public class HomeActivity extends AppCompatActivity
   private static final int REQUEST_CODE_USER_LOGIN = 101_2;
   public static final int RESULT_CODE_CLOUD_ALBUM = 201_1;
   public static final int REQUEST_CODE_CAMERA = 301_1;
+  public static final int RESULT_CODE_LOCAL_ALBUM = 301_2;
 
   @OnClick(R.id.user_image_view)
   public void onViewClicked() {
@@ -249,6 +253,15 @@ public class HomeActivity extends AppCompatActivity
       case REQUEST_CODE_USER_LOGIN: {
         if (resultCode == RESULT_OK) {
           cloudAlbumListPresenter.start(null);
+        }
+      }
+      break;
+      case REQUEST_CODE_CAMERA: {
+        if (resultCode == RESULT_CODE_LOCAL_ALBUM) {
+          titleTextView.setText(R.string.local_photo);
+          pagerMainTab.setCurrentItem(0, false);
+          mainBottomBar.selectBottomBarItem(0);
+          localPhotoPresenter.start(null);
         }
       }
       break;

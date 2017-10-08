@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -15,11 +16,13 @@ import com.home77.common.base.debug.DLog;
 import com.home77.common.ui.widget.Toast;
 import com.home77.kake.App;
 import com.home77.kake.R;
+import com.home77.kake.business.home.HomeActivity;
 import com.home77.kake.business.home.view.GLPhotoActivity;
 import com.home77.kake.common.api.ServerConfig;
 import com.home77.kake.common.event.BroadCastEvent;
 import com.home77.kake.common.event.BroadCastEventConstant;
 import com.home77.kake.common.widget.VerticalSlider;
+import com.squareup.picasso.Picasso;
 import com.theta360.v2.network.HttpConnector;
 import com.theta360.v2.network.HttpEventListener;
 import com.theta360.v2.view.MJpegInputStream;
@@ -28,6 +31,7 @@ import com.theta360.v2.view.MJpegView;
 import org.json.JSONException;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -47,6 +51,8 @@ public class CameraActivity extends AppCompatActivity implements VerticalSlider.
   @BindView(R.id.brightness_layout)
   VerticalSlider sliderLayout;
   private ShowLiveViewTask livePreviewTask;
+  public static final String EXTRA_LAST_PHOTO_PATH = "extra_last_photo_path";
+  private String lastPhotoPath;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +63,7 @@ public class CameraActivity extends AppCompatActivity implements VerticalSlider.
     setContentView(R.layout.activity_camera);
     ButterKnife.bind(this);
     sliderLayout.setOnSliderListener(this);
+    lastPhotoPath = getIntent().getStringExtra(EXTRA_LAST_PHOTO_PATH);
   }
 
   @Override
@@ -68,6 +75,13 @@ public class CameraActivity extends AppCompatActivity implements VerticalSlider.
   @Override
   protected void onResume() {
     super.onResume();
+    if (!TextUtils.isEmpty(lastPhotoPath)) {
+      Picasso.with(this)
+             .load(new File(lastPhotoPath))
+             .resize(100, 100)
+             .centerCrop()
+             .into(preImageView);
+    }
     liveView.play();
     runPreviewTask();
   }
@@ -90,7 +104,7 @@ public class CameraActivity extends AppCompatActivity implements VerticalSlider.
     }
   }
 
-  @OnClick({R.id.shoot_image_view, R.id.bright_image_view})
+  @OnClick({R.id.shoot_image_view, R.id.bright_image_view, R.id.pre_image_view})
   public void onViewClicked(View view) {
     switch (view.getId()) {
       case R.id.shoot_image_view:
@@ -98,6 +112,10 @@ public class CameraActivity extends AppCompatActivity implements VerticalSlider.
         break;
       case R.id.bright_image_view:
         toggleBrightnessLayout();
+        break;
+      case R.id.pre_image_view:
+        setResult(HomeActivity.RESULT_CODE_LOCAL_ALBUM);
+        this.finish();
         break;
     }
   }

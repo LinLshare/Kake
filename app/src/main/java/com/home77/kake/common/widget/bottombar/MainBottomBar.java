@@ -6,7 +6,6 @@ package com.home77.kake.common.widget.bottombar;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Size;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,11 +91,9 @@ public class MainBottomBar extends LinearLayout implements View.OnClickListener 
       IBottomItem bottomItem = (IBottomItem) view;
       bottomItem.shrink(shrinkAnimation);
     }
-    //    if (view instanceof ImageBottomItem) {
-    //do nothing
-    //    } else {
-    selectBottomBarItem(position);
-    //    }
+    if (position != 1) {
+      selectBottomBarItem(position);
+    }
   }
 
   public interface OnTabItemClickListener {

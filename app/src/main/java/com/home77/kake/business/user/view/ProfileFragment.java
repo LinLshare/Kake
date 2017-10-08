@@ -209,7 +209,7 @@ public class ProfileFragment extends BaseFragment
       existLoginTextView.setVisibility(View.GONE);
     }
     if (!TextUtils.isEmpty(imgUrl)) {
-      Picasso.with(getContext()).load(imgUrl).into(new Target() {
+      Picasso.with(getContext()).load(imgUrl).resize(200, 200).centerCrop().into(new Target() {
         @Override
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
           if (avatarImageView != null) {

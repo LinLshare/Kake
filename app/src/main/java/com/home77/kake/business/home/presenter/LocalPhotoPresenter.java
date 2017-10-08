@@ -45,6 +45,7 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
   private static final String TAG = LocalPhotoPresenter.class.getSimpleName();
   private LoadLocalPhotoListTask loadObjectListTask;
   private LoadLocalPhotoTask loadLocalPhotoTask;
+  private List<LocalPhoto> localPhotoList;
 
   public LocalPhotoPresenter(BaseView baseView) {
     super(baseView, null);
@@ -73,6 +74,12 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
   public void start(Params params) {
     super.start(params);
     loadImageAndVideoList();
+  }
+
+  public String getRecentPhotoPath() {
+    return localPhotoList == null || localPhotoList.size() < 2
+        ? null
+        : localPhotoList.get(1).getPath();
   }
 
   @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -191,6 +198,7 @@ public class LocalPhotoPresenter extends BaseFragmentPresenter {
     @Override
     protected void onPostExecute(List<LocalPhoto> localPhotos) {
       super.onPostExecute(localPhotos);
+      localPhotoList = localPhotos;
       if (localPhotos == null) {
         baseView.onCommand(CmdType.LOCAL_PHOTO_LIST_LOAD_ERROR,
                            Params.create(ParamsKey.MSG, "加载本地图片失败"),

@@ -85,6 +85,18 @@ public class GLPhotoActivity extends Activity implements ConfigurationDialog.Dia
 
     setContentView(R.layout.activity_glphoto);
     mGLPhotoView = (GLPhotoView) findViewById(R.id.photo_image);
+    findViewById(R.id.back_image_view).setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        GLPhotoActivity.this.finish();
+      }
+    });
+    findViewById(R.id.share_image_view).setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+
+      }
+    });
     Intent intent = getIntent();
     source = intent.getIntExtra(SOURCE, SOURCE_LOCAL);
     name = intent.getStringExtra(NAME);

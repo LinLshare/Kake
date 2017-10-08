@@ -1,13 +1,12 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:id="@+id/container"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:orientation="vertical">
+  android:layout_height="match_parent">
+
 
   <FrameLayout
     android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="3">
+    android:layout_height="match_parent">
 
     <com.home77.kake.business.home.view.glview.GLPhotoView
       android:id="@+id/photo_image"
@@ -25,4 +24,33 @@
       android:max="100"
       android:visibility="gone"/>
   </FrameLayout>
-</LinearLayout>
+
+  <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:background="@color/colorTransparent70">
+
+    <ImageView
+      android:id="@+id/back_image_view"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_centerVertical="true"
+      android:paddingBottom="8dp"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
+      android:paddingTop="8dp"
+      android:src="@drawable/nav_back"/>
+
+    <ImageView
+      android:id="@+id/share_image_view"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_alignParentRight="true"
+      android:layout_centerVertical="true"
+      android:paddingBottom="8dp"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
+      android:paddingTop="8dp"
+      android:src="@drawable/nav_share"/>
+  </RelativeLayout>
+</FrameLayout>
