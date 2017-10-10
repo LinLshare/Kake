@@ -10,15 +10,13 @@ import android.widget.ImageView;
 import com.home77.common.base.pattern.Instance;
 import com.home77.common.ui.model.UiData;
 import com.home77.kake.R;
-import com.home77.kake.business.home.WebPageActivity;
+import com.home77.kake.business.home.PinoWebPageActivity;
 import com.home77.kake.business.user.model.Kake;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -63,7 +61,7 @@ public class KakeListAdapter extends CommonAdapter<Kake> {
     holder.getConvertView().setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        WebPageActivity.start(holder.getConvertView().getContext(), kake.getName(), kake.getUrl());
+        PinoWebPageActivity.start(holder.getConvertView().getContext(), kake.getName(), kake.getUrl());
       }
     });
   }

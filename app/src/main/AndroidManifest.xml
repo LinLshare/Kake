@@ -46,7 +46,7 @@
     </activity>
     <activity android:name=".business.user.KakeActivity">
     </activity>
-    <activity android:name=".business.home.WebPageActivity">
+    <activity android:name=".business.home.PinoWebPageActivity">
     </activity>
 
     <!-- Required SDK核心功能 -->

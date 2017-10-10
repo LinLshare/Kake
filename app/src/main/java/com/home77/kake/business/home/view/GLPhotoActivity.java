@@ -163,8 +163,10 @@ public class GLPhotoActivity extends Activity implements ConfigurationDialog.Dia
         }
       } catch (Exception e) {
         DLog.e(TAG, e.getMessage());
-        GLPhotoActivity.this.finish();
-        PhotoViewActivity.start(getApplicationContext(), path);
+      } finally {
+//        PhotoViewActivity.start(GLPhotoActivity.this, path);
+//        GLPhotoActivity.this.finish();
+//        GLPhotoActivity.this.setResult(RESULT_CANCELED);
       }
     }
   }
@@ -200,8 +202,10 @@ public class GLPhotoActivity extends Activity implements ConfigurationDialog.Dia
         }
       } catch (Exception e) {
         DLog.e(TAG, e.getMessage());
-        GLPhotoActivity.this.finish();
-        PhotoViewActivity.start(getApplicationContext(), path);
+      } finally {
+//        PhotoViewActivity.start(GLPhotoActivity.this, path);
+//        GLPhotoActivity.this.finish();
+//        GLPhotoActivity.this.setResult(RESULT_CANCELED);
       }
     }
   }

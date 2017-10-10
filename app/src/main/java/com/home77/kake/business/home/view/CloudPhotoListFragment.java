@@ -36,7 +36,7 @@ import com.home77.kake.base.CmdType;
 import com.home77.kake.base.MsgType;
 import com.home77.kake.base.ParamsKey;
 import com.home77.kake.business.home.PhotoSelectActivity;
-import com.home77.kake.business.home.WebPageActivity;
+import com.home77.kake.business.home.PinoWebPageActivity;
 import com.home77.kake.business.home.adapter.CloudPhotoListAdapter;
 import com.home77.kake.business.home.model.CloudPhoto;
 import com.home77.kake.common.api.response.Album;
@@ -303,7 +303,7 @@ public class CloudPhotoListFragment extends BaseFragment {
         break;
       case SHOW_PANO_PHOTO:
         // show webview
-        WebPageActivity.start(getContext(), album.getName(), album.getPanourl());
+        PinoWebPageActivity.start(getContext(), album.getName(), album.getPanourl());
         break;
       case SHOW_MAKE_PUBLIC_DIALOG:
         showMakePublicDialog();
