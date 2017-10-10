@@ -105,6 +105,7 @@ public class HomeActivity extends AppCompatActivity
       }
     }
   };
+  private CameraUnlinkFragment cameraUnlinkFragment;
 
   @Override
   protected void onSaveInstanceState(Bundle outState) {
@@ -138,7 +139,7 @@ public class HomeActivity extends AppCompatActivity
     cloudAlbumListPresenter = new CloudAlbumListPresenter(cloudAlbumListFragment, this);
     cloudAlbumListFragment.setPresenter(cloudAlbumListPresenter);
 
-    CameraUnlinkFragment cameraUnlinkFragment = new CameraUnlinkFragment();
+    cameraUnlinkFragment = new CameraUnlinkFragment();
     cameraUnlinkPresenter = new CameraUnlinkPresenter(cameraUnlinkFragment);
     cameraUnlinkFragment.setPresenter(cameraUnlinkPresenter);
 
@@ -283,7 +284,14 @@ public class HomeActivity extends AppCompatActivity
         startActivity(intent);
         break;
       case BroadCastEventConstant.CAMERA_LINKED:
-
+        if (cameraUnlinkFragment != null) {
+          cameraUnlinkFragment.link();
+        }
+        break;
+      case BroadCastEventConstant.CAMERA_UNLINKED:
+        if (cameraUnlinkFragment != null) {
+          cameraUnlinkFragment.reset();
+        }
         break;
     }
   }
