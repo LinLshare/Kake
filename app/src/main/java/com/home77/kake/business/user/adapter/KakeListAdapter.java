@@ -56,12 +56,16 @@ public class KakeListAdapter extends CommonAdapter<Kake> {
              });
     }
     Picasso.with(holder.getConvertView().getContext())
-           .load(kake.getShip_user().getAvatar() + "?x-oss-process=style/224_224")
+           .load(kake.getShip_user().getAvatar())
+           .resize(200, 200)
+           .centerCrop()
            .into((ImageView) holder.getView(R.id.user_image_view));
     holder.getConvertView().setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        PinoWebPageActivity.start(holder.getConvertView().getContext(), kake.getName(), kake.getUrl());
+        PinoWebPageActivity.start(holder.getConvertView().getContext(),
+                                  kake.getName(),
+                                  kake.getUrl());
       }
     });
   }

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@color/colorC3"
+  android:background="@color/colorC4"
   android:orientation="vertical">
 
   <RelativeLayout
@@ -31,6 +31,15 @@
       android:textSize="@dimen/fontSizeF1"/>
   </RelativeLayout>
 
-  <include layout="@layout/refreshable_recycler_layout"/>
+  <android.support.v4.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/refresh_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorC3">
+
+    <include layout="@layout/common_recycler_layout"/>
+
+  </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>
 

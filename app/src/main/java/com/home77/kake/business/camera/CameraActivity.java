@@ -232,7 +232,7 @@ public class CameraActivity extends AppCompatActivity implements VerticalSlider.
         Toast.showShort("拍照失败，相机存储已满");
         DLog.d(TAG, "takePicture:FAIL_STORE_FULL");
       } else if (result == HttpConnector.ShootResult.FAIL_DEVICE_BUSY) {
-        Toast.showShort("拍照失败，相机很忙");
+        Toast.showShort("拍照失败，相机繁忙");
         DLog.d(TAG, "takePicture:FAIL_DEVICE_BUSY");
       } else if (result == HttpConnector.ShootResult.SUCCESS) {
         Toast.showShort("拍照成功");
@@ -316,18 +316,6 @@ public class CameraActivity extends AppCompatActivity implements VerticalSlider.
                                                                       0,
                                                                       thumbnailImage.length));
             runPreviewTask();
-            preImageView.setOnClickListener(new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
-                GLPhotoActivity.startActivityForResult(CameraActivity.this,
-                                                       ServerConfig.CAMERA_HOST,
-                                                       fileId,
-                                                       thumbnailImage,
-                                                       fileId.replace("/", ".")
-                                                             .replace("JPG", "jpg"),
-                                                       true);
-              }
-            });
           }
         });
       } else {

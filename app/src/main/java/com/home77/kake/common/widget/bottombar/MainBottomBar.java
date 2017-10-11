@@ -86,7 +86,10 @@ public class MainBottomBar extends LinearLayout implements View.OnClickListener 
   @Override
   public void onClick(View view) {
     int position = indexOfChild(view);
-    if (onTabItemClickListener != null && currentSelectedPosition != position) {
+    if (onTabItemClickListener != null) {
+      if (currentSelectedPosition == position && position != 1) {
+        return;
+      }
       onTabItemClickListener.onTabItemClick(indexOfChild(view));
       IBottomItem bottomItem = (IBottomItem) view;
       bottomItem.shrink(shrinkAnimation);
