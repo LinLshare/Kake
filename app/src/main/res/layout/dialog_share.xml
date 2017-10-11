@@ -46,7 +46,7 @@
       android:id="@+id/moment_layout"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginLeft="16dp"
+      android:layout_marginLeft="12dp"
       android:background="@drawable/bg_share_item"
       android:gravity="center_horizontal"
       android:orientation="vertical"
@@ -65,10 +65,32 @@
     </LinearLayout>
 
     <LinearLayout
+      android:id="@+id/qrcode_layout"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="12dp"
+      android:background="@drawable/bg_share_item"
+      android:gravity="center_horizontal"
+      android:orientation="vertical"
+      android:padding="8dp">
+
+      <ImageView
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:src="@drawable/icon_qrcode"/>
+
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="二维码"/>
+    </LinearLayout>
+
+    <LinearLayout
       android:id="@+id/copy_layout"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginLeft="16dp"
+      android:layout_marginLeft="12dp"
       android:background="@drawable/bg_share_item"
       android:gravity="center_horizontal"
       android:orientation="vertical"

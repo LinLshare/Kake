@@ -1,5 +1,6 @@
 package com.home77.kake.business.home;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -8,6 +9,8 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -15,10 +18,19 @@ import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.home77.common.base.component.ContextManager;
 import com.home77.common.base.debug.DLog;
+import com.home77.common.base.pattern.Instance;
+import com.home77.common.ui.model.UiData;
+import com.home77.common.ui.util.LayoutHelper;
+import com.home77.common.ui.util.SizeHelper;
 import com.home77.common.ui.widget.Toast;
 import com.home77.kake.R;
+import com.home77.kake.common.utils.QRCodeUtil;
 import com.home77.kake.common.utils.Util;
 import com.home77.kake.common.widget.CustomBottomDialog;
 import com.squareup.picasso.Picasso;
@@ -137,6 +149,14 @@ public class PinoWebPageActivity extends AppCompatActivity {
         alertDialog.dismiss();
       }
     });
+
+    dialogView.findViewById(R.id.qrcode_layout).setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        showQRCodeDialog(url, name);
+        alertDialog.dismiss();
+      }
+    });
     dialogView.findViewById(R.id.copy_layout).setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
@@ -148,6 +168,55 @@ public class PinoWebPageActivity extends AppCompatActivity {
       }
     });
     alertDialog.show();
+  }
+
+  private Context getContext() {
+    return this;
+  }
+
+  private void showQRCodeDialog(String content, String name) {
+    int width = Instance.of(UiData.class).winWidth() * 5 / 8;
+    Bitmap qrCodeBitmap = QRCodeUtil.createQRCodeBitmap(content, width, width);
+    LinearLayout linearLayout = new LinearLayout(getContext());
+    linearLayout.setOrientation(LinearLayout.VERTICAL);
+    TextView textView = new TextView(getContext());
+    textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+    textView.setTextColor(ContextManager.resources().getColor(R.color.colorC6));
+    textView.setText(name);
+    linearLayout.addView(textView,
+                         LayoutHelper.createLL(LayoutHelper.WRAP,
+                                               LayoutHelper.WRAP,
+                                               Gravity.CENTER_HORIZONTAL,
+                                               0,
+                                               SizeHelper.dp(16),
+                                               0,
+                                               SizeHelper.dp(4)));
+    ImageView imageView = new ImageView(getContext());
+    imageView.setImageBitmap(qrCodeBitmap);
+    linearLayout.addView(imageView,
+                         LayoutHelper.createLL(LayoutHelper.WRAP,
+                                               LayoutHelper.WRAP,
+                                               Gravity.CENTER_HORIZONTAL));
+
+    TextView textView2 = new TextView(getContext());
+    textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+    textView2.setGravity(Gravity.CENTER);
+    textView2.setTextColor(ContextManager.resources().getColor(R.color.colorC5));
+    textView2.setText("扫描上方二维码查看全景图");
+    linearLayout.addView(textView2,
+                         LayoutHelper.createLL(LayoutHelper.WRAP,
+                                               LayoutHelper.WRAP,
+                                               Gravity.CENTER_HORIZONTAL,
+                                               0,
+                                               0,
+                                               0,
+                                               SizeHelper.dp(16)));
+    AlertDialog alertDialog = new AlertDialog.Builder(getContext()).setView(linearLayout).create();
+    alertDialog.show();
+    Window window = alertDialog.getWindow();
+    WindowManager.LayoutParams attributes = window.getAttributes();
+    attributes.width = width + 2 * SizeHelper.dp(32);
+    window.setAttributes(attributes);
   }
 
   private void shareWetChat(final int scene) {

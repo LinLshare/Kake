@@ -16,6 +16,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -259,29 +261,7 @@ public class CloudPhotoListFragment extends BaseFragment {
         break;
       case SHOW_QRCODE_DIALOG: {
         String content = in.get(ParamsKey.STR);
-        int width = Instance.of(UiData.class).winWidth() / 2;
-        Bitmap qrCodeBitmap = QRCodeUtil.createQRCodeBitmap(content, width, width);
-        LinearLayout linearLayout = new LinearLayout(getContext());
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        TextView textView = new TextView(getContext());
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-        textView.setTextColor(ContextManager.resources().getColor(R.color.colorC6));
-        textView.setText(album.getName() + "");
-        linearLayout.addView(textView,
-                             LayoutHelper.createLL(LayoutHelper.WRAP,
-                                                   LayoutHelper.WRAP,
-                                                   Gravity.CENTER_HORIZONTAL,
-                                                   0,
-                                                   SizeHelper.dp(16),
-                                                   0,
-                                                   0));
-        ImageView imageView = new ImageView(getContext());
-        imageView.setImageBitmap(qrCodeBitmap);
-        linearLayout.addView(imageView,
-                             LayoutHelper.createLL(LayoutHelper.WRAP,
-                                                   LayoutHelper.WRAP,
-                                                   Gravity.CENTER_HORIZONTAL));
-        new AlertDialog.Builder(getContext()).setView(linearLayout).create().show();
+        showQRCodeDialog(content, album.getName() + "");
       }
       break;
       case MAKE_PANO_POSTING:
@@ -384,6 +364,51 @@ public class CloudPhotoListFragment extends BaseFragment {
     }
   }
 
+  private void showQRCodeDialog(String content, String name) {
+    int width = Instance.of(UiData.class).winWidth() * 5 / 8;
+    Bitmap qrCodeBitmap = QRCodeUtil.createQRCodeBitmap(content, width, width);
+    LinearLayout linearLayout = new LinearLayout(getContext());
+    linearLayout.setOrientation(LinearLayout.VERTICAL);
+    TextView textView = new TextView(getContext());
+    textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+    textView.setTextColor(ContextManager.resources().getColor(R.color.colorC6));
+    textView.setText(name);
+    linearLayout.addView(textView,
+                         LayoutHelper.createLL(LayoutHelper.WRAP,
+                                               LayoutHelper.WRAP,
+                                               Gravity.CENTER_HORIZONTAL,
+                                               0,
+                                               SizeHelper.dp(16),
+                                               0,
+                                               SizeHelper.dp(4)));
+    ImageView imageView = new ImageView(getContext());
+    imageView.setImageBitmap(qrCodeBitmap);
+    linearLayout.addView(imageView,
+                         LayoutHelper.createLL(LayoutHelper.WRAP,
+                                               LayoutHelper.WRAP,
+                                               Gravity.CENTER_HORIZONTAL));
+
+    TextView textView2 = new TextView(getContext());
+    textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+    textView2.setGravity(Gravity.CENTER);
+    textView2.setTextColor(ContextManager.resources().getColor(R.color.colorC5));
+    textView2.setText("扫描上方二维码查看全景图");
+    linearLayout.addView(textView2,
+                         LayoutHelper.createLL(LayoutHelper.WRAP,
+                                               LayoutHelper.WRAP,
+                                               Gravity.CENTER_HORIZONTAL,
+                                               0,
+                                               0,
+                                               0,
+                                               SizeHelper.dp(16)));
+    AlertDialog alertDialog = new AlertDialog.Builder(getContext()).setView(linearLayout).create();
+    alertDialog.show();
+    Window window = alertDialog.getWindow();
+    WindowManager.LayoutParams attributes = window.getAttributes();
+    attributes.width = width + 2 * SizeHelper.dp(32);
+    window.setAttributes(attributes);
+  }
+
   private void showRenameDialog(final Params in) {
     inputDialog = new InputDialog(getContext(), "重命名图片", new InputDialog.InputDialogListener() {
       @Override
@@ -477,6 +502,13 @@ public class CloudPhotoListFragment extends BaseFragment {
       @Override
       public void onClick(View v) {
         shareWetChat(SendMessageToWX.Req.WXSceneSession);
+        alertDialog.dismiss();
+      }
+    });
+    dialogView.findViewById(R.id.qrcode_layout).setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        showQRCodeDialog(album.getPanourl(), album.getName());
         alertDialog.dismiss();
       }
     });
