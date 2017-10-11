@@ -115,6 +115,7 @@ public class PinoWebPageActivity extends AppCompatActivity {
   private void showShareDialog() {
     View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_share, null);
     final Dialog alertDialog = new CustomBottomDialog(this);
+    alertDialog.getWindow().setWindowAnimations(R.style.dialogStyle);
     alertDialog.setContentView(dialogView);
     dialogView.findViewById(R.id.cancel_text_view).setOnClickListener(new View.OnClickListener() {
       @Override

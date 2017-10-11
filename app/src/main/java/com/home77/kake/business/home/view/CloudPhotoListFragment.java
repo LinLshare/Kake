@@ -457,6 +457,8 @@ public class CloudPhotoListFragment extends BaseFragment {
   private void showShareDialog() {
     View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_share, null);
     final Dialog alertDialog = new CustomBottomDialog(getContext());
+
+    alertDialog.getWindow().setWindowAnimations(R.style.dialogStyle);
     alertDialog.setContentView(dialogView);
     dialogView.findViewById(R.id.cancel_text_view).setOnClickListener(new View.OnClickListener() {
       @Override
